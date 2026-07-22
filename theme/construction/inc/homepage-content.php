@@ -687,55 +687,27 @@ function construction_rebuild_polylang_homes() {
 }
 
 /**
- * Create one Primary menu per language and assign Polylang locations.
+ * Create empty Primary menus per language (Polylang) — no Home item.
+ * Add real links later under Appearance → Menus.
+ * Logo + site title link to the homepage instead.
  *
- * @param array{lv?:int,en?:int,ru?:int} $page_ids Homepage IDs by language.
+ * @param array{lv?:int,en?:int,ru?:int} $page_ids Unused; kept for call-site compatibility.
  */
 function construction_rebuild_language_menus( array $page_ids = array() ): void {
 	if ( ! function_exists( 'pll_languages_list' ) ) {
 		return;
 	}
 
-	if ( empty( $page_ids['lv'] ) || empty( $page_ids['en'] ) || empty( $page_ids['ru'] ) ) {
-		foreach ( array( 'lv' => 'sakums', 'en' => 'home', 'ru' => 'glavnaya' ) as $lang => $slug ) {
-			$found = get_posts(
-				array(
-					'name'           => $slug,
-					'post_type'      => 'page',
-					'post_status'    => 'publish',
-					'posts_per_page' => 1,
-					'fields'         => 'ids',
-				)
-			);
-			if ( ! empty( $found ) ) {
-				$page_ids[ $lang ] = (int) $found[0];
-			}
-		}
-	}
-
 	$menu_defs = array(
-		'lv' => array(
-			'name'    => 'Primary LV',
-			'page_id' => (int) ( $page_ids['lv'] ?? 0 ),
-		),
-		'en' => array(
-			'name'    => 'Primary EN',
-			'page_id' => (int) ( $page_ids['en'] ?? 0 ),
-		),
-		'ru' => array(
-			'name'    => 'Primary RU',
-			'page_id' => (int) ( $page_ids['ru'] ?? 0 ),
-		),
+		'lv' => 'Primary LV',
+		'en' => 'Primary EN',
+		'ru' => 'Primary RU',
 	);
 
 	$menu_ids = array();
 
-	foreach ( $menu_defs as $lang => $def ) {
-		if ( $def['page_id'] <= 0 ) {
-			continue;
-		}
-
-		$existing = wp_get_nav_menu_object( $def['name'] );
+	foreach ( $menu_defs as $lang => $name ) {
+		$existing = wp_get_nav_menu_object( $name );
 		if ( $existing ) {
 			$menu_id = (int) $existing->term_id;
 			$items   = wp_get_nav_menu_items( $menu_id );
@@ -745,24 +717,12 @@ function construction_rebuild_language_menus( array $page_ids = array() ): void 
 				}
 			}
 		} else {
-			$created = wp_create_nav_menu( $def['name'] );
+			$created = wp_create_nav_menu( $name );
 			if ( is_wp_error( $created ) ) {
 				continue;
 			}
 			$menu_id = (int) $created;
 		}
-
-		wp_update_nav_menu_item(
-			$menu_id,
-			0,
-			array(
-				'menu-item-title'     => get_the_title( $def['page_id'] ),
-				'menu-item-object'    => 'page',
-				'menu-item-object-id' => $def['page_id'],
-				'menu-item-type'      => 'post_type',
-				'menu-item-status'    => 'publish',
-			)
-		);
 
 		$menu_ids[ $lang ] = $menu_id;
 	}

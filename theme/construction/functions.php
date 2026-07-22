@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CONSTRUCTION_VERSION', '0.3.8' );
+define( 'CONSTRUCTION_VERSION', '0.4.1' );
 
 require get_template_directory() . '/inc/i18n.php';
 require get_template_directory() . '/inc/images.php';
@@ -70,6 +70,15 @@ function construction_enqueue_assets(): void {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'construction_enqueue_assets' );
+
+/**
+ * Do not fall back to a page list (e.g. “Sākums”) when Primary menus are empty.
+ * Home is reached via logo + site title instead.
+ */
+function construction_navigation_empty_fallback( $fallback ) {
+	return null;
+}
+add_filter( 'block_core_navigation_render_fallback', 'construction_navigation_empty_fallback' );
 
 /**
  * Register pattern category.

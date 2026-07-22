@@ -138,9 +138,10 @@ video {
 }
 
 .construction-header__inner {
-	display: grid !important;
-	grid-template-columns: 1fr auto 1fr;
+	display: flex !important;
+	flex-wrap: nowrap !important;
 	align-items: center !important;
+	justify-content: flex-start !important;
 	max-width: var(--bn-max);
 	margin-inline: auto;
 	padding: 0.75rem var(--bn-pad);
@@ -149,9 +150,37 @@ video {
 	width: 100%;
 }
 
+.construction-brand {
+	display: flex !important;
+	align-items: center !important;
+	gap: 0.65rem !important;
+	min-width: 0;
+	flex: 0 1 auto;
+}
+
+.construction-logo-mark {
+	margin: 0 !important;
+	flex: 0 0 auto;
+	line-height: 0;
+}
+
+.construction-logo-mark a {
+	display: block;
+	line-height: 0;
+}
+
+.construction-logo-mark img {
+	display: block;
+	width: 40px;
+	height: 40px;
+	border-radius: 10px;
+	object-fit: contain;
+	background: var(--bn-mist);
+}
+
 .construction-logo {
 	margin: 0;
-	justify-self: start;
+	min-width: 0;
 }
 
 .construction-logo a {
@@ -164,11 +193,30 @@ video {
 	white-space: nowrap;
 }
 
+.construction-logo a:hover {
+	color: var(--bn-timber);
+}
+
+/* Hide empty nav (no links) so it doesn't sit in the middle */
+.construction-nav:not(:has(.wp-block-navigation-item)),
+.construction-nav:not(:has(a)) {
+	display: none !important;
+}
+
 .construction-nav {
-	justify-self: center;
+	flex: 1 1 auto;
 	display: flex;
 	justify-content: center;
 	min-width: 0;
+}
+
+.construction-header__actions {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: flex-end !important;
+	gap: 0.65rem;
+	flex: 0 0 auto;
+	margin-left: auto !important; /* stay right even without a center menu */
 }
 
 .construction-nav-list {
@@ -192,15 +240,6 @@ video {
 .construction-nav-list .current-menu-item a,
 .construction-nav-list a:hover {
 	color: var(--bn-timber);
-}
-
-.construction-header__actions {
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	gap: 0.65rem;
-	flex-shrink: 0;
-	justify-self: end;
 }
 
 .construction-phone {
