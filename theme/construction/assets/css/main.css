@@ -955,8 +955,8 @@ p.construction-lang a[aria-current="true"] {
 
 /* ——— Projects gallery page ——— */
 .construction-projects {
-	padding-top: var(--bn-section-y);
-	padding-bottom: var(--bn-section-y);
+	padding-top: clamp(1.25rem, 3vw, 2rem);
+	padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
 	padding-left: max(var(--bn-pad), calc((100% - var(--bn-max)) / 2));
 	padding-right: max(var(--bn-pad), calc((100% - var(--bn-max)) / 2));
 }
@@ -967,30 +967,49 @@ p.construction-lang a[aria-current="true"] {
 	width: 100%;
 }
 
-.construction-projects__title {
-	margin: 0.35rem 0 0.75rem;
-	font-size: clamp(1.85rem, 4vw, 2.75rem);
-	line-height: 1.1;
+.construction-projects__head {
+	display: flex !important;
+	flex-wrap: wrap !important;
+	align-items: baseline !important;
+	justify-content: space-between !important;
+	gap: 0.65rem 1.5rem !important;
+	margin: 0 0 1.15rem !important;
+	padding: 0 !important;
 }
 
-.construction-projects__intro {
-	margin: 0 0 1.75rem;
-	max-width: 40rem;
+.construction-projects__title {
+	margin: 0 !important;
+	font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+	line-height: 1.15;
+	letter-spacing: -0.02em;
+	font-weight: 700;
+}
+
+.construction-projects__cta-inline {
+	margin: 0 !important;
+	font-size: 0.95rem;
+	font-weight: 600;
+}
+
+.construction-projects__cta-inline a {
 	color: var(--bn-steel);
-	font-size: 1.05rem;
-	line-height: 1.55;
+	text-decoration: none;
+}
+
+.construction-projects__cta-inline a:hover {
+	color: var(--bn-timber);
 }
 
 .construction-projects__grid {
 	display: grid !important;
 	grid-template-columns: 1fr;
-	gap: 0.85rem !important;
+	gap: 0.65rem !important;
 }
 
 .construction-projects__item {
 	margin: 0 !important;
 	overflow: hidden;
-	border-radius: var(--bn-radius);
+	border-radius: 14px;
 	background: var(--bn-mist);
 }
 
@@ -1000,32 +1019,44 @@ p.construction-lang a[aria-current="true"] {
 	height: 100%;
 	aspect-ratio: 4 / 3;
 	object-fit: cover;
+	transition: transform 0.45s ease;
 }
 
-.construction-projects__actions {
-	margin-top: 1.75rem;
+.construction-projects__item:hover img {
+	transform: scale(1.03);
 }
 
 @media (min-width: 640px) {
 	.construction-projects__grid {
 		grid-template-columns: repeat(2, 1fr);
-		gap: 1rem !important;
+		gap: 0.85rem !important;
 	}
 }
 
 @media (min-width: 960px) {
 	.construction-projects__grid {
 		grid-template-columns: repeat(3, 1fr);
-		gap: 1.15rem !important;
+		gap: 0.95rem !important;
 	}
 
-	.construction-projects__item:nth-child(1),
-	.construction-projects__item:nth-child(7) {
+	.construction-projects__item:nth-child(1) {
+		grid-column: span 2;
+		grid-row: span 2;
+	}
+
+	.construction-projects__item:nth-child(1) img {
+		aspect-ratio: auto;
+		min-height: 100%;
+		height: 100%;
+	}
+
+	.construction-projects__item:nth-child(6),
+	.construction-projects__item:nth-child(11) {
 		grid-column: span 2;
 	}
 
-	.construction-projects__item:nth-child(1) img,
-	.construction-projects__item:nth-child(7) img {
+	.construction-projects__item:nth-child(6) img,
+	.construction-projects__item:nth-child(11) img {
 		aspect-ratio: 16 / 9;
 	}
 }

@@ -65,30 +65,22 @@ function construction_projects_page_content_for_lang( string $lang ): string {
 <div class="wp-block-group alignfull construction-projects" id="projects">
 	<!-- wp:group {"className":"construction-projects__inner","layout":{"type":"default"}} -->
 	<div class="wp-block-group construction-projects__inner">
-		<!-- wp:paragraph {"className":"construction-eyebrow"} -->
-		<p class="construction-eyebrow">{$t( 'projects.eyebrow' )}</p>
-		<!-- /wp:paragraph -->
+		<!-- wp:group {"className":"construction-projects__head","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"end"}} -->
+		<div class="wp-block-group construction-projects__head">
+			<!-- wp:heading {"level":1,"className":"construction-projects__title"} -->
+			<h1 class="wp-block-heading construction-projects__title">{$t( 'projects.title' )}</h1>
+			<!-- /wp:heading -->
 
-		<!-- wp:heading {"level":1,"className":"construction-projects__title"} -->
-		<h1 class="wp-block-heading construction-projects__title">{$t( 'projects.title' )}</h1>
-		<!-- /wp:heading -->
-
-		<!-- wp:paragraph {"className":"construction-projects__intro"} -->
-		<p class="construction-projects__intro">{$t( 'projects.intro' )}</p>
-		<!-- /wp:paragraph -->
+			<!-- wp:paragraph {"className":"construction-projects__cta-inline"} -->
+			<p class="construction-projects__cta-inline"><a href="{$contact_href}">{$contact_cta} →</a></p>
+			<!-- /wp:paragraph -->
+		</div>
+		<!-- /wp:group -->
 
 		<!-- wp:group {"className":"construction-projects__grid","layout":{"type":"default"}} -->
 		<div class="wp-block-group construction-projects__grid">
 {$items}		</div>
 		<!-- /wp:group -->
-
-		<!-- wp:buttons {"className":"construction-projects__actions"} -->
-		<div class="wp-block-buttons construction-projects__actions">
-			<!-- wp:button -->
-			<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="{$contact_href}">{$contact_cta}</a></div>
-			<!-- /wp:button -->
-		</div>
-		<!-- /wp:buttons -->
 	</div>
 	<!-- /wp:group -->
 </div>
