@@ -548,8 +548,8 @@ ITEM;
 			<!-- wp:paragraph {"className":"construction-contact__email"} -->
 			<p class="construction-contact__email"><a href="{$mail_href}">info@construction.lv</a></p>
 			<!-- /wp:paragraph -->
-			<!-- wp:paragraph {"className":"construction-contact__telegram"} -->
-			<p class="construction-contact__telegram"><a href="https://t.me/construction" target="_blank" rel="noopener">Telegram · @construction</a></p>
+			<!-- wp:paragraph {"className":"construction-contact__social"} -->
+			<p class="construction-contact__social"><a href="https://instagram.com/construction" target="_blank" rel="noopener">Instagram</a> · <a href="https://facebook.com/construction" target="_blank" rel="noopener">Facebook</a></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:column -->

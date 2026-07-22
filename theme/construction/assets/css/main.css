@@ -697,8 +697,7 @@ video {
 	margin: 0 0 0.5rem;
 }
 
-.construction-contact__email a,
-.construction-contact__telegram a {
+.construction-contact__email a {
 	font-family: "Archivo", sans-serif;
 	font-weight: 700;
 	font-size: clamp(1.15rem, 4vw, 1.75rem);
@@ -707,14 +706,20 @@ video {
 	color: inherit;
 }
 
-.construction-contact__telegram {
-	margin-top: 0.35rem;
+.construction-contact__social {
+	margin-top: 0.45rem;
 }
 
-.construction-contact__telegram a {
+.construction-contact__social a {
+	font-family: "Archivo", sans-serif;
 	font-size: 1rem;
 	font-weight: 600;
 	color: var(--bn-steel);
+	text-decoration: none;
+}
+
+.construction-contact__social a:hover {
+	color: var(--bn-timber);
 }
 
 .construction-lead-form--visual {
