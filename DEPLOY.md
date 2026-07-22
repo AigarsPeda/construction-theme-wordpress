@@ -176,6 +176,22 @@ Avoid developing on Local and re-importing over a live site that already has new
 
 ---
 
+## Performance / Lighthouse (Local vs prod)
+
+A Lighthouse run on `http://construction.local` can look “worse” than the real site. Scores around **Performance 90+** are already good.
+
+| Insight | Fix where? | Notes |
+|---|---|---|
+| **Use efficient cache lifetimes** | **Host / CDN on prod** | Local rarely sends long `Cache-Control` headers. On prod: enable host caching, Cloudflare, or a cache plugin. Theme cannot fully fix this on Local. |
+| **Improve image delivery** | **Theme** (done in 0.6.6+) | Responsive `srcset`, smaller display sizes (not full-res), lazy-load below the fold, `fetchpriority` on hero. After theme update, rebuild homes: `?construction_rebuild_homes=1`. Optional: regenerate thumbnails / serve WebP via host or Imagify. |
+| **Render-blocking requests** | **Theme** (partial) | Google Fonts load async + `preconnect`. Main CSS stays render-blocking on purpose (avoids unstyled flash). |
+| **Network dependency tree** | Informational | Improves when fonts/CDN chains shrink; self-host fonts later if needed. |
+| **Best Practices ~78 on Local** | **HTTPS on prod** | Often dragged down by plain `http://` on Local. Production with SSL usually recovers this. |
+
+Re-test Lighthouse on the **production HTTPS** URL after deploy — that score is the one that matters.
+
+---
+
 ## Related docs
 
 - [README.md](README.md) — theme install / zip

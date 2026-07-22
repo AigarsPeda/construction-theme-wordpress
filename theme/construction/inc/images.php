@@ -271,33 +271,61 @@ function construction_project_image_url( string $key, string $size = 'large' ): 
 /**
  * Gutenberg image block markup bound to a Media Library attachment.
  *
+ * Uses srcset/sizes from WordPress; lazy-loads below-fold images.
+ *
  * @param string $key        Catalog key.
  * @param string $class_name Extra figure class.
  * @param string $alt        Alt text.
- * @param string $size       Image size slug.
+ * @param string $size       Image size slug (avoid "full" for display).
  * @param bool   $lightbox   Wrap in lightbox link to full-size image.
+ * @param bool   $priority   LCP candidate: eager + fetchpriority=high.
  */
-function construction_media_image_block( string $key, string $class_name, string $alt, string $size = 'large', bool $lightbox = false ): string {
-	$id  = construction_media_id( $key );
-	$url = esc_url( construction_image_url( $key, $size ) );
-	$alt_attr = esc_attr( $alt );
-	$class_name = trim( $class_name );
-
-	if ( $id <= 0 || $url === '' ) {
+function construction_media_image_block( string $key, string $class_name, string $alt, string $size = 'large', bool $lightbox = false, bool $priority = false ): string {
+	$id = construction_media_id( $key );
+	if ( $id <= 0 ) {
 		return '';
 	}
 
-	$classes = 'wp-block-image size-' . esc_attr( $size );
+	// Fall back if a custom size was never generated for this attachment.
+	$meta = wp_get_attachment_metadata( $id );
+	if (
+		$size !== 'full'
+		&& is_array( $meta )
+		&& empty( $meta['sizes'][ $size ] )
+		&& ! in_array( $size, array( 'thumbnail', 'medium', 'medium_large', 'large' ), true )
+	) {
+		$size = 'large';
+	}
+
+	$class_name = trim( $class_name );
+	$classes    = 'wp-block-image size-' . esc_attr( $size );
 	if ( $class_name !== '' ) {
 		$classes .= ' ' . esc_attr( $class_name );
 	}
 
-	$img = '<img src="' . $url . '" alt="' . $alt_attr . '" class="wp-image-' . $id . '"/>';
+	$img_attrs = array(
+		'class'    => 'wp-image-' . $id,
+		'alt'      => $alt,
+		'decoding' => 'async',
+		'sizes'    => construction_image_sizes_attr( $class_name ),
+	);
+
+	if ( $priority ) {
+		$img_attrs['loading']       = 'eager';
+		$img_attrs['fetchpriority'] = 'high';
+	} else {
+		$img_attrs['loading'] = 'lazy';
+	}
+
+	$img = wp_get_attachment_image( $id, $size, false, $img_attrs );
+	if ( ! is_string( $img ) || $img === '' ) {
+		return '';
+	}
 
 	if ( $lightbox ) {
 		$full = esc_url( construction_image_url( $key, 'full' ) );
 		if ( $full === '' ) {
-			$full = $url;
+			$full = esc_url( construction_image_url( $key, $size ) );
 		}
 		$link_dest = 'custom';
 		$inner     = '<a href="' . $full . '" class="construction-lightbox glightbox" data-gallery="construction-projects">' . $img . '</a>';
@@ -312,6 +340,26 @@ function construction_media_image_block( string $key, string $class_name, string
 			<!-- /wp:image -->
 
 HTML;
+}
+
+/**
+ * Responsive sizes= hint from figure class context.
+ */
+function construction_image_sizes_attr( string $class_name ): string {
+	if ( str_contains( $class_name, 'construction-hero__image' ) ) {
+		return '(max-width: 900px) 100vw, 52vw';
+	}
+	if ( str_contains( $class_name, 'construction-service-card__thumb' ) ) {
+		return '(max-width: 900px) 120px, 160px';
+	}
+	if ( str_contains( $class_name, 'construction-quality__media' ) ) {
+		return '(max-width: 700px) 100vw, 25vw';
+	}
+	if ( str_contains( $class_name, 'construction-projects__item' ) ) {
+		return '(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 33vw';
+	}
+
+	return '(max-width: 900px) 100vw, 800px';
 }
 
 /**

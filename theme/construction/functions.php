@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CONSTRUCTION_VERSION', '0.6.5' );
+define( 'CONSTRUCTION_VERSION', '0.6.6' );
 
 require get_template_directory() . '/inc/i18n.php';
 require get_template_directory() . '/inc/settings.php';
@@ -30,6 +30,10 @@ function construction_setup(): void {
 	add_theme_support( 'editor-styles' );
 	add_editor_style( 'assets/css/main.css' );
 
+	// Display sizes (avoid shipping full-resolution photos in the layout).
+	add_image_size( 'construction-hero', 1400, 1050, false );
+	add_image_size( 'construction-card', 768, 576, false );
+
 	register_nav_menus(
 		array(
 			'primary' => __( 'Primary Menu', 'construction' ),
@@ -37,6 +41,42 @@ function construction_setup(): void {
 	);
 }
 add_action( 'after_setup_theme', 'construction_setup' );
+
+/**
+ * Faster font connection; load Google Fonts CSS without blocking first paint.
+ */
+function construction_resource_hints( array $urls, string $relation_type ): array {
+	if ( 'preconnect' === $relation_type ) {
+		$urls[] = array(
+			'href' => 'https://fonts.googleapis.com',
+		);
+		$urls[] = array(
+			'href'        => 'https://fonts.gstatic.com',
+			'crossorigin' => 'anonymous',
+		);
+	}
+	return $urls;
+}
+add_filter( 'wp_resource_hints', 'construction_resource_hints', 10, 2 );
+
+/**
+ * Print Google Fonts stylesheet as non-render-blocking.
+ *
+ * @param string $html   Link tag HTML.
+ * @param string $handle Style handle.
+ */
+function construction_async_google_fonts( string $html, string $handle ): string {
+	if ( 'construction-fonts' !== $handle ) {
+		return $html;
+	}
+
+	$noscript = $html;
+	$html     = str_replace( "media='all'", "media='print' onload=\"this.media='all'\"", $html );
+	$html     = str_replace( 'media="all"', 'media="print" onload="this.media=\'all\'"', $html );
+
+	return $html . '<noscript>' . $noscript . '</noscript>';
+}
+add_filter( 'style_loader_tag', 'construction_async_google_fonts', 10, 2 );
 
 /**
  * Enqueue front-end assets.
@@ -52,7 +92,7 @@ function construction_enqueue_assets(): void {
 	wp_enqueue_style(
 		'construction-main',
 		get_template_directory_uri() . '/assets/css/main.css',
-		array( 'construction-fonts' ),
+		array(),
 		CONSTRUCTION_VERSION
 	);
 

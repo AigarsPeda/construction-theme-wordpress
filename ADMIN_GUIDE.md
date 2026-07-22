@@ -129,3 +129,13 @@ Theme path in this repo: `theme/construction/`
 Usually symlinked into Local’s `wp-content/themes/construction`.
 
 After pulling CSS/JS changes, hard-refresh the browser (theme version is bumped in `functions.php` / `style.css`).
+
+---
+
+## Performance tips (Lighthouse)
+
+See the table in [DEPLOY.md](DEPLOY.md) (“Performance / Lighthouse”).
+
+After image-related theme updates, rebuild homepage content so the DB picks up new `<img>` markup:
+
+`https://construction.local/?construction_rebuild_homes=1` (logged-in admin)

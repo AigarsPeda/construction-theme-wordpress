@@ -40,14 +40,14 @@ function construction_homepage_content_for_lang( string $lang ): string {
 		return esc_attr( construction_string( $key, $lang ) );
 	};
 
-	$hero_img     = construction_media_image_block( 'hero', 'construction-hero__image', construction_string( 'hero.alt', $lang ), 'full' );
-	$service_1    = construction_media_image_block( 'service_1', 'construction-service-card__thumb', '', 'full' );
-	$service_2    = construction_media_image_block( 'service_2', 'construction-service-card__thumb', '', 'full' );
-	$service_3    = construction_media_image_block( 'service_3', 'construction-service-card__thumb', '', 'full' );
-	$quality_1    = construction_media_image_block( 'quality_1', 'construction-quality__media', '', 'large' );
-	$quality_2    = construction_media_image_block( 'quality_2', 'construction-quality__media', '', 'large' );
-	$quality_3    = construction_media_image_block( 'quality_3', 'construction-quality__media', '', 'large' );
-	$quality_4    = construction_media_image_block( 'quality_4', 'construction-quality__media', '', 'large' );
+	$hero_img     = construction_media_image_block( 'hero', 'construction-hero__image', construction_string( 'hero.alt', $lang ), 'construction-hero', false, true );
+	$service_1    = construction_media_image_block( 'service_1', 'construction-service-card__thumb', '', 'medium_large' );
+	$service_2    = construction_media_image_block( 'service_2', 'construction-service-card__thumb', '', 'medium_large' );
+	$service_3    = construction_media_image_block( 'service_3', 'construction-service-card__thumb', '', 'medium_large' );
+	$quality_1    = construction_media_image_block( 'quality_1', 'construction-quality__media', '', 'medium_large' );
+	$quality_2    = construction_media_image_block( 'quality_2', 'construction-quality__media', '', 'medium_large' );
+	$quality_3    = construction_media_image_block( 'quality_3', 'construction-quality__media', '', 'medium_large' );
+	$quality_4    = construction_media_image_block( 'quality_4', 'construction-quality__media', '', 'medium_large' );
 
 	$mail_href = esc_url( construction_contact_mail_href( $lang ) );
 	$email     = esc_html( construction_contact( 'email' ) );
