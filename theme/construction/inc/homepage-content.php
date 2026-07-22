@@ -1,8 +1,6 @@
 <?php
 /**
- * Build static homepage HTML for a specific language (Polylang-friendly).
- *
- * Each language page stores its own text, so the editor shows the correct language.
+ * Build homepage content as editable Gutenberg blocks (per language).
  *
  * @package Construction
  */
@@ -28,7 +26,7 @@ function construction_string( string $key, string $lang ): string {
 }
 
 /**
- * Homepage block/HTML content for one language.
+ * Homepage block content for one language (visual editor friendly).
  */
 function construction_homepage_content_for_lang( string $lang ): string {
 	if ( ! in_array( $lang, construction_languages(), true ) ) {
@@ -38,156 +36,359 @@ function construction_homepage_content_for_lang( string $lang ): string {
 	$t = static function ( string $key ) use ( $lang ): string {
 		return esc_html( construction_string( $key, $lang ) );
 	};
-
 	$ta = static function ( string $key ) use ( $lang ): string {
 		return esc_attr( construction_string( $key, $lang ) );
 	};
-
 	$img = static function ( string $key ): string {
 		return esc_url( construction_image_url( $key ) );
 	};
 
-	$credits = '';
+	$credits_items = '';
 	foreach ( construction_image_credits() as $credit ) {
-		$credits .= '<li><a href="' . esc_url( $credit['unsplash_url'] ) . '" target="_blank" rel="noopener noreferrer">';
-		$credits .= esc_html(
+		$label = esc_html(
 			sprintf(
 				/* translators: %s: photographer name */
 				__( 'Photo by %s on Unsplash', 'construction' ),
 				$credit['author']
 			)
 		);
-		$credits .= '</a></li>';
+		$url = esc_url( $credit['unsplash_url'] );
+		$credits_items .= '<li><a href="' . $url . '" target="_blank" rel="noopener noreferrer">' . $label . '</a></li>';
 	}
 
 	return <<<HTML
-<!-- wp:html -->
-<div class="construction-hero" id="top">
-	<div class="construction-hero__grid">
-		<div class="construction-hero__copy">
-			<h1 class="construction-hero__title">{$t( 'hero.title' )}</h1>
+<!-- wp:group {"align":"full","className":"construction-hero","layout":{"type":"default"},"anchor":"top"} -->
+<div class="wp-block-group alignfull construction-hero" id="top">
+	<!-- wp:columns {"className":"construction-hero__grid"} -->
+	<div class="wp-block-columns construction-hero__grid">
+		<!-- wp:column {"width":"48%","className":"construction-hero__copy"} -->
+		<div class="wp-block-column construction-hero__copy" style="flex-basis:48%">
+			<!-- wp:heading {"level":1,"className":"construction-hero__title"} -->
+			<h1 class="wp-block-heading construction-hero__title">{$t( 'hero.title' )}</h1>
+			<!-- /wp:heading -->
+
+			<!-- wp:paragraph {"className":"construction-hero__text"} -->
 			<p class="construction-hero__text">{$t( 'hero.text' )}</p>
-			<div class="construction-hero__actions">
-				<a class="wp-block-button__link wp-element-button" href="#contact">{$t( 'hero.cta' )}</a>
+			<!-- /wp:paragraph -->
+
+			<!-- wp:buttons {"className":"construction-hero__actions"} -->
+			<div class="wp-block-buttons construction-hero__actions">
+				<!-- wp:button -->
+				<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#contact">{$t( 'hero.cta' )}</a></div>
+				<!-- /wp:button -->
 			</div>
+			<!-- /wp:buttons -->
+
+			<!-- wp:paragraph {"className":"construction-hero__since"} -->
 			<p class="construction-hero__since">{$t( 'hero.since' )}</p>
+			<!-- /wp:paragraph -->
 		</div>
-		<div class="construction-hero__media">
-			<figure class="construction-hero__image">
-				<img src="{$img( 'hero' )}" alt="{$t( 'hero.alt' )}" width="1600" height="1200" loading="eager" decoding="async" />
-			</figure>
-		</div>
-	</div>
-</div>
+		<!-- /wp:column -->
 
-<div class="construction-services" id="services">
-	<div class="construction-services__grid">
-		<div class="construction-services__intro">
-			<h2>{$t( 'services.title' )}</h2>
+		<!-- wp:column {"width":"52%","className":"construction-hero__media"} -->
+		<div class="wp-block-column construction-hero__media" style="flex-basis:52%">
+			<!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"construction-hero__image"} -->
+			<figure class="wp-block-image size-full construction-hero__image"><img src="{$img( 'hero' )}" alt="{$ta( 'hero.alt' )}"/></figure>
+			<!-- /wp:image -->
+		</div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"align":"full","className":"construction-services","layout":{"type":"default"},"anchor":"services"} -->
+<div class="wp-block-group alignfull construction-services" id="services">
+	<!-- wp:columns {"className":"construction-services__grid"} -->
+	<div class="wp-block-columns construction-services__grid">
+		<!-- wp:column {"width":"42%","className":"construction-services__intro"} -->
+		<div class="wp-block-column construction-services__intro" style="flex-basis:42%">
+			<!-- wp:heading -->
+			<h2 class="wp-block-heading">{$t( 'services.title' )}</h2>
+			<!-- /wp:heading -->
+
+			<!-- wp:paragraph -->
 			<p>{$t( 'services.intro' )}</p>
+			<!-- /wp:paragraph -->
 		</div>
-		<div class="construction-services__list">
-			<div class="construction-service-card">
-				<div class="construction-service-card__thumb"><img src="{$img( 'service_1' )}" alt="" loading="lazy" decoding="async" /></div>
-				<div>
-					<h3>{$t( 'services.item1.title' )}</h3>
+		<!-- /wp:column -->
+
+		<!-- wp:column {"width":"58%","className":"construction-services__list"} -->
+		<div class="wp-block-column construction-services__list" style="flex-basis:58%">
+			<!-- wp:group {"className":"construction-service-card","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"top"}} -->
+			<div class="wp-block-group construction-service-card">
+				<!-- wp:image {"width":"72px","height":"72px","scale":"cover","sizeSlug":"thumbnail","className":"construction-service-card__thumb"} -->
+				<figure class="wp-block-image size-thumbnail is-resized construction-service-card__thumb"><img src="{$img( 'service_1' )}" alt="" style="aspect-ratio:1;object-fit:cover;width:72px;height:72px"/></figure>
+				<!-- /wp:image -->
+
+				<!-- wp:group {"layout":{"type":"constrained"}} -->
+				<div class="wp-block-group">
+					<!-- wp:heading {"level":3} -->
+					<h3 class="wp-block-heading">{$t( 'services.item1.title' )}</h3>
+					<!-- /wp:heading -->
+					<!-- wp:paragraph -->
 					<p>{$t( 'services.item1.text' )}</p>
+					<!-- /wp:paragraph -->
 				</div>
+				<!-- /wp:group -->
 			</div>
-			<div class="construction-service-card">
-				<div class="construction-service-card__thumb"><img src="{$img( 'service_2' )}" alt="" loading="lazy" decoding="async" /></div>
-				<div>
-					<h3>{$t( 'services.item2.title' )}</h3>
+			<!-- /wp:group -->
+
+			<!-- wp:group {"className":"construction-service-card","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"top"}} -->
+			<div class="wp-block-group construction-service-card">
+				<!-- wp:image {"width":"72px","height":"72px","scale":"cover","sizeSlug":"thumbnail","className":"construction-service-card__thumb"} -->
+				<figure class="wp-block-image size-thumbnail is-resized construction-service-card__thumb"><img src="{$img( 'service_2' )}" alt="" style="aspect-ratio:1;object-fit:cover;width:72px;height:72px"/></figure>
+				<!-- /wp:image -->
+				<!-- wp:group {"layout":{"type":"constrained"}} -->
+				<div class="wp-block-group">
+					<!-- wp:heading {"level":3} -->
+					<h3 class="wp-block-heading">{$t( 'services.item2.title' )}</h3>
+					<!-- /wp:heading -->
+					<!-- wp:paragraph -->
 					<p>{$t( 'services.item2.text' )}</p>
+					<!-- /wp:paragraph -->
 				</div>
+				<!-- /wp:group -->
 			</div>
-			<div class="construction-service-card">
-				<div class="construction-service-card__thumb"><img src="{$img( 'service_3' )}" alt="" loading="lazy" decoding="async" /></div>
-				<div>
-					<h3>{$t( 'services.item3.title' )}</h3>
+			<!-- /wp:group -->
+
+			<!-- wp:group {"className":"construction-service-card","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"top"}} -->
+			<div class="wp-block-group construction-service-card">
+				<!-- wp:image {"width":"72px","height":"72px","scale":"cover","sizeSlug":"thumbnail","className":"construction-service-card__thumb"} -->
+				<figure class="wp-block-image size-thumbnail is-resized construction-service-card__thumb"><img src="{$img( 'service_3' )}" alt="" style="aspect-ratio:1;object-fit:cover;width:72px;height:72px"/></figure>
+				<!-- /wp:image -->
+				<!-- wp:group {"layout":{"type":"constrained"}} -->
+				<div class="wp-block-group">
+					<!-- wp:heading {"level":3} -->
+					<h3 class="wp-block-heading">{$t( 'services.item3.title' )}</h3>
+					<!-- /wp:heading -->
+					<!-- wp:paragraph -->
 					<p>{$t( 'services.item3.text' )}</p>
+					<!-- /wp:paragraph -->
 				</div>
+				<!-- /wp:group -->
 			</div>
+			<!-- /wp:group -->
 		</div>
+		<!-- /wp:column -->
 	</div>
+	<!-- /wp:columns -->
 </div>
+<!-- /wp:group -->
 
-<div class="construction-quality" id="about">
-	<div class="construction-quality__inner">
-		<h2>{$t( 'quality.title' )}</h2>
-		<div class="construction-quality__grid">
-			<div class="construction-quality__card">
-				<div class="construction-quality__media"><img src="{$img( 'quality_1' )}" alt="" loading="lazy" decoding="async" /></div>
-				<h3>{$t( 'quality.item1' )}</h3>
+<!-- wp:group {"align":"full","className":"construction-quality","layout":{"type":"default"},"anchor":"about"} -->
+<div class="wp-block-group alignfull construction-quality" id="about">
+	<!-- wp:group {"className":"construction-quality__inner","layout":{"type":"constrained","contentSize":"1200px"}} -->
+	<div class="wp-block-group construction-quality__inner">
+		<!-- wp:heading -->
+		<h2 class="wp-block-heading">{$t( 'quality.title' )}</h2>
+		<!-- /wp:heading -->
+
+		<!-- wp:columns {"className":"construction-quality__grid"} -->
+		<div class="wp-block-columns construction-quality__grid">
+			<!-- wp:column -->
+			<div class="wp-block-column">
+				<!-- wp:group {"className":"construction-quality__card","layout":{"type":"constrained"}} -->
+				<div class="wp-block-group construction-quality__card">
+					<!-- wp:image {"sizeSlug":"large","className":"construction-quality__media"} -->
+					<figure class="wp-block-image size-large construction-quality__media"><img src="{$img( 'quality_1' )}" alt=""/></figure>
+					<!-- /wp:image -->
+					<!-- wp:heading {"level":3} -->
+					<h3 class="wp-block-heading">{$t( 'quality.item1' )}</h3>
+					<!-- /wp:heading -->
+				</div>
+				<!-- /wp:group -->
 			</div>
-			<div class="construction-quality__card">
-				<div class="construction-quality__media"><img src="{$img( 'quality_2' )}" alt="" loading="lazy" decoding="async" /></div>
-				<h3>{$t( 'quality.item2' )}</h3>
+			<!-- /wp:column -->
+
+			<!-- wp:column -->
+			<div class="wp-block-column">
+				<!-- wp:group {"className":"construction-quality__card","layout":{"type":"constrained"}} -->
+				<div class="wp-block-group construction-quality__card">
+					<!-- wp:image {"sizeSlug":"large","className":"construction-quality__media"} -->
+					<figure class="wp-block-image size-large construction-quality__media"><img src="{$img( 'quality_2' )}" alt=""/></figure>
+					<!-- /wp:image -->
+					<!-- wp:heading {"level":3} -->
+					<h3 class="wp-block-heading">{$t( 'quality.item2' )}</h3>
+					<!-- /wp:heading -->
+				</div>
+				<!-- /wp:group -->
 			</div>
-			<div class="construction-quality__card">
-				<div class="construction-quality__media"><img src="{$img( 'quality_3' )}" alt="" loading="lazy" decoding="async" /></div>
-				<h3>{$t( 'quality.item3' )}</h3>
+			<!-- /wp:column -->
+
+			<!-- wp:column -->
+			<div class="wp-block-column">
+				<!-- wp:group {"className":"construction-quality__card","layout":{"type":"constrained"}} -->
+				<div class="wp-block-group construction-quality__card">
+					<!-- wp:image {"sizeSlug":"large","className":"construction-quality__media"} -->
+					<figure class="wp-block-image size-large construction-quality__media"><img src="{$img( 'quality_3' )}" alt=""/></figure>
+					<!-- /wp:image -->
+					<!-- wp:heading {"level":3} -->
+					<h3 class="wp-block-heading">{$t( 'quality.item3' )}</h3>
+					<!-- /wp:heading -->
+				</div>
+				<!-- /wp:group -->
 			</div>
-			<div class="construction-quality__card">
-				<div class="construction-quality__media"><img src="{$img( 'quality_4' )}" alt="" loading="lazy" decoding="async" /></div>
-				<h3>{$t( 'quality.item4' )}</h3>
+			<!-- /wp:column -->
+
+			<!-- wp:column -->
+			<div class="wp-block-column">
+				<!-- wp:group {"className":"construction-quality__card","layout":{"type":"constrained"}} -->
+				<div class="wp-block-group construction-quality__card">
+					<!-- wp:image {"sizeSlug":"large","className":"construction-quality__media"} -->
+					<figure class="wp-block-image size-large construction-quality__media"><img src="{$img( 'quality_4' )}" alt=""/></figure>
+					<!-- /wp:image -->
+					<!-- wp:heading {"level":3} -->
+					<h3 class="wp-block-heading">{$t( 'quality.item4' )}</h3>
+					<!-- /wp:heading -->
+				</div>
+				<!-- /wp:group -->
 			</div>
+			<!-- /wp:column -->
 		</div>
+		<!-- /wp:columns -->
 	</div>
+	<!-- /wp:group -->
 </div>
+<!-- /wp:group -->
 
-<div class="construction-reviews" id="reviews">
-	<div class="construction-reviews__inner">
-		<h2>{$t( 'reviews.title' )}</h2>
-		<div class="construction-reviews__summary">
+<!-- wp:group {"align":"full","className":"construction-reviews","layout":{"type":"default"},"anchor":"reviews"} -->
+<div class="wp-block-group alignfull construction-reviews" id="reviews">
+	<!-- wp:group {"className":"construction-reviews__inner","layout":{"type":"constrained","contentSize":"1200px"}} -->
+	<div class="wp-block-group construction-reviews__inner">
+		<!-- wp:heading -->
+		<h2 class="wp-block-heading">{$t( 'reviews.title' )}</h2>
+		<!-- /wp:heading -->
+
+		<!-- wp:group {"className":"construction-reviews__summary","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between"}} -->
+		<div class="wp-block-group construction-reviews__summary">
+			<!-- wp:paragraph -->
 			<p><strong>4.9 ★</strong> · {$t( 'reviews.avg' )}</p>
+			<!-- /wp:paragraph -->
+			<!-- wp:paragraph -->
 			<p>{$t( 'reviews.count' )}</p>
+			<!-- /wp:paragraph -->
 		</div>
-		<div class="construction-reviews__grid">
-			<article class="construction-review-card">
-				<p class="construction-review-card__meta"><strong>Anna K.</strong> · ★★★★★</p>
-				<p>{$t( 'reviews.1' )}</p>
-			</article>
-			<article class="construction-review-card">
-				<p class="construction-review-card__meta"><strong>Jānis P.</strong> · ★★★★★</p>
-				<p>{$t( 'reviews.2' )}</p>
-			</article>
-			<article class="construction-review-card">
-				<p class="construction-review-card__meta"><strong>Elena M.</strong> · ★★★★★</p>
-				<p>{$t( 'reviews.3' )}</p>
-			</article>
-			<article class="construction-review-card">
-				<p class="construction-review-card__meta"><strong>Mārtiņš L.</strong> · ★★★★★</p>
-				<p>{$t( 'reviews.4' )}</p>
-			</article>
-		</div>
-	</div>
-</div>
+		<!-- /wp:group -->
 
-<div class="construction-contact" id="contact">
-	<div class="construction-contact__grid">
-		<div class="construction-contact__info">
-			<p class="construction-contact__label">{$t( 'contact.label' )}</p>
-			<p class="construction-contact__email"><a href="mailto:info@construction.lv">info@construction.lv</a></p>
-			<p class="construction-contact__telegram"><a href="https://t.me/construction" target="_blank" rel="noopener">Telegram · @construction</a></p>
-		</div>
-		<form class="construction-lead-form" action="mailto:info@construction.lv" method="post" enctype="text/plain">
-			<label class="screen-reader-text" for="construction-lead-{$lang}">{$t( 'contact.field' )}</label>
-			<div class="construction-lead-form__row">
-				<input id="construction-lead-{$lang}" type="text" name="contact" placeholder="{$ta( 'contact.placeholder' )}" required />
-				<button type="submit" aria-label="{$ta( 'contact.submit' )}">→</button>
+		<!-- wp:columns {"className":"construction-reviews__grid"} -->
+		<div class="wp-block-columns construction-reviews__grid">
+			<!-- wp:column -->
+			<div class="wp-block-column">
+				<!-- wp:group {"className":"construction-review-card","layout":{"type":"constrained"}} -->
+				<div class="wp-block-group construction-review-card">
+					<!-- wp:paragraph {"className":"construction-review-card__meta"} -->
+					<p class="construction-review-card__meta"><strong>Anna K.</strong> · ★★★★★</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:paragraph -->
+					<p>{$t( 'reviews.1' )}</p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
 			</div>
-		</form>
-	</div>
-</div>
+			<!-- /wp:column -->
 
-<div class="construction-credits" id="credits">
-	<div class="construction-credits__inner">
-		<p class="construction-credits__title">{$t( 'credits.title' )}</p>
-		<ul class="construction-credits__list">{$credits}</ul>
+			<!-- wp:column -->
+			<div class="wp-block-column">
+				<!-- wp:group {"className":"construction-review-card","layout":{"type":"constrained"}} -->
+				<div class="wp-block-group construction-review-card">
+					<!-- wp:paragraph {"className":"construction-review-card__meta"} -->
+					<p class="construction-review-card__meta"><strong>Jānis P.</strong> · ★★★★★</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:paragraph -->
+					<p>{$t( 'reviews.2' )}</p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
+			</div>
+			<!-- /wp:column -->
+
+			<!-- wp:column -->
+			<div class="wp-block-column">
+				<!-- wp:group {"className":"construction-review-card","layout":{"type":"constrained"}} -->
+				<div class="wp-block-group construction-review-card">
+					<!-- wp:paragraph {"className":"construction-review-card__meta"} -->
+					<p class="construction-review-card__meta"><strong>Elena M.</strong> · ★★★★★</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:paragraph -->
+					<p>{$t( 'reviews.3' )}</p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
+			</div>
+			<!-- /wp:column -->
+
+			<!-- wp:column -->
+			<div class="wp-block-column">
+				<!-- wp:group {"className":"construction-review-card","layout":{"type":"constrained"}} -->
+				<div class="wp-block-group construction-review-card">
+					<!-- wp:paragraph {"className":"construction-review-card__meta"} -->
+					<p class="construction-review-card__meta"><strong>Mārtiņš L.</strong> · ★★★★★</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:paragraph -->
+					<p>{$t( 'reviews.4' )}</p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
+			</div>
+			<!-- /wp:column -->
+		</div>
+		<!-- /wp:columns -->
 	</div>
+	<!-- /wp:group -->
 </div>
-<!-- /wp:html -->
+<!-- /wp:group -->
+
+<!-- wp:group {"align":"full","className":"construction-contact","layout":{"type":"default"},"anchor":"contact"} -->
+<div class="wp-block-group alignfull construction-contact" id="contact">
+	<!-- wp:columns {"className":"construction-contact__grid","verticalAlignment":"center"} -->
+	<div class="wp-block-columns construction-contact__grid are-vertically-aligned-center">
+		<!-- wp:column {"verticalAlignment":"center","width":"40%"} -->
+		<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:40%">
+			<!-- wp:paragraph {"className":"construction-contact__label"} -->
+			<p class="construction-contact__label">{$t( 'contact.label' )}</p>
+			<!-- /wp:paragraph -->
+			<!-- wp:paragraph {"className":"construction-contact__email"} -->
+			<p class="construction-contact__email"><a href="mailto:info@construction.lv">info@construction.lv</a></p>
+			<!-- /wp:paragraph -->
+			<!-- wp:paragraph {"className":"construction-contact__telegram"} -->
+			<p class="construction-contact__telegram"><a href="https://t.me/construction" target="_blank" rel="noopener">Telegram · @construction</a></p>
+			<!-- /wp:paragraph -->
+		</div>
+		<!-- /wp:column -->
+
+		<!-- wp:column {"verticalAlignment":"center","width":"60%"} -->
+		<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:60%">
+			<!-- wp:html -->
+			<form class="construction-lead-form" action="mailto:info@construction.lv" method="post" enctype="text/plain">
+				<label class="screen-reader-text" for="construction-lead-{$lang}">{$t( 'contact.field' )}</label>
+				<div class="construction-lead-form__row">
+					<input id="construction-lead-{$lang}" type="text" name="contact" placeholder="{$ta( 'contact.placeholder' )}" required />
+					<button type="submit" aria-label="{$ta( 'contact.submit' )}">→</button>
+				</div>
+			</form>
+			<!-- /wp:html -->
+		</div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"align":"full","className":"construction-credits","layout":{"type":"default"},"anchor":"credits"} -->
+<div class="wp-block-group alignfull construction-credits" id="credits">
+	<!-- wp:group {"className":"construction-credits__inner","layout":{"type":"constrained","contentSize":"1200px"}} -->
+	<div class="wp-block-group construction-credits__inner">
+		<!-- wp:paragraph {"className":"construction-credits__title"} -->
+		<p class="construction-credits__title">{$t( 'credits.title' )}</p>
+		<!-- /wp:paragraph -->
+		<!-- wp:html -->
+		<ul class="construction-credits__list">{$credits_items}</ul>
+		<!-- /wp:html -->
+	</div>
+	<!-- /wp:group -->
+</div>
+<!-- /wp:group -->
 HTML;
 }
 
@@ -216,14 +417,12 @@ function construction_rebuild_polylang_homes() {
 		$old_ids = array_merge( $old_ids, $found );
 	}
 
-	// Also remove by known titles.
 	$title_query = new WP_Query(
 		array(
 			'post_type'      => 'page',
 			'post_status'    => array( 'publish', 'draft', 'trash', 'private' ),
 			'posts_per_page' => 50,
 			'fields'         => 'ids',
-			's'              => '',
 		)
 	);
 	foreach ( $title_query->posts as $pid ) {
@@ -372,13 +571,11 @@ function construction_rebuild_language_menus( array $page_ids = array() ): void 
 		return;
 	}
 
-	// Theme location for current request / default.
-	$locations           = get_theme_mod( 'nav_menu_locations', array() );
-	$locations           = is_array( $locations ) ? $locations : array();
+	$locations            = get_theme_mod( 'nav_menu_locations', array() );
+	$locations            = is_array( $locations ) ? $locations : array();
 	$locations['primary'] = $menu_ids['lv'] ?? reset( $menu_ids );
 	set_theme_mod( 'nav_menu_locations', $locations );
 
-	// Polylang per-language menu locations.
 	$pll = get_option( 'polylang', array() );
 	if ( ! is_array( $pll ) ) {
 		$pll = array();

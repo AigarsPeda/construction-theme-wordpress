@@ -204,6 +204,31 @@ video {
 	width: 100%;
 }
 
+/* Hero uses columns on desktop */
+.construction-hero .construction-hero__grid.wp-block-columns {
+	display: grid !important;
+	grid-template-columns: 1fr;
+	gap: 0 !important;
+	margin: 0 !important;
+	max-width: none !important;
+	align-items: stretch !important;
+}
+
+@media (min-width: 900px) {
+	.construction-hero .construction-hero__grid.wp-block-columns {
+		grid-template-columns: minmax(0, 48%) minmax(0, 52%) !important;
+		flex-wrap: nowrap !important;
+		min-height: min(88vh, 820px);
+	}
+
+	.construction-hero .construction-hero__copy,
+	.construction-hero .construction-hero__media {
+		flex-basis: auto !important;
+		width: auto !important;
+		max-width: none !important;
+	}
+}
+
 .construction-hero__grid {
 	display: grid;
 	grid-template-columns: 1fr;
