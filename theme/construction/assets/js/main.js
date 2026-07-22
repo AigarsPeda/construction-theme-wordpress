@@ -19,6 +19,71 @@
 		});
 	});
 
+	// Project gallery lightbox with a virtual ring (clone last/first)
+	// so next/prev always slide in one direction — no awkward wrap.
+	if (typeof window.GLightbox === 'function' && document.querySelector('.construction-projects__grid .construction-lightbox')) {
+		const triggers = Array.from(document.querySelectorAll('.construction-projects__grid .construction-lightbox'));
+		const realItems = triggers.map((node) => ({
+			href: node.getAttribute('href'),
+			type: 'image',
+		}));
+
+		if (realItems.length > 0) {
+			const elements =
+				realItems.length === 1
+					? realItems
+					: [realItems[realItems.length - 1], ...realItems, realItems[0]];
+
+			const lightbox = window.GLightbox({
+				elements,
+				touchNavigation: true,
+				loop: false,
+				openEffect: 'fade',
+				closeEffect: 'fade',
+				slideEffect: 'slide',
+				dragAutoSnap: true,
+				preload: true,
+			});
+
+			let jumping = false;
+			const lastCloneIndex = elements.length - 1;
+			const firstRealIndex = realItems.length === 1 ? 0 : 1;
+			const lastRealIndex = realItems.length === 1 ? 0 : realItems.length;
+
+			const jumpWithoutSlide = (index) => {
+				jumping = true;
+				const previousEffect = lightbox.settings.slideEffect;
+				lightbox.settings.slideEffect = 'none';
+				lightbox.goToSlide(index);
+				lightbox.settings.slideEffect = previousEffect;
+				// Allow GLightbox to finish DOM updates before accepting another jump.
+				requestAnimationFrame(() => {
+					jumping = false;
+				});
+			};
+
+			lightbox.on('slide_changed', ({ current }) => {
+				if (jumping || realItems.length < 2) {
+					return;
+				}
+				if (current.index === lastCloneIndex) {
+					// Landed on cloned first after sliding past last → snap to real first.
+					jumpWithoutSlide(firstRealIndex);
+				} else if (current.index === 0) {
+					// Landed on cloned last after sliding before first → snap to real last.
+					jumpWithoutSlide(lastRealIndex);
+				}
+			});
+
+			triggers.forEach((node, index) => {
+				node.addEventListener('click', (event) => {
+					event.preventDefault();
+					lightbox.openAt(realItems.length === 1 ? 0 : index + 1);
+				});
+			});
+		}
+	}
+
 	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	const gsap = window.gsap;
 

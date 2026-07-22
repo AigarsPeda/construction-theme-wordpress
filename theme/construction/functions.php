@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CONSTRUCTION_VERSION', '0.5.2' );
+define( 'CONSTRUCTION_VERSION', '0.5.8' );
 
 require get_template_directory() . '/inc/i18n.php';
 require get_template_directory() . '/inc/images.php';
@@ -55,6 +55,25 @@ function construction_enqueue_assets(): void {
 		CONSTRUCTION_VERSION
 	);
 
+	$slug        = is_singular( 'page' ) ? (string) get_post_field( 'post_name', get_queried_object_id() ) : '';
+	$is_projects = in_array( $slug, array( 'projekti', 'projects', 'proekty' ), true );
+
+	if ( $is_projects ) {
+		wp_enqueue_style(
+			'glightbox',
+			'https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/css/glightbox.min.css',
+			array(),
+			'3.3.0'
+		);
+		wp_enqueue_script(
+			'glightbox',
+			'https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/js/glightbox.min.js',
+			array(),
+			'3.3.0',
+			true
+		);
+	}
+
 	wp_enqueue_script(
 		'gsap',
 		'https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js',
@@ -63,10 +82,15 @@ function construction_enqueue_assets(): void {
 		true
 	);
 
+	$main_deps = array( 'gsap' );
+	if ( $is_projects ) {
+		$main_deps[] = 'glightbox';
+	}
+
 	wp_enqueue_script(
 		'construction-main',
 		get_template_directory_uri() . '/assets/js/main.js',
-		array( 'gsap' ),
+		$main_deps,
 		CONSTRUCTION_VERSION,
 		true
 	);

@@ -35,7 +35,8 @@ $contact_href = esc_url( trailingslashit( home_url( '/' ) ) . '#contact' );
 					$key,
 					'construction-projects__item',
 					construction_t( $alt_key ),
-					'large'
+					'large',
+					true
 				);
 				?>
 			<?php endforeach; ?>

@@ -269,11 +269,17 @@ function construction_project_image_url( string $key, string $size = 'large' ): 
 
 /**
  * Gutenberg image block markup bound to a Media Library attachment.
+ *
+ * @param string $key        Catalog key.
+ * @param string $class_name Extra figure class.
+ * @param string $alt        Alt text.
+ * @param string $size       Image size slug.
+ * @param bool   $lightbox   Wrap in lightbox link to full-size image.
  */
-function construction_media_image_block( string $key, string $class_name, string $alt, string $size = 'large' ): string {
+function construction_media_image_block( string $key, string $class_name, string $alt, string $size = 'large', bool $lightbox = false ): string {
 	$id  = construction_media_id( $key );
 	$url = esc_url( construction_image_url( $key, $size ) );
-	$alt = esc_attr( $alt );
+	$alt_attr = esc_attr( $alt );
 	$class_name = trim( $class_name );
 
 	if ( $id <= 0 || $url === '' ) {
@@ -285,9 +291,23 @@ function construction_media_image_block( string $key, string $class_name, string
 		$classes .= ' ' . esc_attr( $class_name );
 	}
 
+	$img = '<img src="' . $url . '" alt="' . $alt_attr . '" class="wp-image-' . $id . '"/>';
+
+	if ( $lightbox ) {
+		$full = esc_url( construction_image_url( $key, 'full' ) );
+		if ( $full === '' ) {
+			$full = $url;
+		}
+		$link_dest = 'custom';
+		$inner     = '<a href="' . $full . '" class="construction-lightbox glightbox" data-gallery="construction-projects">' . $img . '</a>';
+	} else {
+		$link_dest = 'none';
+		$inner     = $img;
+	}
+
 	return <<<HTML
-			<!-- wp:image {"id":{$id},"sizeSlug":"{$size}","linkDestination":"none","className":"{$class_name}"} -->
-			<figure class="{$classes}"><img src="{$url}" alt="{$alt}" class="wp-image-{$id}"/></figure>
+			<!-- wp:image {"id":{$id},"sizeSlug":"{$size}","linkDestination":"{$link_dest}","className":"{$class_name}"} -->
+			<figure class="{$classes}">{$inner}</figure>
 			<!-- /wp:image -->
 
 HTML;

@@ -1013,6 +1013,14 @@ p.construction-lang a[aria-current="true"] {
 	background: var(--bn-mist);
 }
 
+.construction-projects__item a.construction-lightbox {
+	display: block;
+	cursor: zoom-in;
+	line-height: 0;
+	text-decoration: none;
+	color: inherit;
+}
+
 .construction-projects__item img {
 	display: block;
 	width: 100%;

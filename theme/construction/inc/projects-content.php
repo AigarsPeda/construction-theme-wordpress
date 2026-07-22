@@ -53,7 +53,8 @@ function construction_projects_page_content_for_lang( string $lang ): string {
 			$key,
 			'construction-projects__item',
 			construction_string( $alt_key, $lang ),
-			'large'
+			'large',
+			true
 		);
 	}
 
