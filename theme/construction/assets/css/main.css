@@ -1,4 +1,4 @@
-/* BūvNams — Mockup 1 layout styles */
+/* Construction — Mockup 1 layout styles */
 
 :root {
 	--bn-mist: #e4ebf0;
@@ -24,7 +24,7 @@
 }
 
 /* ——— Header ——— */
-.buvnams-header {
+.construction-header {
 	position: sticky;
 	top: 0;
 	z-index: 100;
@@ -33,15 +33,15 @@
 	border-bottom: 1px solid color-mix(in srgb, var(--bn-ink) 6%, transparent);
 }
 
-.buvnams-header__inner {
+.construction-header__inner {
 	max-width: var(--bn-max);
 	margin-inline: auto;
 	padding: 0.9rem var(--bn-pad);
 	gap: 1rem;
 }
 
-.buvnams-logo .wp-block-site-title a,
-.buvnams-logo a {
+.construction-logo .wp-block-site-title a,
+.construction-logo a {
 	font-family: "Syne", sans-serif;
 	font-weight: 800;
 	font-size: 1.15rem;
@@ -50,37 +50,37 @@
 	color: var(--bn-ink);
 }
 
-.buvnams-nav {
+.construction-nav {
 	flex: 1;
 	justify-content: center;
 }
 
-.buvnams-phone {
+.construction-phone {
 	margin: 0;
 	font-weight: 600;
 	font-size: 0.95rem;
 	white-space: nowrap;
 }
 
-.buvnams-phone a {
+.construction-phone a {
 	text-decoration: none;
 }
 
 /* ——— Hero ——— */
-.buvnams-hero {
+.construction-hero {
 	background: linear-gradient(105deg, var(--bn-mist) 0%, var(--bn-mist) 46%, #cfd8de 46%, #b8c5ce 100%);
 	min-height: min(88vh, 820px);
 	overflow: hidden;
 }
 
-.buvnams-hero__grid {
+.construction-hero__grid {
 	max-width: none !important;
 	margin: 0 !important;
 	min-height: min(88vh, 820px);
 	align-items: stretch !important;
 }
 
-.buvnams-hero__copy {
+.construction-hero__copy {
 	display: flex !important;
 	flex-direction: column;
 	justify-content: center;
@@ -89,28 +89,38 @@
 	margin-left: max(0px, calc((100vw - var(--bn-max)) / 2));
 }
 
-.buvnams-hero__title {
+.construction-hero__title {
 	margin: 0 0 1rem;
 	letter-spacing: -0.03em;
 }
 
-.buvnams-hero__text {
+.construction-hero__text {
 	color: var(--bn-steel);
 	max-width: 28rem;
 	margin-bottom: 1.5rem;
 }
 
-.buvnams-hero__since {
+.construction-hero__since {
 	margin-top: 2.5rem;
 	font-size: 0.875rem;
 	color: var(--bn-steel);
 }
 
-.buvnams-hero__media {
+.construction-hero__media {
 	padding: 0 !important;
 }
 
-.buvnams-hero__visual {
+.construction-hero__image,
+.construction-hero__image img {
+	height: 100%;
+	min-height: min(88vh, 820px);
+	margin: 0;
+	object-fit: cover;
+	width: 100%;
+	display: block;
+}
+
+.construction-hero__visual {
 	height: 100%;
 	min-height: 360px;
 	background:
@@ -121,7 +131,7 @@
 	position: relative;
 }
 
-.buvnams-hero__visual::after {
+.construction-hero__visual::after {
 	content: "";
 	position: absolute;
 	inset: 12% 18% 18% 22%;
@@ -134,47 +144,47 @@
 }
 
 /* ——— Shared section padding ——— */
-.buvnams-services,
-.buvnams-quality,
-.buvnams-contact {
+.construction-services,
+.construction-quality,
+.construction-contact {
 	padding: clamp(3.5rem, 8vw, 6.5rem) var(--bn-pad);
 }
 
-.buvnams-services__grid,
-.buvnams-quality__grid,
-.buvnams-contact__grid,
-.buvnams-reviews__grid {
+.construction-services__grid,
+.construction-quality__grid,
+.construction-contact__grid,
+.construction-reviews__grid {
 	max-width: var(--bn-max);
 }
 
 /* ——— Services ——— */
-.buvnams-services__intro h2 {
+.construction-services__intro h2 {
 	letter-spacing: -0.02em;
 	margin-top: 0;
 }
 
-.buvnams-service-card {
+.construction-service-card {
 	gap: 1.1rem !important;
 	padding: 1rem 0;
 	border-bottom: 1px solid color-mix(in srgb, var(--bn-ink) 8%, transparent);
 }
 
-.buvnams-service-card:last-child {
+.construction-service-card:last-child {
 	border-bottom: 0;
 }
 
-.buvnams-service-card h3 {
+.construction-service-card h3 {
 	margin: 0 0 0.25rem;
 	font-size: 1.1rem;
 }
 
-.buvnams-service-card p {
+.construction-service-card p {
 	margin: 0;
 	color: var(--bn-steel);
 	font-size: 0.95rem;
 }
 
-.buvnams-service-card__thumb {
+.construction-service-card__thumb {
 	flex: 0 0 72px;
 	width: 72px;
 	height: 72px;
@@ -182,67 +192,67 @@
 	background: var(--bn-mist);
 }
 
-.buvnams-service-card__thumb--1 {
+.construction-service-card__thumb--1 {
 	background: linear-gradient(135deg, #d7e0e6, #9aafbc);
 }
 
-.buvnams-service-card__thumb--2 {
+.construction-service-card__thumb--2 {
 	background: linear-gradient(135deg, #e8d7c2, #b8956c);
 }
 
-.buvnams-service-card__thumb--3 {
+.construction-service-card__thumb--3 {
 	background: linear-gradient(135deg, #c5ced4, #6b7580);
 }
 
 /* ——— Quality ——— */
-.buvnams-quality h2 {
+.construction-quality h2 {
 	max-width: 18ch;
 	margin-bottom: 2rem;
 }
 
-.buvnams-quality__card h3 {
+.construction-quality__card h3 {
 	font-size: 1.05rem;
 	margin: 0.85rem 0 0;
 }
 
-.buvnams-quality__media {
+.construction-quality__media {
 	aspect-ratio: 4 / 5;
 	border-radius: var(--bn-radius);
 	background: var(--bn-mist);
 }
 
-.buvnams-quality__media--1 {
+.construction-quality__media--1 {
 	background: linear-gradient(160deg, #cfd8de, #7f93a0);
 }
 
-.buvnams-quality__media--2 {
+.construction-quality__media--2 {
 	background:
 		radial-gradient(circle at 30% 30%, #fff 0 12%, transparent 13%),
 		radial-gradient(circle at 55% 45%, #fff 0 16%, transparent 17%),
 		linear-gradient(160deg, #e8eef2, #aebbc4);
 }
 
-.buvnams-quality__media--3 {
+.construction-quality__media--3 {
 	background: linear-gradient(160deg, #e4d5c0, #8a6a45);
 }
 
-.buvnams-quality__media--4 {
+.construction-quality__media--4 {
 	background: linear-gradient(160deg, #b0bcc4, #4a5560);
 }
 
 /* ——— Reviews ——— */
-.buvnams-reviews {
+.construction-reviews {
 	background: var(--bn-ink);
 	color: #fff;
 	padding: clamp(3.5rem, 8vw, 6.5rem) var(--bn-pad);
 }
 
-.buvnams-reviews h2 {
+.construction-reviews h2 {
 	max-width: 22ch;
 	margin-bottom: 1.5rem;
 }
 
-.buvnams-reviews__summary {
+.construction-reviews__summary {
 	background: #fff;
 	color: var(--bn-ink);
 	border-radius: 999px;
@@ -252,7 +262,7 @@
 	font-size: 0.9rem;
 }
 
-.buvnams-review-card {
+.construction-review-card {
 	background: #fff;
 	color: var(--bn-ink);
 	border-radius: var(--bn-radius);
@@ -260,19 +270,19 @@
 	height: 100%;
 }
 
-.buvnams-review-card__meta {
+.construction-review-card__meta {
 	margin: 0 0 0.6rem;
 	font-size: 0.9rem;
 }
 
-.buvnams-review-card p:last-child {
+.construction-review-card p:last-child {
 	margin: 0;
 	color: var(--bn-steel);
 	font-size: 0.95rem;
 }
 
 /* ——— Contact ——— */
-.buvnams-contact__label {
+.construction-contact__label {
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
 	font-size: 0.75rem;
@@ -280,25 +290,25 @@
 	margin: 0 0 0.5rem;
 }
 
-.buvnams-contact__email a,
-.buvnams-contact__telegram a {
+.construction-contact__email a,
+.construction-contact__telegram a {
 	font-family: "Syne", sans-serif;
 	font-weight: 700;
 	font-size: clamp(1.25rem, 2.5vw, 1.75rem);
 	text-decoration: none;
 }
 
-.buvnams-contact__telegram {
+.construction-contact__telegram {
 	margin-top: 0.35rem;
 }
 
-.buvnams-contact__telegram a {
+.construction-contact__telegram a {
 	font-size: 1rem;
 	font-weight: 600;
 	color: var(--bn-steel);
 }
 
-.buvnams-lead-form__row {
+.construction-lead-form__row {
 	display: flex;
 	gap: 0.5rem;
 	align-items: stretch;
@@ -307,7 +317,7 @@
 	padding: 0.35rem 0.35rem 0.35rem 1.25rem;
 }
 
-.buvnams-lead-form input {
+.construction-lead-form input {
 	flex: 1;
 	border: 0;
 	background: transparent;
@@ -317,7 +327,7 @@
 	min-width: 0;
 }
 
-.buvnams-lead-form button {
+.construction-lead-form button {
 	width: 3rem;
 	height: 3rem;
 	border: 0;
@@ -329,37 +339,37 @@
 	flex-shrink: 0;
 }
 
-.buvnams-lead-form button:hover {
+.construction-lead-form button:hover {
 	background: var(--bn-timber);
 }
 
 /* ——— Footer ——— */
-.buvnams-footer {
+.construction-footer {
 	border-top: 1px solid color-mix(in srgb, var(--bn-ink) 8%, transparent);
 }
 
-.buvnams-footer__inner {
+.construction-footer__inner {
 	max-width: var(--bn-max);
 	margin-inline: auto;
 	padding: 1.1rem var(--bn-pad);
 	gap: 1rem;
 }
 
-.buvnams-footer__links {
+.construction-footer__links {
 	margin: 0;
 	color: var(--bn-steel);
 	font-size: 0.95rem;
 }
 
-.buvnams-footer__links a {
+.construction-footer__links a {
 	text-decoration: none;
 }
 
-.buvnams-footer__top {
+.construction-footer__top {
 	margin: 0;
 }
 
-.buvnams-footer__top a {
+.construction-footer__top a {
 	display: inline-flex;
 	width: 2.5rem;
 	height: 2.5rem;
@@ -373,27 +383,29 @@
 
 /* ——— Motion ——— */
 @media (prefers-reduced-motion: no-preference) {
-	.buvnams-hero__copy > * {
+	.construction-hero__copy > * {
 		animation: bn-rise 0.7s ease both;
 	}
 
-	.buvnams-hero__copy > *:nth-child(2) { animation-delay: 0.08s; }
-	.buvnams-hero__copy > *:nth-child(3) { animation-delay: 0.16s; }
-	.buvnams-hero__copy > *:nth-child(4) { animation-delay: 0.24s; }
+	.construction-hero__copy > *:nth-child(2) { animation-delay: 0.08s; }
+	.construction-hero__copy > *:nth-child(3) { animation-delay: 0.16s; }
+	.construction-hero__copy > *:nth-child(4) { animation-delay: 0.24s; }
 
-	.buvnams-hero__visual {
+	.construction-hero__visual,
+	.construction-hero__image,
+	.construction-hero__image img {
 		animation: bn-fade 1s ease both;
 	}
 
-	.buvnams-service-card,
-	.buvnams-quality__card,
-	.buvnams-review-card {
+	.construction-service-card,
+	.construction-quality__card,
+	.construction-review-card {
 		transition: transform 0.25s ease, box-shadow 0.25s ease;
 	}
 
-	.buvnams-service-card:hover,
-	.buvnams-quality__card:hover,
-	.buvnams-review-card:hover {
+	.construction-service-card:hover,
+	.construction-quality__card:hover,
+	.construction-review-card:hover {
 		transform: translateY(-2px);
 	}
 }
@@ -416,44 +428,47 @@
 
 /* ——— Responsive ——— */
 @media (max-width: 900px) {
-	.buvnams-hero {
+	.construction-hero {
 		background: var(--bn-mist);
 		min-height: auto;
 	}
 
-	.buvnams-hero__grid {
+	.construction-hero__grid {
 		flex-direction: column !important;
 		min-height: auto;
 	}
 
-	.buvnams-hero__copy {
+	.construction-hero__copy {
 		max-width: none;
 		margin-left: 0;
 		padding-bottom: 2rem;
 	}
 
-	.buvnams-hero__visual {
+	.construction-hero__visual,
+	.construction-hero__image,
+	.construction-hero__image img {
 		min-height: 280px;
 		border-radius: var(--bn-radius) var(--bn-radius) 0 0;
 		margin: 0 var(--bn-pad) var(--bn-pad);
+		width: calc(100% - (var(--bn-pad) * 2));
 	}
 
-	.buvnams-header__inner {
+	.construction-header__inner {
 		justify-content: space-between;
 	}
 
-	.buvnams-reviews__summary {
+	.construction-reviews__summary {
 		border-radius: var(--bn-radius);
 	}
 }
 
 @media (max-width: 600px) {
-	.buvnams-phone {
+	.construction-phone {
 		display: none;
 	}
 
-	.buvnams-quality__grid,
-	.buvnams-reviews__grid {
+	.construction-quality__grid,
+	.construction-reviews__grid {
 		flex-direction: column !important;
 	}
 }

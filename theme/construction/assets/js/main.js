@@ -1,5 +1,5 @@
 /**
- * BūvNams front-end script (reserved for small UI helpers).
+ * Construction front-end script (reserved for small UI helpers).
  */
 (() => {
 	'use strict';

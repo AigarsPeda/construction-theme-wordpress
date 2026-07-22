@@ -1,4 +1,4 @@
-# BūvNams — WordPress theme
+# Construction — WordPress theme
 
 Custom **Gutenberg / block theme** for a construction company site.
 
@@ -14,8 +14,9 @@ construction/
 ├── README.md
 ├── DEVELOPMENT_PLAN.md
 └── theme/
-    └── buvnams/          ← install this folder as the WP theme
+    └── construction/          ← install this folder as the WP theme
         ├── style.css
+        ├── screenshot.png     ← Themes admin preview
         ├── theme.json
         ├── functions.php
         ├── templates/
@@ -29,24 +30,24 @@ construction/
 ### Option A — symlink (recommended while developing)
 
 ```bash
-ln -s "/Users/aigarspeda/Desktop/construction/theme/buvnams" \
-  "/Users/aigarspeda/Local Sites/construction/app/public/wp-content/themes/buvnams"
+ln -s "/Users/aigarspeda/Desktop/construction/theme/construction" \
+  "/Users/aigarspeda/Local Sites/construction/app/public/wp-content/themes/construction"
 ```
 
-Then in WP Admin: **Appearance → Themes → Activate “BūvNams”**.
+Then in WP Admin: **Appearance → Themes → Activate “Construction”**.
 
 ### Option B — copy
 
-Copy `theme/buvnams` into:
+Copy `theme/construction` into:
 
-`Local Sites/construction/app/public/wp-content/themes/buvnams`
+`Local Sites/construction/app/public/wp-content/themes/construction`
 
 ## Install on production
 
 1. Push this repo to GitHub.
-2. On the server, place `theme/buvnams` into `wp-content/themes/buvnams`  
+2. On the server, place `theme/construction` into `wp-content/themes/construction`  
    (via Git deploy, SFTP, or zip upload).
-3. In WP Admin: **Appearance → Themes → Activate “BūvNams”**.
+3. In WP Admin: **Appearance → Themes → Activate “Construction”**.
 4. Install/activate **Polylang**, set languages: **LV (default)**, EN, RU.
 5. Migrate content/DB from Local (All-in-One WP Migration, Duplicator, or similar), **or** rebuild pages on prod.
 
@@ -54,10 +55,10 @@ Copy `theme/buvnams` into:
 
 ```bash
 cd theme
-zip -r buvnams.zip buvnams
+zip -r construction.zip construction
 ```
 
-Then: **Appearance → Themes → Add New → Upload Theme → buvnams.zip**.
+Then: **Appearance → Themes → Add New → Upload Theme → construction.zip**.
 
 ## After activate
 
@@ -75,7 +76,7 @@ Gutenberg is WordPress’s block editor. This theme is built *for* it (templates
 
 | | |
 |---|---|
-| Brand | BūvNams |
+| Brand | Construction |
 | Phone | +371 2000 0000 |
-| Email | info@buvnams.lv |
-| Telegram | @buvnams |
+| Email | info@construction.lv |
+| Telegram | @construction |

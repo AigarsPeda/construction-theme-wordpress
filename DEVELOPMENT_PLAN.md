@@ -15,10 +15,10 @@ Last updated: 2026-07-22
 
 | Item | Placeholder |
 |---|---|
-| Company name | **BūvNams** |
+| Company name | **Construction** |
 | Phone | `+371 2000 0000` |
-| Email | `info@buvnams.lv` |
-| Telegram | `@buvnams` |
+| Email | `info@construction.lv` |
+| Telegram | `@construction` |
 | Domain (prod) | TBD |
 
 ## Architecture decision
@@ -29,7 +29,7 @@ Not Elementor. Not a heavy page-builder stack.
 
 **Stack:**
 
-1. Custom WordPress **block theme** (`themes/buvnams/`)
+1. Custom WordPress **block theme** (`themes/construction/`)
 2. **Custom block patterns** for each homepage section
 3. **Polylang** for LV / EN / RU (already installed in Local)
 4. Native contact form (or one lightweight form plugin later if needed)
@@ -120,7 +120,7 @@ construction/
 ├── README.md                    ← Local + prod install instructions
 ├── .gitignore
 └── theme/
-    └── buvnams/                 ← the WordPress theme (commit this)
+    └── construction/                 ← the WordPress theme (commit this)
         ├── style.css            ← theme header (required)
         ├── theme.json           ← block theme settings
         ├── functions.php
@@ -134,16 +134,16 @@ construction/
 
 **Local (dev):** symlink Desktop theme → Local themes folder (already set up for daily work).
 
-**GitHub:** commit `/Users/aigarspeda/Desktop/construction` (theme lives under `theme/buvnams`).
+**GitHub:** commit `/Users/aigarspeda/Desktop/construction` (theme lives under `theme/construction`).
 
-**Production:** copy/deploy `theme/buvnams` → `wp-content/themes/buvnams`, then Activate in WP Admin (or upload `buvnams.zip`).
+**Production:** copy/deploy `theme/construction` → `wp-content/themes/construction`, then Activate in WP Admin (or upload `construction.zip`).
 
 ---
 
 ## Implementation phases
 
 ### Phase 0 — Foundations
-- [x] Placeholder brand **BūvNams**
+- [x] Placeholder brand **Construction**
 - [x] Theme scaffold in Desktop + symlink into Local
 - [ ] Activate theme in WP Admin (Appearance → Themes)
 - [ ] Finish Polylang: LV default, EN, RU
@@ -186,7 +186,7 @@ construction/
 ## Success criteria (v1)
 
 - Homepage on `construction.local` matches Mockup 1 structure and feel
-- Theme code lives under Desktop `construction/theme/buvnams`
+- Theme code lives under Desktop `construction/theme/construction`
 - No Elementor (or other page builder) required
 - Site opens in **LV** by default; EN and RU switch correctly via Polylang
 - Header shows placeholder phone; footer shows placeholder email + Telegram
@@ -196,7 +196,7 @@ construction/
 
 ## Open decisions (non-blocking)
 
-1. Final company name (placeholder: BūvNams)
+1. Final company name (placeholder: Construction)
 2. Real photos vs temporary Unsplash/local placeholders
 3. Quiz feature: skip for v1 vs simple multi-step form later
 4. Production host (cPanel, VPS, WP Engine, etc.)
@@ -205,4 +205,4 @@ construction/
 
 ## Next action
 
-After this plan is accepted: scaffold the `buvnams` block theme, symlink into Local, and build the Mockup 1 homepage shell in Latvian.
+After this plan is accepted: scaffold the `construction` block theme, symlink into Local, and build the Mockup 1 homepage shell in Latvian.
