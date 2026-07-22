@@ -22,7 +22,13 @@ $mail_href = esc_url(
 			<p class="construction-contact__label"><?php echo esc_html( construction_t( 'contact.label' ) ); ?></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"construction-contact__email"} -->
-			<p class="construction-contact__email"><a href="<?php echo $mail_href; ?>">info@construction.lv</a></p>
+			<p class="construction-contact__email"><a href="<?php echo $mail_href; ?>"><?php echo esc_html( construction_t( 'contact.email' ) ); ?></a></p>
+			<!-- /wp:paragraph -->
+			<!-- wp:paragraph {"className":"construction-contact__phone"} -->
+			<p class="construction-contact__phone"><a href="tel:+37120000000"><?php echo esc_html( construction_t( 'contact.phone' ) ); ?></a></p>
+			<!-- /wp:paragraph -->
+			<!-- wp:paragraph {"className":"construction-contact__address"} -->
+			<p class="construction-contact__address"><?php echo esc_html( construction_t( 'contact.address' ) ); ?></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"construction-contact__social"} -->
 			<p class="construction-contact__social"><a href="https://instagram.com/construction" target="_blank" rel="noopener">Instagram</a> · <a href="https://facebook.com/construction" target="_blank" rel="noopener">Facebook</a></p>

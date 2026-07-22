@@ -19,6 +19,76 @@
 		});
 	});
 
+	// Mobile drawer: nav links + language switcher.
+	(() => {
+		const root = document.querySelector('[data-construction-drawer]');
+		const toggle = document.querySelector('[data-construction-menu-open]');
+		if (!root || !toggle) {
+			return;
+		}
+
+		// Header uses backdrop-filter, which traps position:fixed children.
+		// Keep the drawer on <body> so it covers the full viewport.
+		if (root.parentElement !== document.body) {
+			document.body.appendChild(root);
+		}
+
+		const closeButtons = root.querySelectorAll('[data-construction-menu-close]');
+		const drawer = root.querySelector('.construction-drawer');
+		const mq = window.matchMedia('(max-width: 899px)');
+		let closeTimer = 0;
+
+		const setOpen = (open) => {
+			if (!mq.matches && open) {
+				return;
+			}
+
+			window.clearTimeout(closeTimer);
+			toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+			document.body.classList.toggle('construction-menu-open', open);
+
+			if (open) {
+				root.hidden = false;
+				// Next frame so the slide-in transition can run.
+				requestAnimationFrame(() => {
+					root.classList.add('is-open');
+				});
+				if (drawer) {
+					const focusTarget = drawer.querySelector('[data-construction-menu-close]') || drawer;
+					focusTarget.focus();
+				}
+				return;
+			}
+
+			root.classList.remove('is-open');
+			closeTimer = window.setTimeout(() => {
+				root.hidden = true;
+			}, 320);
+			toggle.focus();
+		};
+
+		toggle.addEventListener('click', () => {
+			const willOpen = toggle.getAttribute('aria-expanded') !== 'true';
+			setOpen(willOpen);
+		});
+
+		closeButtons.forEach((btn) => {
+			btn.addEventListener('click', () => setOpen(false));
+		});
+
+		document.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+				setOpen(false);
+			}
+		});
+
+		mq.addEventListener('change', (event) => {
+			if (!event.matches) {
+				setOpen(false);
+			}
+		});
+	})();
+
 	// Project gallery lightbox with a virtual ring (clone last/first)
 	// so next/prev always slide in one direction — no awkward wrap.
 	if (typeof window.GLightbox === 'function' && document.querySelector('.construction-projects__grid .construction-lightbox')) {

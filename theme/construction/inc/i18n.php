@@ -156,6 +156,21 @@ function construction_strings(): array {
 			'en' => 'Contact',
 			'ru' => 'Контакты',
 		),
+		'nav.menu'             => array(
+			'lv' => 'Izvēlne',
+			'en' => 'Menu',
+			'ru' => 'Меню',
+		),
+		'nav.close'            => array(
+			'lv' => 'Aizvērt',
+			'en' => 'Close',
+			'ru' => 'Закрыть',
+		),
+		'nav.language'         => array(
+			'lv' => 'Valoda',
+			'en' => 'Language',
+			'ru' => 'Язык',
+		),
 		'seo.home.title'       => array(
 			'lv' => 'Karkasa mājas — projektēšana un būvniecība',
 			'en' => 'Frame houses — design and construction',
@@ -520,6 +535,26 @@ function construction_strings(): array {
 			'lv' => 'Projekta pieprasījums',
 			'en' => 'Project enquiry',
 			'ru' => 'Заявка на проект',
+		),
+		'contact.email'        => array(
+			'lv' => 'info@construction.lv',
+			'en' => 'info@construction.lv',
+			'ru' => 'info@construction.lv',
+		),
+		'contact.phone'        => array(
+			'lv' => '+371 2000 0000',
+			'en' => '+371 2000 0000',
+			'ru' => '+371 2000 0000',
+		),
+		'contact.address'      => array(
+			'lv' => 'Rīga, Latvija',
+			'en' => 'Riga, Latvia',
+			'ru' => 'Рига, Латвия',
+		),
+		'contact.address_label' => array(
+			'lv' => 'Adrese',
+			'en' => 'Address',
+			'ru' => 'Адрес',
 		),
 		'credits.title'        => array(
 			'lv' => 'Foto kredīti (Unsplash)',
