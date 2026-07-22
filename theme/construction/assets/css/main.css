@@ -138,10 +138,9 @@ video {
 }
 
 .construction-header__inner {
-	display: flex !important;
-	flex-wrap: nowrap !important;
+	display: grid !important;
+	grid-template-columns: 1fr auto 1fr;
 	align-items: center !important;
-	justify-content: flex-start !important;
 	max-width: var(--bn-max);
 	margin-inline: auto;
 	padding: 0.75rem var(--bn-pad);
@@ -155,7 +154,8 @@ video {
 	align-items: center !important;
 	gap: 0.65rem !important;
 	min-width: 0;
-	flex: 0 1 auto;
+	justify-self: start;
+	grid-column: 1;
 }
 
 .construction-logo-mark {
@@ -197,28 +197,15 @@ video {
 	color: var(--bn-timber);
 }
 
-/* Hide empty nav (no links) so it doesn't sit in the middle */
-.construction-nav:not(:has(.wp-block-navigation-item)),
-.construction-nav:not(:has(a)) {
-	display: none !important;
-}
-
+/* Center slot — empty or filled; logo/actions stay put */
 .construction-nav {
-	flex: 1 1 auto;
-	display: flex;
-	justify-content: center;
+	grid-column: 2;
+	justify-self: center;
 	min-width: 0;
+	max-width: 100%;
 }
 
-.construction-header__actions {
-	display: flex !important;
-	align-items: center !important;
-	justify-content: flex-end !important;
-	gap: 0.65rem;
-	flex: 0 0 auto;
-	margin-left: auto !important; /* stay right even without a center menu */
-}
-
+.construction-nav .construction-nav-list,
 .construction-nav-list {
 	display: flex;
 	flex-wrap: wrap;
@@ -242,11 +229,36 @@ video {
 	color: var(--bn-timber);
 }
 
-.construction-phone {
-	margin: 0;
-	font-weight: 600;
-	font-size: 0.9rem;
-	white-space: nowrap;
+.construction-header__actions {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: flex-end !important;
+	gap: 0.65rem;
+	justify-self: end;
+	grid-column: 3;
+	flex-wrap: nowrap;
+}
+
+@media (max-width: 720px) {
+	.construction-header__inner {
+		grid-template-columns: 1fr auto;
+		grid-template-areas:
+			"brand actions"
+			"nav nav";
+	}
+
+	.construction-brand {
+		grid-area: brand;
+	}
+
+	.construction-header__actions {
+		grid-area: actions;
+	}
+
+	.construction-nav {
+		grid-area: nav;
+		justify-self: start;
+	}
 }
 
 .construction-phone a {
