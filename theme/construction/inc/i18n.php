@@ -31,6 +31,17 @@ function construction_current_lang(): string {
 		}
 	}
 
+	// Fallback: language of the current page/post.
+	if ( function_exists( 'pll_get_post_language' ) ) {
+		$post_id = get_queried_object_id();
+		if ( $post_id > 0 ) {
+			$lang = pll_get_post_language( $post_id, 'slug' );
+			if ( is_string( $lang ) && in_array( $lang, construction_languages(), true ) ) {
+				return $lang;
+			}
+		}
+	}
+
 	if ( isset( $_GET['lang'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$lang = sanitize_key( wp_unslash( $_GET['lang'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( in_array( $lang, construction_languages(), true ) ) {
@@ -42,11 +53,25 @@ function construction_current_lang(): string {
 }
 
 /**
- * URL for a language (Polylang home URL or ?lang= fallback).
+ * URL for a language (translated front page when Polylang is available).
  */
 function construction_lang_url( string $lang ): string {
 	if ( ! in_array( $lang, construction_languages(), true ) ) {
 		$lang = 'lv';
+	}
+
+	// Prefer the translated homepage permalink (Sākums / Home / Главная).
+	if ( function_exists( 'pll_get_post' ) ) {
+		$front_id = (int) get_option( 'page_on_front' );
+		if ( $front_id > 0 ) {
+			$translated_id = pll_get_post( $front_id, $lang );
+			if ( $translated_id ) {
+				$url = get_permalink( (int) $translated_id );
+				if ( is_string( $url ) && $url !== '' ) {
+					return $url;
+				}
+			}
+		}
 	}
 
 	if ( function_exists( 'pll_home_url' ) && function_exists( 'pll_languages_list' ) ) {

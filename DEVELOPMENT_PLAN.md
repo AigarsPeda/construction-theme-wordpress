@@ -146,11 +146,9 @@ construction/
 ### Phase 0 — Foundations
 - [x] Placeholder brand **Construction**
 - [x] Theme scaffold in Desktop + symlink into Local
-- [x] Homepage as a real Page (**Sākums**) under Pages + static front page
-- [ ] Activate theme in WP Admin (Appearance → Themes) if not already
-- [ ] Finish Polylang: LV default, EN, RU
-- [ ] Create LV/EN/RU menus and language switcher
-- [ ] Init git / push to GitHub when ready
+- [x] Homepage as real Polylang pages: **Sākums (LV)**, **Home (EN)**, **Главная (RU)** with language-specific content
+- [x] Language switcher links between translated front pages
+- [ ] Create LV/EN/RU menus (optional cleanup: remove Sample Page)
 
 ### Phase 1 — Theme shell
 - [x] `theme.json` (colors, fonts, spacing — Mockup 1 palette)

@@ -11,10 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CONSTRUCTION_VERSION', '0.1.5' );
+define( 'CONSTRUCTION_VERSION', '0.2.0' );
 
 require get_template_directory() . '/inc/i18n.php';
 require get_template_directory() . '/inc/images.php';
+require get_template_directory() . '/inc/homepage-content.php';
 
 /**
  * Theme setup.
@@ -76,116 +77,58 @@ function construction_register_pattern_categories(): void {
 add_action( 'init', 'construction_register_pattern_categories' );
 
 /**
- * Default homepage block content (theme patterns).
+ * Rebuild LV/EN/RU homepages from scratch (admin URL or one-time key).
+ *
+ * Admin: /wp-admin/?construction_rebuild_homes=1
+ * Or one-time: /?construction_rebuild_homes_key=KEY
  */
-function construction_home_page_content(): string {
-	$patterns = array(
-		'construction/hero',
-		'construction/services',
-		'construction/quality',
-		'construction/reviews',
-		'construction/contact',
-		'construction/credits',
-	);
+function construction_admin_rebuild_homes(): void {
+	$by_admin = is_admin()
+		&& current_user_can( 'manage_options' )
+		&& isset( $_GET['construction_rebuild_homes'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-	$blocks = '';
-	foreach ( $patterns as $slug ) {
-		$blocks .= '<!-- wp:pattern {"slug":"' . $slug . '"} /-->' . "\n";
+	$key       = (string) get_option( 'construction_rebuild_key', '' );
+	$by_key    = $key !== ''
+		&& isset( $_GET['construction_rebuild_homes_key'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		&& hash_equals( $key, (string) wp_unslash( $_GET['construction_rebuild_homes_key'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+	if ( ! $by_admin && ! $by_key ) {
+		return;
 	}
 
-	return $blocks;
+	$result = construction_rebuild_polylang_homes();
+	if ( is_wp_error( $result ) ) {
+		wp_die( esc_html( $result->get_error_message() ) );
+	}
+
+	delete_option( 'construction_rebuild_key' );
+	flush_rewrite_rules( false );
+	delete_option( 'construction_flush_rewrites' );
+
+	if ( $by_admin ) {
+		wp_safe_redirect( admin_url( 'edit.php?post_type=page&construction_homes_ready=1' ) );
+		exit;
+	}
+
+	wp_safe_redirect( home_url( '/?construction_homes_ready=1' ) );
+	exit;
 }
+add_action( 'admin_init', 'construction_admin_rebuild_homes' );
+add_action( 'init', 'construction_admin_rebuild_homes', 5 );
 
 /**
- * Create/assign the homepage under Pages → Sākums.
+ * Notice after successful rebuild.
  */
-function construction_ensure_home_page(): void {
-	if ( ! is_admin() && 'wp_loaded' === current_action() ) {
+function construction_homes_ready_notice(): void {
+	if ( ! isset( $_GET['construction_homes_ready'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		return;
 	}
 
-	$existing_id = (int) get_option( 'construction_home_page_id', 0 );
-	$page        = $existing_id ? get_post( $existing_id ) : null;
-
-	if ( ! $page || 'page' !== $page->post_type || 'trash' === $page->post_status ) {
-		$found = get_posts(
-			array(
-				'name'           => 'sakums',
-				'post_type'      => 'page',
-				'post_status'    => array( 'publish', 'draft' ),
-				'posts_per_page' => 1,
-				'fields'         => 'ids',
-			)
-		);
-
-		if ( ! empty( $found ) ) {
-			$existing_id = (int) $found[0];
-			$page        = get_post( $existing_id );
-		}
-	}
-
-	if ( ! $page ) {
-		$existing_id = wp_insert_post(
-			array(
-				'post_title'   => 'Sākums',
-				'post_name'    => 'sakums',
-				'post_status'  => 'publish',
-				'post_type'    => 'page',
-				'post_content' => construction_home_page_content(),
-			),
-			true
-		);
-
-		if ( is_wp_error( $existing_id ) || ! $existing_id ) {
-			return;
-		}
-
-		$page = get_post( (int) $existing_id );
-	}
-
-	if ( ! $page ) {
-		return;
-	}
-
-	update_option( 'construction_home_page_id', (int) $page->ID );
-
-	// Keep homepage content synced to theme patterns if still empty.
-	if ( '' === trim( (string) $page->post_content ) ) {
-		wp_update_post(
-			array(
-				'ID'           => (int) $page->ID,
-				'post_content' => construction_home_page_content(),
-			)
-		);
-	}
-
-	update_option( 'show_on_front', 'page' );
-	update_option( 'page_on_front', (int) $page->ID );
-}
-add_action( 'after_switch_theme', 'construction_ensure_home_page' );
-add_action( 'admin_init', 'construction_ensure_home_page' );
-
-/**
- * Admin notice on the homepage edit screen.
- */
-function construction_home_page_admin_notice(): void {
-	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-	if ( ! $screen || 'page' !== $screen->id || 'post' !== $screen->base ) {
-		return;
-	}
-
-	$post_id = isset( $_GET['post'] ) ? (int) $_GET['post'] : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$home_id = (int) get_option( 'page_on_front' );
-
-	if ( ! $post_id || $post_id !== $home_id ) {
-		return;
-	}
-
-	echo '<div class="notice notice-info"><p>';
-	echo esc_html__( 'This is your site homepage (index). Sections come from Construction theme patterns (Hero, Services, …). Language text switches with LV / EN / RU.', 'construction' );
+	echo '<div class="notice notice-success is-dismissible"><p>';
+	echo esc_html__( 'Homepages rebuilt: Sākums (LV), Home (EN), Главная (RU). Open each page — text matches that language. Use LV/EN/RU on the site to switch.', 'construction' );
 	echo '</p></div>';
 }
-add_action( 'admin_notices', 'construction_home_page_admin_notice' );
+add_action( 'admin_notices', 'construction_homes_ready_notice' );
 
 /**
  * Mark html lang attribute for current language.
@@ -207,3 +150,16 @@ function construction_language_attributes( string $output ): string {
 	return $output . ' lang="' . esc_attr( $map[ $lang ] ) . '"';
 }
 add_filter( 'language_attributes', 'construction_language_attributes' );
+
+/**
+ * One-time permalink flush.
+ */
+function construction_maybe_flush_rewrites(): void {
+	if ( ! get_option( 'construction_flush_rewrites' ) ) {
+		return;
+	}
+
+	flush_rewrite_rules( false );
+	delete_option( 'construction_flush_rewrites' );
+}
+add_action( 'init', 'construction_maybe_flush_rewrites', 99 );
