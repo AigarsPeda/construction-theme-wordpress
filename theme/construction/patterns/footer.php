@@ -4,7 +4,7 @@
  * Slug: construction/footer
  * Categories: footer, construction
  * Block Types: core/template-part/footer
- * Description: Compact footer bar with CTA and links.
+ * Description: Compact footer bar with links and back-to-top.
  *
  * @package Construction
  */
@@ -13,7 +13,6 @@
 <div class="wp-block-group alignfull construction-footer">
 	<!-- wp:html -->
 	<div class="construction-footer__inner">
-		<a class="wp-block-button__link wp-element-button" href="#contact"><?php echo esc_html( construction_t( 'hero.cta' ) ); ?></a>
 		<p class="construction-footer__links">
 			<a href="#services"><?php echo esc_html( construction_t( 'nav.projects' ) ); ?></a>
 			·

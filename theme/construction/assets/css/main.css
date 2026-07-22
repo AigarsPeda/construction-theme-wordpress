@@ -491,40 +491,61 @@ video {
 	color: var(--bn-steel);
 }
 
-.construction-lead-form__row {
-	display: flex;
-	gap: 0.5rem;
-	align-items: stretch;
-	background: var(--bn-mist);
-	border-radius: 999px;
-	padding: 0.3rem 0.3rem 0.3rem 1rem;
+.construction-lead-form {
 	width: 100%;
 }
 
+.construction-lead-form__row {
+	display: flex;
+	flex-direction: row;
+	direction: ltr;
+	gap: 0.5rem;
+	align-items: center;
+	background: var(--bn-mist);
+	border-radius: 999px;
+	padding: 0.35rem 0.35rem 0.35rem 1.15rem;
+	width: 100%;
+	box-sizing: border-box;
+}
+
 .construction-lead-form input {
-	flex: 1;
+	flex: 1 1 auto;
+	order: 1;
 	border: 0;
 	background: transparent;
 	font: inherit;
 	font-size: 1rem;
-	padding: 0.85rem 0;
+	line-height: 1.4;
+	padding: 0.85rem 0.5rem 0.85rem 0;
 	outline: none;
 	min-width: 0;
-	width: 100%;
+	width: auto;
+	color: var(--bn-ink);
+}
+
+.construction-lead-form input::placeholder {
+	color: var(--bn-steel);
+	opacity: 1;
 }
 
 .construction-lead-form button {
+	order: 2;
+	flex: 0 0 3rem;
 	width: 3rem;
 	height: 3rem;
 	min-width: 48px;
 	min-height: 48px;
+	margin: 0;
 	border: 0;
 	border-radius: 999px;
 	background: var(--bn-ink);
 	color: #fff;
 	font-size: 1.25rem;
+	line-height: 1;
 	cursor: pointer;
-	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .construction-lead-form button:hover,
@@ -577,22 +598,8 @@ video {
 	flex-wrap: wrap;
 	gap: 0.85rem 1rem;
 	align-items: center;
+	justify-content: space-between;
 	width: 100%;
-}
-
-.construction-footer__inner .wp-element-button {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	padding: 0.7rem 1.15rem;
-	min-height: 44px;
-	border-radius: 10px;
-	background: var(--bn-ink);
-	color: #fff;
-	text-decoration: none;
-	font-family: "Archivo", sans-serif;
-	font-weight: 600;
-	font-size: 0.9rem;
 }
 
 .construction-footer__links {
@@ -608,7 +615,7 @@ video {
 }
 
 .construction-footer__top {
-	margin: 0 0 0 auto;
+	margin: 0;
 }
 
 .construction-footer__top a {
@@ -753,10 +760,6 @@ video {
 @media (max-width: 899px) {
 	.construction-phone {
 		display: none;
-	}
-
-	.construction-footer__top {
-		margin-left: 0;
 	}
 }
 
