@@ -3,14 +3,16 @@
  * Title: Contact
  * Slug: construction/contact
  * Categories: contact, construction
- * Description: Contact strip with email, social links, and mailto CTA.
+ * Description: Contact strip with email, phone, address, social links, and mailto CTA.
  *
  * @package Construction
  */
 
-$mail_href = esc_url(
-	'mailto:info@construction.lv?subject=' . rawurlencode( construction_t( 'contact.mail_subject' ) )
-);
+$email      = esc_html( construction_contact( 'email' ) );
+$phone      = esc_html( construction_contact( 'phone' ) );
+$phone_href = esc_url( construction_contact_phone_href() );
+$mail_href  = esc_url( construction_contact_mail_href() );
+$address    = esc_html( construction_contact_address() );
 ?>
 <!-- wp:group {"align":"full","className":"construction-contact","layout":{"type":"default"},"anchor":"contact"} -->
 <div class="wp-block-group alignfull construction-contact" id="contact">
@@ -22,13 +24,13 @@ $mail_href = esc_url(
 			<p class="construction-contact__label"><?php echo esc_html( construction_t( 'contact.label' ) ); ?></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"construction-contact__email"} -->
-			<p class="construction-contact__email"><a href="<?php echo $mail_href; ?>"><?php echo esc_html( construction_t( 'contact.email' ) ); ?></a></p>
+			<p class="construction-contact__email"><a href="<?php echo $mail_href; ?>"><?php echo $email; ?></a></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"construction-contact__phone"} -->
-			<p class="construction-contact__phone"><a href="tel:+37120000000"><?php echo esc_html( construction_t( 'contact.phone' ) ); ?></a></p>
+			<p class="construction-contact__phone"><a href="<?php echo $phone_href; ?>"><?php echo $phone; ?></a></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"construction-contact__address"} -->
-			<p class="construction-contact__address"><?php echo esc_html( construction_t( 'contact.address' ) ); ?></p>
+			<p class="construction-contact__address"><?php echo $address; ?></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"construction-contact__social"} -->
 			<p class="construction-contact__social"><a href="https://instagram.com/construction" target="_blank" rel="noopener">Instagram</a> · <a href="https://facebook.com/construction" target="_blank" rel="noopener">Facebook</a></p>

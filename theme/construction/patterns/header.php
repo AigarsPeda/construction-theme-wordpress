@@ -9,15 +9,17 @@
  * @package Construction
  */
 
-$lang     = construction_current_lang();
-$lv       = esc_url( construction_lang_url( 'lv' ) );
-$en       = esc_url( construction_lang_url( 'en' ) );
-$ru       = esc_url( construction_lang_url( 'ru' ) );
-$home_url = esc_url( home_url( '/' ) );
-$logo_src = esc_url( get_template_directory_uri() . '/assets/images/logo-placeholder.svg' );
-$menu_label  = esc_attr( construction_t( 'nav.menu' ) );
-$close_label = esc_attr( construction_t( 'nav.close' ) );
-$lang_label  = esc_html( construction_t( 'nav.language' ) );
+$lang         = construction_current_lang();
+$home_url     = esc_url( home_url( '/' ) );
+$logo_src     = esc_url( get_template_directory_uri() . '/assets/images/logo-placeholder.svg' );
+$menu_label   = esc_attr( construction_t( 'nav.menu' ) );
+$close_label  = esc_attr( construction_t( 'nav.close' ) );
+$lang_label   = esc_html( construction_t( 'nav.language' ) );
+$phone        = esc_html( construction_contact( 'phone' ) );
+$phone_href   = esc_url( construction_contact_phone_href() );
+$email        = esc_html( construction_contact( 'email' ) );
+$mail_href    = esc_url( 'mailto:' . construction_contact( 'email' ) );
+$address      = esc_html( construction_contact_address( $lang ) );
 
 $nav_html = wp_nav_menu(
 	array(
@@ -40,21 +42,6 @@ $drawer_nav_html = wp_nav_menu(
 		'depth'          => 1,
 	)
 );
-
-$lang_links = static function ( string $class, string $current ) use ( $lv, $en, $ru ): string {
-	$items = array(
-		'lv' => $lv,
-		'en' => $en,
-		'ru' => $ru,
-	);
-	$html  = '<p class="' . esc_attr( $class ) . '">';
-	foreach ( $items as $code => $url ) {
-		$current_attr = $code === $current ? ' aria-current="true"' : '';
-		$html        .= '<a href="' . esc_url( $url ) . '"' . $current_attr . '>' . strtoupper( $code ) . '</a>';
-	}
-	$html .= '</p>';
-	return $html;
-};
 ?>
 <!-- wp:group {"align":"full","className":"construction-header","layout":{"type":"default"}} -->
 <div class="wp-block-group alignfull construction-header">
@@ -70,8 +57,8 @@ $lang_links = static function ( string $class, string $current ) use ( $lv, $en,
 		</nav>
 
 		<div class="construction-header__actions">
-			<p class="construction-phone"><a href="tel:+37120000000">+371 2000 0000</a></p>
-			<?php echo $lang_links( 'construction-lang construction-lang--desktop', $lang ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<p class="construction-phone"><a href="<?php echo $phone_href; ?>"><?php echo $phone; ?></a></p>
+			<?php echo construction_language_switcher_html( 'construction-lang construction-lang--desktop' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			<button
 				type="button"
 				class="construction-menu-toggle"
@@ -106,15 +93,15 @@ $lang_links = static function ( string $class, string $current ) use ( $lv, $en,
 
 			<div class="construction-drawer__langs">
 				<p class="construction-drawer__langs-label"><?php echo $lang_label; ?></p>
-				<?php echo $lang_links( 'construction-lang construction-lang--drawer', $lang ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<?php echo construction_language_switcher_html( 'construction-lang construction-lang--drawer' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</div>
 
 			<div class="construction-drawer__contact">
-				<a class="construction-drawer__contact-link" href="mailto:info@construction.lv"><?php echo esc_html( construction_t( 'contact.email' ) ); ?></a>
-				<a class="construction-drawer__contact-link" href="tel:+37120000000"><?php echo esc_html( construction_t( 'contact.phone' ) ); ?></a>
+				<a class="construction-drawer__contact-link" href="<?php echo $mail_href; ?>"><?php echo $email; ?></a>
+				<a class="construction-drawer__contact-link" href="<?php echo $phone_href; ?>"><?php echo $phone; ?></a>
 				<p class="construction-drawer__contact-address">
 					<span class="construction-drawer__contact-label"><?php echo esc_html( construction_t( 'contact.address_label' ) ); ?></span>
-					<?php echo esc_html( construction_t( 'contact.address' ) ); ?>
+					<?php echo $address; ?>
 				</p>
 			</div>
 		</aside>

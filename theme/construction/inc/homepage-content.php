@@ -49,9 +49,11 @@ function construction_homepage_content_for_lang( string $lang ): string {
 	$quality_3    = construction_media_image_block( 'quality_3', 'construction-quality__media', '', 'large' );
 	$quality_4    = construction_media_image_block( 'quality_4', 'construction-quality__media', '', 'large' );
 
-	$mail_href = esc_url(
-		'mailto:info@construction.lv?subject=' . rawurlencode( construction_string( 'contact.mail_subject', $lang ) )
-	);
+	$mail_href = esc_url( construction_contact_mail_href( $lang ) );
+	$email     = esc_html( construction_contact( 'email' ) );
+	$phone     = esc_html( construction_contact( 'phone' ) );
+	$phone_href = esc_url( construction_contact_phone_href() );
+	$address   = esc_html( construction_contact_address( $lang ) );
 
 	$credits_blocks = '';
 	foreach ( construction_image_credits() as $credit ) {
@@ -528,13 +530,13 @@ ITEM;
 			<p class="construction-contact__label">{$t( 'contact.label' )}</p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"construction-contact__email"} -->
-			<p class="construction-contact__email"><a href="{$mail_href}">{$t( 'contact.email' )}</a></p>
+			<p class="construction-contact__email"><a href="{$mail_href}">{$email}</a></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"construction-contact__phone"} -->
-			<p class="construction-contact__phone"><a href="tel:+37120000000">{$t( 'contact.phone' )}</a></p>
+			<p class="construction-contact__phone"><a href="{$phone_href}">{$phone}</a></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"construction-contact__address"} -->
-			<p class="construction-contact__address">{$t( 'contact.address' )}</p>
+			<p class="construction-contact__address">{$address}</p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"construction-contact__social"} -->
 			<p class="construction-contact__social"><a href="https://instagram.com/construction" target="_blank" rel="noopener">Instagram</a> · <a href="https://facebook.com/construction" target="_blank" rel="noopener">Facebook</a></p>

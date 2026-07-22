@@ -11,9 +11,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CONSTRUCTION_VERSION', '0.6.2' );
+define( 'CONSTRUCTION_VERSION', '0.6.3' );
 
 require get_template_directory() . '/inc/i18n.php';
+require get_template_directory() . '/inc/settings.php';
 require get_template_directory() . '/inc/images.php';
 require get_template_directory() . '/inc/seo.php';
 require get_template_directory() . '/inc/homepage-content.php';
