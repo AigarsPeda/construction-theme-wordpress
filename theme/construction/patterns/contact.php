@@ -3,28 +3,48 @@
  * Title: Contact
  * Slug: construction/contact
  * Categories: contact, construction
- * Description: Contact strip with email, Telegram, and lead field.
+ * Description: Contact strip with email, Telegram, and mailto CTA (fully visual blocks).
  *
  * @package Construction
  */
 ?>
 <!-- wp:group {"align":"full","className":"construction-contact","layout":{"type":"default"}} -->
 <div class="wp-block-group alignfull construction-contact" id="contact">
-	<!-- wp:html -->
-	<div class="construction-contact__grid">
-		<div class="construction-contact__info">
+	<!-- wp:columns {"className":"construction-contact__grid","verticalAlignment":"center"} -->
+	<div class="wp-block-columns construction-contact__grid are-vertically-aligned-center">
+		<!-- wp:column {"verticalAlignment":"center","width":"40%"} -->
+		<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:40%">
+			<!-- wp:paragraph {"className":"construction-contact__label"} -->
 			<p class="construction-contact__label"><?php echo esc_html( construction_t( 'contact.label' ) ); ?></p>
+			<!-- /wp:paragraph -->
+			<!-- wp:paragraph {"className":"construction-contact__email"} -->
 			<p class="construction-contact__email"><a href="mailto:info@construction.lv">info@construction.lv</a></p>
+			<!-- /wp:paragraph -->
+			<!-- wp:paragraph {"className":"construction-contact__telegram"} -->
 			<p class="construction-contact__telegram"><a href="https://t.me/construction" target="_blank" rel="noopener">Telegram · @construction</a></p>
+			<!-- /wp:paragraph -->
 		</div>
-		<form class="construction-lead-form" action="mailto:info@construction.lv" method="post" enctype="text/plain">
-			<label class="screen-reader-text" for="construction-lead"><?php echo esc_html( construction_t( 'contact.field' ) ); ?></label>
-			<div class="construction-lead-form__row">
-				<input id="construction-lead" type="text" name="contact" placeholder="<?php echo esc_attr( construction_t( 'contact.placeholder' ) ); ?>" required />
-				<button type="submit" aria-label="<?php echo esc_attr( construction_t( 'contact.submit' ) ); ?>">→</button>
+		<!-- /wp:column -->
+
+		<!-- wp:column {"verticalAlignment":"center","width":"60%"} -->
+		<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:60%">
+			<!-- wp:group {"className":"construction-lead-form construction-lead-form--visual","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"center"}} -->
+			<div class="wp-block-group construction-lead-form construction-lead-form--visual">
+				<!-- wp:paragraph {"className":"construction-lead-form__hint"} -->
+				<p class="construction-lead-form__hint"><?php echo esc_html( construction_t( 'contact.hint' ) ); ?></p>
+				<!-- /wp:paragraph -->
+				<!-- wp:buttons -->
+				<div class="wp-block-buttons">
+					<!-- wp:button {"className":"construction-lead-form__go"} -->
+					<div class="wp-block-button construction-lead-form__go"><a class="wp-block-button__link wp-element-button" href="mailto:info@construction.lv"><?php echo esc_html( construction_t( 'contact.mail_cta' ) ); ?> →</a></div>
+					<!-- /wp:button -->
+				</div>
+				<!-- /wp:buttons -->
 			</div>
-		</form>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
 	</div>
-	<!-- /wp:html -->
+	<!-- /wp:columns -->
 </div>
 <!-- /wp:group -->

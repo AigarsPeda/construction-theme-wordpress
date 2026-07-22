@@ -43,7 +43,7 @@ function construction_homepage_content_for_lang( string $lang ): string {
 		return esc_url( construction_image_url( $key ) );
 	};
 
-	$credits_items = '';
+	$credits_blocks = '';
 	foreach ( construction_image_credits() as $credit ) {
 		$label = esc_html(
 			sprintf(
@@ -52,8 +52,13 @@ function construction_homepage_content_for_lang( string $lang ): string {
 				$credit['author']
 			)
 		);
-		$url = esc_url( $credit['unsplash_url'] );
-		$credits_items .= '<li><a href="' . $url . '" target="_blank" rel="noopener noreferrer">' . $label . '</a></li>';
+		$url             = esc_url( $credit['unsplash_url'] );
+		$credits_blocks .= <<<ITEM
+			<!-- wp:paragraph {"className":"construction-credits__item"} -->
+			<p class="construction-credits__item"><a href="{$url}" target="_blank" rel="noopener noreferrer">{$label}</a></p>
+			<!-- /wp:paragraph -->
+
+ITEM;
 	}
 
 	return <<<HTML
@@ -359,15 +364,21 @@ function construction_homepage_content_for_lang( string $lang ): string {
 
 		<!-- wp:column {"verticalAlignment":"center","width":"60%"} -->
 		<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:60%">
-			<!-- wp:html -->
-			<form class="construction-lead-form" action="mailto:info@construction.lv" method="post" enctype="text/plain">
-				<label class="screen-reader-text" for="construction-lead-{$lang}">{$t( 'contact.field' )}</label>
-				<div class="construction-lead-form__row">
-					<input id="construction-lead-{$lang}" type="text" name="contact" placeholder="{$ta( 'contact.placeholder' )}" required />
-					<button type="submit" aria-label="{$ta( 'contact.submit' )}">→</button>
+			<!-- wp:group {"className":"construction-lead-form construction-lead-form--visual","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"center"}} -->
+			<div class="wp-block-group construction-lead-form construction-lead-form--visual">
+				<!-- wp:paragraph {"className":"construction-lead-form__hint"} -->
+				<p class="construction-lead-form__hint">{$t( 'contact.hint' )}</p>
+				<!-- /wp:paragraph -->
+
+				<!-- wp:buttons {"className":"construction-lead-form__actions"} -->
+				<div class="wp-block-buttons construction-lead-form__actions">
+					<!-- wp:button {"className":"construction-lead-form__go"} -->
+					<div class="wp-block-button construction-lead-form__go"><a class="wp-block-button__link wp-element-button" href="mailto:info@construction.lv">{$t( 'contact.mail_cta' )} →</a></div>
+					<!-- /wp:button -->
 				</div>
-			</form>
-			<!-- /wp:html -->
+				<!-- /wp:buttons -->
+			</div>
+			<!-- /wp:group -->
 		</div>
 		<!-- /wp:column -->
 	</div>
@@ -382,10 +393,7 @@ function construction_homepage_content_for_lang( string $lang ): string {
 		<!-- wp:paragraph {"className":"construction-credits__title"} -->
 		<p class="construction-credits__title">{$t( 'credits.title' )}</p>
 		<!-- /wp:paragraph -->
-		<!-- wp:html -->
-		<ul class="construction-credits__list">{$credits_items}</ul>
-		<!-- /wp:html -->
-	</div>
+{$credits_blocks}	</div>
 	<!-- /wp:group -->
 </div>
 <!-- /wp:group -->

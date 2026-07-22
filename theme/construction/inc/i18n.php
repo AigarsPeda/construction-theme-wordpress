@@ -259,6 +259,16 @@ function construction_strings(): array {
 			'en' => 'Email / phone',
 			'ru' => 'Email / телефон',
 		),
+		'contact.hint'         => array(
+			'lv' => 'Atstājiet e-pastu vai tālruni — mēs sazināsimies',
+			'en' => 'Leave your email or phone — we will contact you',
+			'ru' => 'Оставьте email или телефон — мы свяжемся',
+		),
+		'contact.mail_cta'     => array(
+			'lv' => 'Rakstīt e-pastu',
+			'en' => 'Email us',
+			'ru' => 'Написать на email',
+		),
 		'credits.title'        => array(
 			'lv' => 'Foto kredīti (Unsplash)',
 			'en' => 'Photo credits (Unsplash)',

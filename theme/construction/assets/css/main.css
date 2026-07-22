@@ -91,9 +91,9 @@ video {
 }
 
 .construction-header__inner {
-	display: grid;
+	display: grid !important;
 	grid-template-columns: 1fr auto 1fr;
-	align-items: center;
+	align-items: center !important;
 	max-width: var(--bn-max);
 	margin-inline: auto;
 	padding: 0.75rem var(--bn-pad);
@@ -516,66 +516,84 @@ video {
 	color: var(--bn-steel);
 }
 
-.construction-lead-form {
+.construction-lead-form--visual {
 	width: 100%;
-}
-
-.construction-lead-form__row {
-	display: flex;
-	flex-direction: row;
-	direction: ltr;
-	gap: 0.5rem;
-	align-items: center;
 	background: var(--bn-mist);
 	border-radius: 999px;
-	padding: 0.35rem 0.35rem 0.35rem 1.15rem;
-	width: 100%;
+	padding: 0.45rem 0.45rem 0.45rem 1.15rem !important;
+	gap: 0.75rem !important;
+	align-items: center !important;
 	box-sizing: border-box;
 }
 
-.construction-lead-form input {
-	flex: 1 1 auto;
-	order: 1;
-	border: 0;
-	background: transparent;
-	font: inherit;
-	font-size: 1rem;
-	line-height: 1.4;
-	padding: 0.85rem 0.5rem 0.85rem 0;
-	outline: none;
-	min-width: 0;
-	width: auto;
-	color: var(--bn-ink);
-}
-
-.construction-lead-form input::placeholder {
-	color: var(--bn-steel);
-	opacity: 1;
-}
-
-.construction-lead-form button {
-	order: 2;
-	flex: 0 0 3rem;
-	width: 3rem;
-	height: 3rem;
-	min-width: 48px;
-	min-height: 48px;
+.construction-lead-form--visual .construction-lead-form__hint {
 	margin: 0;
-	border: 0;
+	flex: 1 1 auto;
+	min-width: 0;
+	color: var(--bn-steel);
+	font-size: 1rem;
+}
+
+.construction-lead-form--visual .construction-lead-form__actions {
+	margin: 0;
+}
+
+.construction-lead-form--visual .construction-lead-form__go .wp-block-button__link {
 	border-radius: 999px;
-	background: var(--bn-ink);
-	color: #fff;
-	font-size: 1.25rem;
-	line-height: 1;
-	cursor: pointer;
+	padding: 0.7rem 1.1rem;
+	min-height: 48px;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
+	background: var(--bn-ink) !important;
+	color: #fff !important;
+	font-size: 0.9rem;
 }
 
-.construction-lead-form button:hover,
-.construction-lead-form button:focus-visible {
-	background: var(--bn-timber);
+.construction-lead-form--visual .construction-lead-form__go .wp-block-button__link:hover {
+	background: var(--bn-timber) !important;
+}
+
+.construction-credits__item {
+	margin: 0 0 0.35rem;
+	font-size: 0.8rem;
+	color: var(--bn-steel);
+}
+
+.construction-credits__item a {
+	color: inherit;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+.construction-lang.wp-block-paragraph,
+p.construction-lang {
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	font-family: "Archivo", sans-serif;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+p.construction-lang a {
+	text-decoration: none;
+	color: var(--bn-steel);
+	padding: 0.35rem 0.4rem;
+	border-radius: 6px;
+	min-width: 2rem;
+	text-align: center;
+}
+
+p.construction-lang a:hover,
+p.construction-lang a[aria-current="true"] {
+	color: var(--bn-ink);
+	background: var(--bn-mist);
 }
 
 /* ——— Photo credits ——— */
