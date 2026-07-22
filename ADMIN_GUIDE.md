@@ -104,10 +104,30 @@ No extra setting — same logo / phone / email as desktop.
 
 ---
 
-## SEO basics
+## SEO / browser tab title
 
-Titles, meta description, Open Graph, and hreflang are handled by the theme (`inc/seo.php`).  
-For richer SEO later, a plugin (e.g. Yoast / Rank Math) can be added carefully so it doesn’t fight Polylang.
+### Without an SEO plugin (default)
+
+Homepage and Projects tab titles come from the theme (`seo.home.title` / `seo.projects.title` in `inc/i18n.php`).  
+Site name after the dash: **Settings → General → Site Title**.
+
+### With an SEO plugin (recommended if you want to edit in Admin)
+
+Install one of: **Rank Math**, **Yoast SEO**, **All in One SEO**, **SEOPress**, or **Slim SEO**.
+
+The Construction theme then **stops overriding** titles and meta tags, so the plugin controls the browser tab.
+
+**Typical flow (Rank Math example):**
+
+1. Plugins → Add New → install/activate **Rank Math** (or Slim SEO if you want something lighter).
+2. Open the page (e.g. **Sākums** / **Home** / **Главная**) in the editor.
+3. Set **SEO title** (and meta description) in the plugin box.
+4. Repeat for each language version of the page.
+5. Update / hard-refresh — check the browser tab.
+
+**Polylang:** edit SEO fields on **each** language page (LV, EN, RU). Rank Math works with free Polylang for basic titles; Yoast’s deepest multilingual features may need paid add-ons.
+
+You do **not** need an SEO plugin just for the tab title — but a plugin is the easiest way to avoid editing theme files.
 
 ---
 
