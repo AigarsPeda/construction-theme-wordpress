@@ -8,7 +8,7 @@
  * @package Construction
  */
 
-$contact_href = esc_url( trailingslashit( home_url( '/' ) ) . '#contact' );
+$contact_href = esc_url( trailingslashit( construction_home_url() ) . '#contact' );
 ?>
 <!-- wp:group {"align":"full","className":"construction-projects","layout":{"type":"default"},"anchor":"projects"} -->
 <div class="wp-block-group alignfull construction-projects" id="projects">

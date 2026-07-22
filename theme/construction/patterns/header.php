@@ -10,7 +10,7 @@
  */
 
 $lang         = construction_current_lang();
-$home_url     = esc_url( home_url( '/' ) );
+$home_url     = esc_url( construction_home_url() );
 $logo_src     = esc_url( get_template_directory_uri() . '/assets/images/logo-placeholder.svg' );
 $menu_label   = esc_attr( construction_t( 'nav.menu' ) );
 $close_label  = esc_attr( construction_t( 'nav.close' ) );

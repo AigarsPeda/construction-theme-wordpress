@@ -21,6 +21,24 @@ function construction_languages(): array {
 }
 
 /**
+ * Homepage URL for the current language (keeps lang during logo/nav).
+ */
+function construction_home_url(): string {
+	if ( function_exists( 'construction_front_url_for_lang' ) ) {
+		return construction_front_url_for_lang( construction_current_lang() );
+	}
+
+	if ( function_exists( 'pll_home_url' ) ) {
+		$url = pll_home_url();
+		if ( is_string( $url ) && $url !== '' ) {
+			return $url;
+		}
+	}
+
+	return home_url( '/' );
+}
+
+/**
  * Current language slug.
  */
 function construction_current_lang(): string {
