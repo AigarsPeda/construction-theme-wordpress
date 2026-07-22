@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CONSTRUCTION_VERSION', '0.2.0' );
+define( 'CONSTRUCTION_VERSION', '0.2.2' );
 
 require get_template_directory() . '/inc/i18n.php';
 require get_template_directory() . '/inc/images.php';
@@ -117,15 +117,52 @@ add_action( 'admin_init', 'construction_admin_rebuild_homes' );
 add_action( 'init', 'construction_admin_rebuild_homes', 5 );
 
 /**
+ * Rebuild menus only (admin URL or one-time key).
+ *
+ * Admin: /wp-admin/?construction_rebuild_menus=1
+ */
+function construction_admin_rebuild_menus(): void {
+	$by_admin = is_admin()
+		&& current_user_can( 'manage_options' )
+		&& isset( $_GET['construction_rebuild_menus'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+	$key    = (string) get_option( 'construction_rebuild_menus_key', '' );
+	$by_key = $key !== ''
+		&& isset( $_GET['construction_rebuild_menus_key'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		&& hash_equals( $key, (string) wp_unslash( $_GET['construction_rebuild_menus_key'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+	if ( ! $by_admin && ! $by_key ) {
+		return;
+	}
+
+	construction_rebuild_language_menus();
+	delete_option( 'construction_rebuild_menus_key' );
+
+	if ( $by_admin ) {
+		wp_safe_redirect( admin_url( 'nav-menus.php?construction_menus_ready=1' ) );
+		exit;
+	}
+
+	wp_safe_redirect( home_url( '/?construction_menus_ready=1' ) );
+	exit;
+}
+add_action( 'admin_init', 'construction_admin_rebuild_menus' );
+add_action( 'init', 'construction_admin_rebuild_menus', 6 );
+
+/**
  * Notice after successful rebuild.
  */
 function construction_homes_ready_notice(): void {
-	if ( ! isset( $_GET['construction_homes_ready'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( ! isset( $_GET['construction_homes_ready'] ) && ! isset( $_GET['construction_menus_ready'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		return;
 	}
 
 	echo '<div class="notice notice-success is-dismissible"><p>';
-	echo esc_html__( 'Homepages rebuilt: Sākums (LV), Home (EN), Главная (RU). Open each page — text matches that language. Use LV/EN/RU on the site to switch.', 'construction' );
+	if ( isset( $_GET['construction_menus_ready'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		echo esc_html__( 'Menus ready: Primary LV / EN / RU. Edit them under Appearance → Menus.', 'construction' );
+	} else {
+		echo esc_html__( 'Homepages rebuilt: Sākums (LV), Home (EN), Главная (RU). Open each page — text matches that language. Use LV/EN/RU on the site to switch.', 'construction' );
+	}
 	echo '</p></div>';
 }
 add_action( 'admin_notices', 'construction_homes_ready_notice' );
