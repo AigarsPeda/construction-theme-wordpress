@@ -10,7 +10,7 @@
 ?>
 <!-- wp:group {"align":"full","className":"construction-quality","layout":{"type":"default"},"anchor":"about"} -->
 <div class="wp-block-group alignfull construction-quality" id="about">
-	<!-- wp:group {"className":"construction-quality__inner","layout":{"type":"constrained","contentSize":"1200px"}} -->
+	<!-- wp:group {"className":"construction-quality__inner","layout":{"type":"default"}} -->
 	<div class="wp-block-group construction-quality__inner">
 		<!-- wp:heading -->
 		<h2 class="wp-block-heading"><?php echo esc_html( construction_t( 'quality.title' ) ); ?></h2>

@@ -183,7 +183,7 @@ ITEM;
 
 <!-- wp:group {"align":"full","className":"construction-quality","layout":{"type":"default"},"anchor":"about"} -->
 <div class="wp-block-group alignfull construction-quality" id="about">
-	<!-- wp:group {"className":"construction-quality__inner","layout":{"type":"constrained","contentSize":"1200px"}} -->
+	<!-- wp:group {"className":"construction-quality__inner","layout":{"type":"default"}} -->
 	<div class="wp-block-group construction-quality__inner">
 		<!-- wp:heading -->
 		<h2 class="wp-block-heading">{$t( 'quality.title' )}</h2>
@@ -259,7 +259,7 @@ ITEM;
 
 <!-- wp:group {"align":"full","className":"construction-reviews","layout":{"type":"default"},"anchor":"reviews"} -->
 <div class="wp-block-group alignfull construction-reviews" id="reviews">
-	<!-- wp:group {"className":"construction-reviews__inner","layout":{"type":"constrained","contentSize":"1200px"}} -->
+	<!-- wp:group {"className":"construction-reviews__inner","layout":{"type":"default"}} -->
 	<div class="wp-block-group construction-reviews__inner">
 		<!-- wp:heading -->
 		<h2 class="wp-block-heading">{$t( 'reviews.title' )}</h2>
@@ -388,7 +388,7 @@ ITEM;
 
 <!-- wp:group {"align":"full","className":"construction-credits","layout":{"type":"default"},"anchor":"credits"} -->
 <div class="wp-block-group alignfull construction-credits" id="credits">
-	<!-- wp:group {"className":"construction-credits__inner","layout":{"type":"constrained","contentSize":"1200px"}} -->
+	<!-- wp:group {"className":"construction-credits__inner","layout":{"type":"default"}} -->
 	<div class="wp-block-group construction-credits__inner">
 		<!-- wp:paragraph {"className":"construction-credits__title"} -->
 		<p class="construction-credits__title">{$t( 'credits.title' )}</p>

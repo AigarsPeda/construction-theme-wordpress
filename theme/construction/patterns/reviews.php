@@ -10,7 +10,7 @@
 ?>
 <!-- wp:group {"align":"full","className":"construction-reviews","layout":{"type":"default"},"anchor":"reviews"} -->
 <div class="wp-block-group alignfull construction-reviews" id="reviews">
-	<!-- wp:group {"className":"construction-reviews__inner","layout":{"type":"constrained","contentSize":"1200px"}} -->
+	<!-- wp:group {"className":"construction-reviews__inner","layout":{"type":"default"}} -->
 	<div class="wp-block-group construction-reviews__inner">
 		<!-- wp:heading -->
 		<h2 class="wp-block-heading"><?php echo esc_html( construction_t( 'reviews.title' ) ); ?></h2>

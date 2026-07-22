@@ -54,8 +54,49 @@ body {
 	width: 100% !important;
 	margin-left: 0 !important;
 	margin-right: 0 !important;
+}
+
+/* Full-bleed chrome only — do not zero side padding on content sections */
+.construction-hero.alignfull,
+.construction-header.alignfull,
+.construction-footer.alignfull {
 	padding-left: 0;
 	padding-right: 0;
+}
+
+/*
+ * Content sections: same left/right inset as the header column (1200px + gutters).
+ * This keeps the editor canvas and the live page aligned.
+ */
+.construction-services,
+.construction-services.alignfull,
+.construction-quality,
+.construction-quality.alignfull,
+.construction-reviews,
+.construction-reviews.alignfull,
+.construction-contact,
+.construction-contact.alignfull,
+.construction-credits,
+.construction-credits.alignfull {
+	padding-top: var(--bn-section-y);
+	padding-bottom: var(--bn-section-y);
+	padding-left: max(var(--bn-pad), calc((100% - var(--bn-max)) / 2));
+	padding-right: max(var(--bn-pad), calc((100% - var(--bn-max)) / 2));
+}
+
+/* If a heading was moved outside the inner wrap, keep it on the same column */
+.construction-quality > .wp-block-heading,
+.construction-reviews > .wp-block-heading,
+.construction-services > .wp-block-heading {
+	max-width: var(--bn-max);
+	width: 100%;
+	box-sizing: border-box;
+}
+
+/* Match editor/frontend: no extra iframe side padding on top of section gutters */
+.editor-styles-wrapper {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
 }
 
 img,
@@ -312,13 +353,6 @@ video {
 }
 
 /* ——— Shared sections ——— */
-.construction-services,
-.construction-quality,
-.construction-contact,
-.construction-credits {
-	padding: var(--bn-section-y) var(--bn-pad);
-}
-
 .construction-services__grid,
 .construction-quality__inner,
 .construction-contact__grid,
@@ -397,6 +431,8 @@ video {
 .construction-quality h2 {
 	max-width: 16ch;
 	margin-bottom: 1.5rem;
+	margin-left: 0 !important;
+	margin-right: auto !important;
 }
 
 .construction-quality__grid {
@@ -429,7 +465,6 @@ video {
 .construction-reviews {
 	background: var(--bn-ink);
 	color: #fff;
-	padding: var(--bn-section-y) var(--bn-pad);
 }
 
 .construction-reviews h2 {
