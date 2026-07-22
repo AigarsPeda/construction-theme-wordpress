@@ -28,8 +28,8 @@
 		<div class="wp-block-column construction-services__list" style="flex-basis:58%">
 			<!-- wp:group {"className":"construction-service-card","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"top"}} -->
 			<div class="wp-block-group construction-service-card">
-				<!-- wp:image {"width":"72px","height":"72px","scale":"cover","sizeSlug":"thumbnail","className":"construction-service-card__thumb"} -->
-				<figure class="wp-block-image size-thumbnail is-resized construction-service-card__thumb"><img src="<?php echo esc_url( construction_image_url( 'service_1' ) ); ?>" alt="" style="aspect-ratio:1;object-fit:cover;width:72px;height:72px"/></figure>
+				<!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"construction-service-card__thumb"} -->
+				<figure class="wp-block-image size-full construction-service-card__thumb"><img src="<?php echo esc_url( construction_image_url( 'service_1' ) ); ?>" alt=""/></figure>
 				<!-- /wp:image -->
 
 				<!-- wp:group {"layout":{"type":"constrained"}} -->
@@ -47,8 +47,8 @@
 
 			<!-- wp:group {"className":"construction-service-card","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"top"}} -->
 			<div class="wp-block-group construction-service-card">
-				<!-- wp:image {"width":"72px","height":"72px","scale":"cover","sizeSlug":"thumbnail","className":"construction-service-card__thumb"} -->
-				<figure class="wp-block-image size-thumbnail is-resized construction-service-card__thumb"><img src="<?php echo esc_url( construction_image_url( 'service_2' ) ); ?>" alt="" style="aspect-ratio:1;object-fit:cover;width:72px;height:72px"/></figure>
+				<!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"construction-service-card__thumb"} -->
+				<figure class="wp-block-image size-full construction-service-card__thumb"><img src="<?php echo esc_url( construction_image_url( 'service_2' ) ); ?>" alt=""/></figure>
 				<!-- /wp:image -->
 				<!-- wp:group {"layout":{"type":"constrained"}} -->
 				<div class="wp-block-group">
@@ -65,8 +65,8 @@
 
 			<!-- wp:group {"className":"construction-service-card","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"top"}} -->
 			<div class="wp-block-group construction-service-card">
-				<!-- wp:image {"width":"72px","height":"72px","scale":"cover","sizeSlug":"thumbnail","className":"construction-service-card__thumb"} -->
-				<figure class="wp-block-image size-thumbnail is-resized construction-service-card__thumb"><img src="<?php echo esc_url( construction_image_url( 'service_3' ) ); ?>" alt="" style="aspect-ratio:1;object-fit:cover;width:72px;height:72px"/></figure>
+				<!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"construction-service-card__thumb"} -->
+				<figure class="wp-block-image size-full construction-service-card__thumb"><img src="<?php echo esc_url( construction_image_url( 'service_3' ) ); ?>" alt=""/></figure>
 				<!-- /wp:image -->
 				<!-- wp:group {"layout":{"type":"constrained"}} -->
 				<div class="wp-block-group">
