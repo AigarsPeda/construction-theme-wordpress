@@ -762,6 +762,7 @@ video {
 }
 
 .construction-lead-form--visual {
+	position: relative;
 	width: 100%;
 	background: var(--bn-mist);
 	border-radius: var(--bn-radius);
@@ -771,6 +772,12 @@ video {
 	flex-direction: column !important;
 	flex-wrap: nowrap !important;
 	box-sizing: border-box;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.construction-lead-form--visual:hover {
+	background: color-mix(in srgb, var(--bn-mist) 82%, var(--bn-ink) 18%);
 }
 
 .construction-lead-form--visual .construction-lead-form__hint {
@@ -780,6 +787,7 @@ video {
 	color: var(--bn-steel);
 	font-size: 0.98rem;
 	line-height: 1.45;
+	pointer-events: none;
 }
 
 .construction-lead-form--visual .construction-lead-form__actions {
@@ -795,6 +803,7 @@ video {
 }
 
 .construction-lead-form--visual .wp-block-button__link {
+	position: static;
 	border-radius: 12px;
 	padding: 0.85rem 1.1rem;
 	min-height: 48px;
@@ -806,12 +815,23 @@ video {
 	box-sizing: border-box;
 }
 
+/* Stretch mailto over the whole bar — click anywhere opens email */
+.construction-lead-form--visual .construction-lead-form__go .wp-block-button__link::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	border-radius: inherit;
+}
+
 .construction-lead-form--visual .construction-lead-form__go .wp-block-button__link {
 	background: var(--bn-ink) !important;
 	color: #fff !important;
 }
 
-.construction-lead-form--visual .construction-lead-form__go .wp-block-button__link:hover {
+.construction-lead-form--visual:hover .construction-lead-form__go .wp-block-button__link,
+.construction-lead-form--visual .construction-lead-form__go .wp-block-button__link:hover,
+.construction-lead-form--visual .construction-lead-form__go .wp-block-button__link:focus-visible {
 	background: var(--bn-timber) !important;
 }
 

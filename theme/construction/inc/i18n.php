@@ -110,9 +110,9 @@ function construction_strings(): array {
 			'ru' => 'Проектируем и строим каркасные дома под ваши задачи — от идеи до ключей.',
 		),
 		'hero.cta'             => array(
-			'lv' => 'Iziet testu',
-			'en' => 'Take the quiz',
-			'ru' => 'Пройти тест',
+			'lv' => 'Sazinies ar mums',
+			'en' => 'Contact us',
+			'ru' => 'Связаться с нами',
 		),
 		'hero.since'           => array(
 			'lv' => 'Būvējam karkasa mājas kopš 2008. gada',
