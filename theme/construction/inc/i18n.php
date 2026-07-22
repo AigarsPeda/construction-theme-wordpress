@@ -53,15 +53,27 @@ function construction_current_lang(): string {
 }
 
 /**
- * URL for a language (translated front page when Polylang is available).
+ * URL for a language (translated current page, else front page).
  */
 function construction_lang_url( string $lang ): string {
 	if ( ! in_array( $lang, construction_languages(), true ) ) {
 		$lang = 'lv';
 	}
 
-	// Prefer the translated homepage permalink (Sākums / Home / Главная).
+	// Prefer the translated version of the current page (e.g. Projects).
 	if ( function_exists( 'pll_get_post' ) ) {
+		$current_id = get_queried_object_id();
+		if ( $current_id > 0 ) {
+			$translated_id = pll_get_post( $current_id, $lang );
+			if ( $translated_id ) {
+				$url = get_permalink( (int) $translated_id );
+				if ( is_string( $url ) && $url !== '' ) {
+					return $url;
+				}
+			}
+		}
+
+		// Fallback: translated homepage (Sākums / Home / Главная).
 		$front_id = (int) get_option( 'page_on_front' );
 		if ( $front_id > 0 ) {
 			$translated_id = pll_get_post( $front_id, $lang );
@@ -138,6 +150,116 @@ function construction_strings(): array {
 			'lv' => 'Par mums',
 			'en' => 'About us',
 			'ru' => 'О нас',
+		),
+		'nav.contact'          => array(
+			'lv' => 'Kontakti',
+			'en' => 'Contact',
+			'ru' => 'Контакты',
+		),
+		'seo.home.title'       => array(
+			'lv' => 'Karkasa mājas — projektēšana un būvniecība',
+			'en' => 'Frame houses — design and construction',
+			'ru' => 'Каркасные дома — проектирование и строительство',
+		),
+		'seo.home.desc'        => array(
+			'lv' => 'Projektējam un būvējam karkasa mājas Latvijā — no idejas līdz atslēgai. Skaidri termiņi, kvalitāte un viena komanda.',
+			'en' => 'We design and build frame houses in Latvia — from idea to turnkey. Clear timelines, quality, and one dedicated team.',
+			'ru' => 'Проектируем и строим каркасные дома в Латвии — от идеи до ключей. Понятные сроки, качество и одна команда.',
+		),
+		'seo.projects.title'   => array(
+			'lv' => 'Projekti un galerija',
+			'en' => 'Projects and gallery',
+			'ru' => 'Проекты и галерея',
+		),
+		'seo.projects.desc'    => array(
+			'lv' => 'Apskati mūsu projektu galeriju — karkasa mājas, būvlaukumi un gatavie objekti.',
+			'en' => 'Browse our project gallery — frame houses, construction sites, and finished builds.',
+			'ru' => 'Смотрите галерею проектов — каркасные дома, стройки и готовые объекты.',
+		),
+		'projects.eyebrow'     => array(
+			'lv' => 'Galerija',
+			'en' => 'Gallery',
+			'ru' => 'Галерея',
+		),
+		'projects.title'       => array(
+			'lv' => 'Mūsu projekti',
+			'en' => 'Our projects',
+			'ru' => 'Наши проекты',
+		),
+		'projects.intro'       => array(
+			'lv' => 'Atlasīti objekti un būvniecības mirkļi — no karkasa līdz gatavai mājai.',
+			'en' => 'Selected builds and construction moments — from frame to finished home.',
+			'ru' => 'Избранные объекты и моменты строительства — от каркаса до готового дома.',
+		),
+		'projects.cta'         => array(
+			'lv' => 'Sazinies ar mums',
+			'en' => 'Contact us',
+			'ru' => 'Связаться с нами',
+		),
+		'projects.alt.1'       => array(
+			'lv' => 'Būvlaukums ar celtņiem',
+			'en' => 'Construction site with cranes',
+			'ru' => 'Стройплощадка с кранами',
+		),
+		'projects.alt.2'       => array(
+			'lv' => 'Modernas mājas fasāde',
+			'en' => 'Modern house façade',
+			'ru' => 'Фасад современного дома',
+		),
+		'projects.alt.3'       => array(
+			'lv' => 'Būvniecības process',
+			'en' => 'Construction in progress',
+			'ru' => 'Процесс строительства',
+		),
+		'projects.alt.4'       => array(
+			'lv' => 'Mājas eksterjers',
+			'en' => 'House exterior',
+			'ru' => 'Экстерьер дома',
+		),
+		'projects.alt.5'       => array(
+			'lv' => 'Arhitektūras detaļa',
+			'en' => 'Architectural detail',
+			'ru' => 'Архитектурная деталь',
+		),
+		'projects.alt.6'       => array(
+			'lv' => 'Karkasa konstrukcija',
+			'en' => 'Frame structure',
+			'ru' => 'Каркасная конструкция',
+		),
+		'projects.alt.7'       => array(
+			'lv' => 'Interjera / objekta skats',
+			'en' => 'Interior or site view',
+			'ru' => 'Интерьер или вид объекта',
+		),
+		'projects.alt.8'       => array(
+			'lv' => 'Būvniecības darbi',
+			'en' => 'Building works',
+			'ru' => 'Строительные работы',
+		),
+		'projects.alt.9'       => array(
+			'lv' => 'Mājokļa vizuālis',
+			'en' => 'Home visual',
+			'ru' => 'Визуал жилья',
+		),
+		'projects.alt.10'      => array(
+			'lv' => 'Lielais būvobjekts',
+			'en' => 'Large construction project',
+			'ru' => 'Крупный строительный объект',
+		),
+		'projects.alt.11'      => array(
+			'lv' => 'Objekta atmosfēra',
+			'en' => 'Site atmosphere',
+			'ru' => 'Атмосфера объекта',
+		),
+		'projects.alt.12'      => array(
+			'lv' => 'Apdare un montāža',
+			'en' => 'Finishing and installation',
+			'ru' => 'Отделка и монтаж',
+		),
+		'projects.alt.13'      => array(
+			'lv' => 'Gatavs projekts',
+			'en' => 'Finished project',
+			'ru' => 'Готовый проект',
 		),
 		'services.title'       => array(
 			'lv' => 'Uzņemamies projektēšanu, dizainu un objekta montāžu',

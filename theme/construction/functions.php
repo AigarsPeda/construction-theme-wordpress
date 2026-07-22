@@ -11,11 +11,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CONSTRUCTION_VERSION', '0.4.2' );
+define( 'CONSTRUCTION_VERSION', '0.5.0' );
 
 require get_template_directory() . '/inc/i18n.php';
 require get_template_directory() . '/inc/images.php';
+require get_template_directory() . '/inc/seo.php';
 require get_template_directory() . '/inc/homepage-content.php';
+require get_template_directory() . '/inc/projects-content.php';
 
 /**
  * Theme setup.
@@ -134,10 +136,64 @@ add_action( 'admin_init', 'construction_admin_rebuild_homes' );
 add_action( 'init', 'construction_admin_rebuild_homes', 5 );
 
 /**
- * Rebuild menus only (admin URL or one-time key).
+ * Rebuild LV/EN/RU Projects gallery pages.
  *
- * Admin: /wp-admin/?construction_rebuild_menus=1
+ * Admin: /wp-admin/?construction_rebuild_projects=1
  */
+function construction_admin_rebuild_projects(): void {
+	$by_admin = is_admin()
+		&& current_user_can( 'manage_options' )
+		&& isset( $_GET['construction_rebuild_projects'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+	$key    = (string) get_option( 'construction_rebuild_projects_key', '' );
+	$by_key = $key !== ''
+		&& isset( $_GET['construction_rebuild_projects_key'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		&& hash_equals( $key, (string) wp_unslash( $_GET['construction_rebuild_projects_key'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+	if ( ! $by_admin && ! $by_key ) {
+		return;
+	}
+
+	$result = construction_rebuild_polylang_projects();
+	if ( is_wp_error( $result ) ) {
+		wp_die( esc_html( $result->get_error_message() ) );
+	}
+
+	delete_option( 'construction_rebuild_projects_key' );
+	flush_rewrite_rules( false );
+	delete_option( 'construction_flush_rewrites' );
+
+	if ( $by_admin ) {
+		wp_safe_redirect( admin_url( 'edit.php?post_type=page&construction_projects_ready=1' ) );
+		exit;
+	}
+
+	wp_safe_redirect( home_url( '/?construction_projects_ready=1' ) );
+	exit;
+}
+add_action( 'admin_init', 'construction_admin_rebuild_projects' );
+add_action( 'init', 'construction_admin_rebuild_projects', 5 );
+
+/**
+ * Import images into Media Library only.
+ *
+ * Admin: /wp-admin/?construction_import_media=1
+ */
+function construction_admin_import_media(): void {
+	if ( ! is_admin() || ! current_user_can( 'manage_options' ) || ! isset( $_GET['construction_import_media'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return;
+	}
+
+	$result = construction_import_media_library();
+	if ( is_wp_error( $result ) ) {
+		wp_die( esc_html( $result->get_error_message() ) );
+	}
+
+	wp_safe_redirect( admin_url( 'upload.php?construction_media_ready=1' ) );
+	exit;
+}
+add_action( 'admin_init', 'construction_admin_import_media' );
+
 function construction_admin_rebuild_menus(): void {
 	$by_admin = is_admin()
 		&& current_user_can( 'manage_options' )
@@ -170,12 +226,21 @@ add_action( 'init', 'construction_admin_rebuild_menus', 6 );
  * Notice after successful rebuild.
  */
 function construction_homes_ready_notice(): void {
-	if ( ! isset( $_GET['construction_homes_ready'] ) && ! isset( $_GET['construction_menus_ready'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if (
+		! isset( $_GET['construction_homes_ready'] )
+		&& ! isset( $_GET['construction_menus_ready'] )
+		&& ! isset( $_GET['construction_projects_ready'] )
+		&& ! isset( $_GET['construction_media_ready'] )
+	) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		return;
 	}
 
 	echo '<div class="notice notice-success is-dismissible"><p>';
-	if ( isset( $_GET['construction_menus_ready'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( isset( $_GET['construction_media_ready'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		echo esc_html__( 'Images imported into the Media Library (wp-content/uploads).', 'construction' );
+	} elseif ( isset( $_GET['construction_projects_ready'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		echo esc_html__( 'Projects pages ready: Projekti (LV), Projects (EN), Проекты (RU).', 'construction' );
+	} elseif ( isset( $_GET['construction_menus_ready'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		echo esc_html__( 'Menus ready: Primary LV / EN / RU. Edit them under Appearance → Menus.', 'construction' );
 	} else {
 		echo esc_html__( 'Homepages rebuilt: Sākums (LV), Home (EN), Главная (RU). Open each page — text matches that language. Use LV/EN/RU on the site to switch.', 'construction' );

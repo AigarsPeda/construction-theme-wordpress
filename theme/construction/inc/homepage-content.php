@@ -39,9 +39,15 @@ function construction_homepage_content_for_lang( string $lang ): string {
 	$ta = static function ( string $key ) use ( $lang ): string {
 		return esc_attr( construction_string( $key, $lang ) );
 	};
-	$img = static function ( string $key ): string {
-		return esc_url( construction_image_url( $key ) );
-	};
+
+	$hero_img     = construction_media_image_block( 'hero', 'construction-hero__image', construction_string( 'hero.alt', $lang ), 'full' );
+	$service_1    = construction_media_image_block( 'service_1', 'construction-service-card__thumb', '', 'full' );
+	$service_2    = construction_media_image_block( 'service_2', 'construction-service-card__thumb', '', 'full' );
+	$service_3    = construction_media_image_block( 'service_3', 'construction-service-card__thumb', '', 'full' );
+	$quality_1    = construction_media_image_block( 'quality_1', 'construction-quality__media', '', 'large' );
+	$quality_2    = construction_media_image_block( 'quality_2', 'construction-quality__media', '', 'large' );
+	$quality_3    = construction_media_image_block( 'quality_3', 'construction-quality__media', '', 'large' );
+	$quality_4    = construction_media_image_block( 'quality_4', 'construction-quality__media', '', 'large' );
 
 	$mail_href = esc_url(
 		'mailto:info@construction.lv?subject=' . rawurlencode( construction_string( 'contact.mail_subject', $lang ) )
@@ -96,10 +102,7 @@ ITEM;
 
 		<!-- wp:column {"width":"52%","className":"construction-hero__media"} -->
 		<div class="wp-block-column construction-hero__media" style="flex-basis:52%">
-			<!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"construction-hero__image"} -->
-			<figure class="wp-block-image size-full construction-hero__image"><img src="{$img( 'hero' )}" alt="{$ta( 'hero.alt' )}"/></figure>
-			<!-- /wp:image -->
-		</div>
+{$hero_img}		</div>
 		<!-- /wp:column -->
 	</div>
 	<!-- /wp:columns -->
@@ -126,10 +129,7 @@ ITEM;
 		<div class="wp-block-column construction-services__list" style="flex-basis:58%">
 			<!-- wp:group {"className":"construction-service-card","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"top"}} -->
 			<div class="wp-block-group construction-service-card">
-				<!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"construction-service-card__thumb"} -->
-				<figure class="wp-block-image size-full construction-service-card__thumb"><img src="{$img( 'service_1' )}" alt=""/></figure>
-				<!-- /wp:image -->
-
+{$service_1}
 				<!-- wp:group {"layout":{"type":"constrained"}} -->
 				<div class="wp-block-group">
 					<!-- wp:heading {"level":3} -->
@@ -145,10 +145,7 @@ ITEM;
 
 			<!-- wp:group {"className":"construction-service-card","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"top"}} -->
 			<div class="wp-block-group construction-service-card">
-				<!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"construction-service-card__thumb"} -->
-				<figure class="wp-block-image size-full construction-service-card__thumb"><img src="{$img( 'service_2' )}" alt=""/></figure>
-				<!-- /wp:image -->
-				<!-- wp:group {"layout":{"type":"constrained"}} -->
+{$service_2}				<!-- wp:group {"layout":{"type":"constrained"}} -->
 				<div class="wp-block-group">
 					<!-- wp:heading {"level":3} -->
 					<h3 class="wp-block-heading">{$t( 'services.item2.title' )}</h3>
@@ -163,10 +160,7 @@ ITEM;
 
 			<!-- wp:group {"className":"construction-service-card","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"top"}} -->
 			<div class="wp-block-group construction-service-card">
-				<!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"construction-service-card__thumb"} -->
-				<figure class="wp-block-image size-full construction-service-card__thumb"><img src="{$img( 'service_3' )}" alt=""/></figure>
-				<!-- /wp:image -->
-				<!-- wp:group {"layout":{"type":"constrained"}} -->
+{$service_3}				<!-- wp:group {"layout":{"type":"constrained"}} -->
 				<div class="wp-block-group">
 					<!-- wp:heading {"level":3} -->
 					<h3 class="wp-block-heading">{$t( 'services.item3.title' )}</h3>
@@ -299,10 +293,7 @@ ITEM;
 			<div class="wp-block-column">
 				<!-- wp:group {"className":"construction-quality__card","layout":{"type":"constrained"}} -->
 				<div class="wp-block-group construction-quality__card">
-					<!-- wp:image {"sizeSlug":"large","linkDestination":"none","className":"construction-quality__media"} -->
-					<figure class="wp-block-image size-large construction-quality__media"><img src="{$img( 'quality_1' )}" alt=""/></figure>
-					<!-- /wp:image -->
-					<!-- wp:heading {"level":3} -->
+{$quality_1}					<!-- wp:heading {"level":3} -->
 					<h3 class="wp-block-heading">{$t( 'quality.item1' )}</h3>
 					<!-- /wp:heading -->
 				</div>
@@ -314,10 +305,7 @@ ITEM;
 			<div class="wp-block-column">
 				<!-- wp:group {"className":"construction-quality__card","layout":{"type":"constrained"}} -->
 				<div class="wp-block-group construction-quality__card">
-					<!-- wp:image {"sizeSlug":"large","linkDestination":"none","className":"construction-quality__media"} -->
-					<figure class="wp-block-image size-large construction-quality__media"><img src="{$img( 'quality_2' )}" alt=""/></figure>
-					<!-- /wp:image -->
-					<!-- wp:heading {"level":3} -->
+{$quality_2}					<!-- wp:heading {"level":3} -->
 					<h3 class="wp-block-heading">{$t( 'quality.item2' )}</h3>
 					<!-- /wp:heading -->
 				</div>
@@ -329,10 +317,7 @@ ITEM;
 			<div class="wp-block-column">
 				<!-- wp:group {"className":"construction-quality__card","layout":{"type":"constrained"}} -->
 				<div class="wp-block-group construction-quality__card">
-					<!-- wp:image {"sizeSlug":"large","linkDestination":"none","className":"construction-quality__media"} -->
-					<figure class="wp-block-image size-large construction-quality__media"><img src="{$img( 'quality_3' )}" alt=""/></figure>
-					<!-- /wp:image -->
-					<!-- wp:heading {"level":3} -->
+{$quality_3}					<!-- wp:heading {"level":3} -->
 					<h3 class="wp-block-heading">{$t( 'quality.item3' )}</h3>
 					<!-- /wp:heading -->
 				</div>
@@ -344,10 +329,7 @@ ITEM;
 			<div class="wp-block-column">
 				<!-- wp:group {"className":"construction-quality__card","layout":{"type":"constrained"}} -->
 				<div class="wp-block-group construction-quality__card">
-					<!-- wp:image {"sizeSlug":"large","linkDestination":"none","className":"construction-quality__media"} -->
-					<figure class="wp-block-image size-large construction-quality__media"><img src="{$img( 'quality_4' )}" alt=""/></figure>
-					<!-- /wp:image -->
-					<!-- wp:heading {"level":3} -->
+{$quality_4}					<!-- wp:heading {"level":3} -->
 					<h3 class="wp-block-heading">{$t( 'quality.item4' )}</h3>
 					<!-- /wp:heading -->
 				</div>
@@ -602,6 +584,11 @@ function construction_rebuild_polylang_homes() {
 		return new WP_Error( 'no_polylang', 'Polylang is not active.' );
 	}
 
+	$media = construction_import_media_library();
+	if ( is_wp_error( $media ) ) {
+		return $media;
+	}
+
 	$old_ids = array();
 	foreach ( array( 'sakums', 'home', 'glavnaya', 'sakums-english' ) as $slug ) {
 		$found = get_posts(
@@ -687,9 +674,7 @@ function construction_rebuild_polylang_homes() {
 }
 
 /**
- * Create empty Primary menus per language (Polylang) — no Home item.
- * Add real links later under Appearance → Menus.
- * Logo + site title link to the homepage instead.
+ * Create Primary menus per language with Projects page link.
  *
  * @param array{lv?:int,en?:int,ru?:int} $page_ids Unused; kept for call-site compatibility.
  */
@@ -703,6 +688,11 @@ function construction_rebuild_language_menus( array $page_ids = array() ): void 
 		'en' => 'Primary EN',
 		'ru' => 'Primary RU',
 	);
+
+	$project_ids = get_option( 'construction_projects_page_ids', array() );
+	if ( ! is_array( $project_ids ) ) {
+		$project_ids = array();
+	}
 
 	$menu_ids = array();
 
@@ -722,6 +712,20 @@ function construction_rebuild_language_menus( array $page_ids = array() ): void 
 				continue;
 			}
 			$menu_id = (int) $created;
+		}
+
+		if ( ! empty( $project_ids[ $lang ] ) ) {
+			wp_update_nav_menu_item(
+				$menu_id,
+				0,
+				array(
+					'menu-item-title'     => construction_string( 'nav.projects', $lang ),
+					'menu-item-object'    => 'page',
+					'menu-item-object-id' => (int) $project_ids[ $lang ],
+					'menu-item-type'      => 'post_type',
+					'menu-item-status'    => 'publish',
+				)
+			);
 		}
 
 		$menu_ids[ $lang ] = $menu_id;
