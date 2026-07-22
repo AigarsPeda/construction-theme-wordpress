@@ -43,6 +43,10 @@ function construction_homepage_content_for_lang( string $lang ): string {
 		return esc_url( construction_image_url( $key ) );
 	};
 
+	$mail_href = esc_url(
+		'mailto:info@construction.lv?subject=' . rawurlencode( construction_string( 'contact.mail_subject', $lang ) )
+	);
+
 	$credits_blocks = '';
 	foreach ( construction_image_credits() as $credit ) {
 		$label = esc_html(
@@ -178,6 +182,106 @@ ITEM;
 		<!-- /wp:column -->
 	</div>
 	<!-- /wp:columns -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"align":"full","className":"construction-process","layout":{"type":"default"},"anchor":"process"} -->
+<div class="wp-block-group alignfull construction-process" id="process">
+	<!-- wp:group {"className":"construction-process__inner","layout":{"type":"default"}} -->
+	<div class="wp-block-group construction-process__inner">
+		<!-- wp:group {"className":"construction-process__header","layout":{"type":"default"}} -->
+		<div class="wp-block-group construction-process__header">
+			<!-- wp:paragraph {"className":"construction-eyebrow"} -->
+			<p class="construction-eyebrow">{$t( 'process.eyebrow' )}</p>
+			<!-- /wp:paragraph -->
+
+			<!-- wp:heading -->
+			<h2 class="wp-block-heading">{$t( 'process.title' )}</h2>
+			<!-- /wp:heading -->
+
+			<!-- wp:paragraph {"className":"construction-process__intro"} -->
+			<p class="construction-process__intro">{$t( 'process.intro' )}</p>
+			<!-- /wp:paragraph -->
+		</div>
+		<!-- /wp:group -->
+
+		<!-- wp:columns {"className":"construction-process__grid"} -->
+		<div class="wp-block-columns construction-process__grid">
+			<!-- wp:column -->
+			<div class="wp-block-column">
+				<!-- wp:group {"className":"construction-process-step","layout":{"type":"default"}} -->
+				<div class="wp-block-group construction-process-step">
+					<!-- wp:paragraph {"className":"construction-process-step__num"} -->
+					<p class="construction-process-step__num">01</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:heading {"level":3} -->
+					<h3 class="wp-block-heading">{$t( 'process.1.title' )}</h3>
+					<!-- /wp:heading -->
+					<!-- wp:paragraph -->
+					<p>{$t( 'process.1.text' )}</p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
+			</div>
+			<!-- /wp:column -->
+
+			<!-- wp:column -->
+			<div class="wp-block-column">
+				<!-- wp:group {"className":"construction-process-step","layout":{"type":"default"}} -->
+				<div class="wp-block-group construction-process-step">
+					<!-- wp:paragraph {"className":"construction-process-step__num"} -->
+					<p class="construction-process-step__num">02</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:heading {"level":3} -->
+					<h3 class="wp-block-heading">{$t( 'process.2.title' )}</h3>
+					<!-- /wp:heading -->
+					<!-- wp:paragraph -->
+					<p>{$t( 'process.2.text' )}</p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
+			</div>
+			<!-- /wp:column -->
+
+			<!-- wp:column -->
+			<div class="wp-block-column">
+				<!-- wp:group {"className":"construction-process-step","layout":{"type":"default"}} -->
+				<div class="wp-block-group construction-process-step">
+					<!-- wp:paragraph {"className":"construction-process-step__num"} -->
+					<p class="construction-process-step__num">03</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:heading {"level":3} -->
+					<h3 class="wp-block-heading">{$t( 'process.3.title' )}</h3>
+					<!-- /wp:heading -->
+					<!-- wp:paragraph -->
+					<p>{$t( 'process.3.text' )}</p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
+			</div>
+			<!-- /wp:column -->
+
+			<!-- wp:column -->
+			<div class="wp-block-column">
+				<!-- wp:group {"className":"construction-process-step","layout":{"type":"default"}} -->
+				<div class="wp-block-group construction-process-step">
+					<!-- wp:paragraph {"className":"construction-process-step__num"} -->
+					<p class="construction-process-step__num">04</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:heading {"level":3} -->
+					<h3 class="wp-block-heading">{$t( 'process.4.title' )}</h3>
+					<!-- /wp:heading -->
+					<!-- wp:paragraph -->
+					<p>{$t( 'process.4.text' )}</p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
+			</div>
+			<!-- /wp:column -->
+		</div>
+		<!-- /wp:columns -->
+	</div>
+	<!-- /wp:group -->
 </div>
 <!-- /wp:group -->
 
@@ -344,6 +448,94 @@ ITEM;
 </div>
 <!-- /wp:group -->
 
+<!-- wp:group {"align":"full","className":"construction-faq","layout":{"type":"default"},"anchor":"faq"} -->
+<div class="wp-block-group alignfull construction-faq" id="faq">
+	<!-- wp:group {"className":"construction-faq__inner","layout":{"type":"default"}} -->
+	<div class="wp-block-group construction-faq__inner">
+		<!-- wp:group {"className":"construction-faq__header","layout":{"type":"default"}} -->
+		<div class="wp-block-group construction-faq__header">
+			<!-- wp:paragraph {"className":"construction-eyebrow"} -->
+			<p class="construction-eyebrow">{$t( 'faq.eyebrow' )}</p>
+			<!-- /wp:paragraph -->
+			<!-- wp:heading -->
+			<h2 class="wp-block-heading">{$t( 'faq.title' )}</h2>
+			<!-- /wp:heading -->
+		</div>
+		<!-- /wp:group -->
+
+		<!-- wp:group {"className":"construction-faq__list","layout":{"type":"default"}} -->
+		<div class="wp-block-group construction-faq__list">
+			<!-- wp:details {"className":"construction-faq-item"} -->
+			<details class="wp-block-details construction-faq-item">
+				<summary>{$t( 'faq.1.q' )}</summary>
+				<!-- wp:group {"className":"construction-faq-item__panel","layout":{"type":"default"}} -->
+				<div class="wp-block-group construction-faq-item__panel">
+					<!-- wp:paragraph -->
+					<p>{$t( 'faq.1.a' )}</p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
+			</details>
+			<!-- /wp:details -->
+
+			<!-- wp:details {"className":"construction-faq-item"} -->
+			<details class="wp-block-details construction-faq-item">
+				<summary>{$t( 'faq.2.q' )}</summary>
+				<!-- wp:group {"className":"construction-faq-item__panel","layout":{"type":"default"}} -->
+				<div class="wp-block-group construction-faq-item__panel">
+					<!-- wp:paragraph -->
+					<p>{$t( 'faq.2.a' )}</p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
+			</details>
+			<!-- /wp:details -->
+
+			<!-- wp:details {"className":"construction-faq-item"} -->
+			<details class="wp-block-details construction-faq-item">
+				<summary>{$t( 'faq.3.q' )}</summary>
+				<!-- wp:group {"className":"construction-faq-item__panel","layout":{"type":"default"}} -->
+				<div class="wp-block-group construction-faq-item__panel">
+					<!-- wp:paragraph -->
+					<p>{$t( 'faq.3.a' )}</p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
+			</details>
+			<!-- /wp:details -->
+
+			<!-- wp:details {"className":"construction-faq-item"} -->
+			<details class="wp-block-details construction-faq-item">
+				<summary>{$t( 'faq.4.q' )}</summary>
+				<!-- wp:group {"className":"construction-faq-item__panel","layout":{"type":"default"}} -->
+				<div class="wp-block-group construction-faq-item__panel">
+					<!-- wp:paragraph -->
+					<p>{$t( 'faq.4.a' )}</p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
+			</details>
+			<!-- /wp:details -->
+
+			<!-- wp:details {"className":"construction-faq-item"} -->
+			<details class="wp-block-details construction-faq-item">
+				<summary>{$t( 'faq.5.q' )}</summary>
+				<!-- wp:group {"className":"construction-faq-item__panel","layout":{"type":"default"}} -->
+				<div class="wp-block-group construction-faq-item__panel">
+					<!-- wp:paragraph -->
+					<p>{$t( 'faq.5.a' )}</p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
+			</details>
+			<!-- /wp:details -->
+		</div>
+		<!-- /wp:group -->
+	</div>
+	<!-- /wp:group -->
+</div>
+<!-- /wp:group -->
+
 <!-- wp:group {"align":"full","className":"construction-contact","layout":{"type":"default"},"anchor":"contact"} -->
 <div class="wp-block-group alignfull construction-contact" id="contact">
 	<!-- wp:columns {"className":"construction-contact__grid","verticalAlignment":"center"} -->
@@ -354,7 +546,7 @@ ITEM;
 			<p class="construction-contact__label">{$t( 'contact.label' )}</p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"construction-contact__email"} -->
-			<p class="construction-contact__email"><a href="mailto:info@construction.lv">info@construction.lv</a></p>
+			<p class="construction-contact__email"><a href="{$mail_href}">info@construction.lv</a></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"construction-contact__telegram"} -->
 			<p class="construction-contact__telegram"><a href="https://t.me/construction" target="_blank" rel="noopener">Telegram · @construction</a></p>
@@ -373,7 +565,7 @@ ITEM;
 				<!-- wp:buttons {"className":"construction-lead-form__actions"} -->
 				<div class="wp-block-buttons construction-lead-form__actions">
 					<!-- wp:button {"className":"construction-lead-form__go"} -->
-					<div class="wp-block-button construction-lead-form__go"><a class="wp-block-button__link wp-element-button" href="mailto:info@construction.lv">{$t( 'contact.mail_cta' )} →</a></div>
+					<div class="wp-block-button construction-lead-form__go"><a class="wp-block-button__link wp-element-button" href="{$mail_href}">{$t( 'contact.mail_cta' )} →</a></div>
 					<!-- /wp:button -->
 				</div>
 				<!-- /wp:buttons -->

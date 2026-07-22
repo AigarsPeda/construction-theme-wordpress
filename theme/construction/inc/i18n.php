@@ -239,6 +239,126 @@ function construction_strings(): array {
 			'en' => 'Fast, tidy, and no budget surprises. We will definitely work together again.',
 			'ru' => 'Быстро, аккуратно и без сюрпризов по бюджету. Обязательно обратимся снова.',
 		),
+		'process.eyebrow'      => array(
+			'lv' => 'Process',
+			'en' => 'Process',
+			'ru' => 'Процесс',
+		),
+		'process.title'        => array(
+			'lv' => 'Kā mēs strādājam',
+			'en' => 'How we work',
+			'ru' => 'Как мы работаем',
+		),
+		'process.intro'        => array(
+			'lv' => 'Skaidrs ceļš no pirmā zvana līdz nodošanai — bez minējumiem un slēptām izmaksām.',
+			'en' => 'A clear path from the first call to handover — no guesswork and no hidden costs.',
+			'ru' => 'Понятный путь от первого звонка до сдачи объекта — без догадок и скрытых расходов.',
+		),
+		'process.1.title'      => array(
+			'lv' => 'Konsultācija',
+			'en' => 'Consultation',
+			'ru' => 'Консультация',
+		),
+		'process.1.text'       => array(
+			'lv' => 'Pastāstiet par objektu, mērķiem un budžetu. Mēs ieskicējam apjomu un nākamos soļus.',
+			'en' => 'Tell us about the site, goals, and budget. We outline the scope and next steps.',
+			'ru' => 'Расскажите об объекте, целях и бюджете. Мы определяем объём работ и следующие шаги.',
+		),
+		'process.2.title'      => array(
+			'lv' => 'Projekts un tāme',
+			'en' => 'Design & estimate',
+			'ru' => 'Проект и смета',
+		),
+		'process.2.text'       => array(
+			'lv' => 'Tehniskie zīmējumi, materiāli un caurspīdīga tāme — pirms darba sākuma.',
+			'en' => 'Technical drawings, materials, and a transparent cost plan — before work begins.',
+			'ru' => 'Технические чертежи, материалы и прозрачная смета — до начала работ.',
+		),
+		'process.3.title'      => array(
+			'lv' => 'Būvniecība',
+			'en' => 'Construction',
+			'ru' => 'Строительство',
+		),
+		'process.3.text'       => array(
+			'lv' => 'Brigādes objektā ar grafika atjauninājumiem un kvalitātes pārbaudēm katrā posmā.',
+			'en' => 'Crews on site with schedule updates and quality checks at every stage.',
+			'ru' => 'Бригады на объекте с обновлениями графика и контролем качества на каждом этапе.',
+		),
+		'process.4.title'      => array(
+			'lv' => 'Nodošana',
+			'en' => 'Handover',
+			'ru' => 'Сдача объекта',
+		),
+		'process.4.text'       => array(
+			'lv' => 'Gala apskate, dokumentācija un garantijas atbalsts pēc darba pabeigšanas.',
+			'en' => 'Final walkthrough, documentation, and warranty support after completion.',
+			'ru' => 'Финальный осмотр, документация и гарантийная поддержка после завершения работ.',
+		),
+		'faq.eyebrow'          => array(
+			'lv' => 'Jautājumi',
+			'en' => 'FAQ',
+			'ru' => 'Вопросы',
+		),
+		'faq.title'            => array(
+			'lv' => 'Biežāk uzdotie jautājumi',
+			'en' => 'Frequently asked questions',
+			'ru' => 'Частые вопросы',
+		),
+		'faq.intro'            => array(
+			'lv' => 'Īsas atbildes par termiņiem, budžetu un to, kā sākt sadarbību.',
+			'en' => 'Short answers about timelines, budget, and how to get started.',
+			'ru' => 'Краткие ответы о сроках, бюджете и том, как начать сотрудничество.',
+		),
+		'faq.1.q'              => array(
+			'lv' => 'Cik ilgi parasti ilgst projekts?',
+			'en' => 'How long does a typical project take?',
+			'ru' => 'Сколько обычно длится проект?',
+		),
+		'faq.1.a'              => array(
+			'lv' => 'Termiņi ir atkarīgi no apjoma. Fasādes darbi bieži aizņem vairākas nedēļas; pilna būve tiek plānota posmos ar skaidriem atskaites punktiem līgumā.',
+			'en' => 'Timelines depend on scope. A façade project often takes several weeks; full builds are planned in phases with clear milestones in the contract.',
+			'ru' => 'Сроки зависят от объёма. Фасадные работы часто занимают несколько недель; полное строительство планируется этапами с понятными вехами в договоре.',
+		),
+		'faq.2.q'              => array(
+			'lv' => 'Kur jūs strādājat?',
+			'en' => 'Where do you work?',
+			'ru' => 'Где вы работаете?',
+		),
+		'faq.2.a'              => array(
+			'lv' => 'Galvenokārt Latvijā. Pierakstiet atrašanās vietu pieteikumā — apstiprināsim, vai varam uzņemties projektu.',
+			'en' => 'Primarily in Latvia. Include your location in the enquiry and we will confirm availability.',
+			'ru' => 'В основном в Латвии. Укажите локацию в заявке — мы подтвердим, можем ли взять проект.',
+		),
+		'faq.3.q'              => array(
+			'lv' => 'Vai tāme ir fiksēta?',
+			'en' => 'Is the estimate fixed?',
+			'ru' => 'Смета фиксированная?',
+		),
+		'faq.3.a'              => array(
+			'lv' => 'Apjomu un budžetu saskaņojam rakstiski pirms darba sākuma. Izmaiņas apspriežam un apstiprinām, pirms tās ietekmē izmaksas vai grafiku.',
+			'en' => 'We agree scope and budget in writing before work begins. Changes are discussed and approved before they affect cost or schedule.',
+			'ru' => 'Объём и бюджет согласуем письменно до начала работ. Изменения обсуждаем и утверждаем до того, как они повлияют на стоимость или график.',
+		),
+		'faq.4.q'              => array(
+			'lv' => 'Kāda ir garantija?',
+			'en' => 'What guarantee do you provide?',
+			'ru' => 'Какая гарантия?',
+		),
+		'faq.4.a'              => array(
+			'lv' => 'Darbu kvalitātes garantija ir iekļauta līgumā. Ilgums ir atkarīgs no darbu veida — precizēsim piedāvājumā.',
+			'en' => 'A workmanship warranty is included in the contract. Duration depends on the type of works — we confirm it in your proposal.',
+			'ru' => 'Гарантия на качество работ включена в договор. Срок зависит от вида работ — уточним в предложении.',
+		),
+		'faq.5.q'              => array(
+			'lv' => 'Kā sākt?',
+			'en' => 'How do I get started?',
+			'ru' => 'Как начать?',
+		),
+		'faq.5.a'              => array(
+			'lv' => 'Uzrakstiet e-pastu vai zvaniet ar īsu projekta aprakstu. Mēs ātri atbildēsim un vienosimies par konsultāciju.',
+			'en' => 'Email or call us with a short project description. We reply quickly and book a consultation.',
+			'ru' => 'Напишите на email или позвоните с кратким описанием проекта. Мы быстро ответим и согласуем консультацию.',
+		),
 		'contact.label'        => array(
 			'lv' => 'Sazināties',
 			'en' => 'Get in touch',
@@ -260,14 +380,24 @@ function construction_strings(): array {
 			'ru' => 'Email / телефон',
 		),
 		'contact.hint'         => array(
-			'lv' => 'Atstājiet e-pastu vai tālruni — mēs sazināsimies',
-			'en' => 'Leave your email or phone — we will contact you',
-			'ru' => 'Оставьте email или телефон — мы свяжемся',
+			'lv' => 'Rakstiet vai zvaniet — mēs ātri atbildēsim',
+			'en' => 'Email or call — we reply quickly',
+			'ru' => 'Напишите или позвоните — ответим быстро',
 		),
 		'contact.mail_cta'     => array(
 			'lv' => 'Rakstīt e-pastu',
 			'en' => 'Email us',
-			'ru' => 'Написать на email',
+			'ru' => 'Написать email',
+		),
+		'contact.call_cta'     => array(
+			'lv' => 'Zvanīt',
+			'en' => 'Call',
+			'ru' => 'Позвонить',
+		),
+		'contact.mail_subject' => array(
+			'lv' => 'Projekta pieprasījums',
+			'en' => 'Project enquiry',
+			'ru' => 'Заявка на проект',
 		),
 		'credits.title'        => array(
 			'lv' => 'Foto kredīti (Unsplash)',

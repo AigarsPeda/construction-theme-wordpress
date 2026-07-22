@@ -3,12 +3,16 @@
  * Title: Contact
  * Slug: construction/contact
  * Categories: contact, construction
- * Description: Contact strip with email, Telegram, and mailto CTA (fully visual blocks).
+ * Description: Contact strip with email, Telegram, mailto + call CTAs.
  *
  * @package Construction
  */
+
+$mail_href = esc_url(
+	'mailto:info@construction.lv?subject=' . rawurlencode( construction_t( 'contact.mail_subject' ) )
+);
 ?>
-<!-- wp:group {"align":"full","className":"construction-contact","layout":{"type":"default"}} -->
+<!-- wp:group {"align":"full","className":"construction-contact","layout":{"type":"default"},"anchor":"contact"} -->
 <div class="wp-block-group alignfull construction-contact" id="contact">
 	<!-- wp:columns {"className":"construction-contact__grid","verticalAlignment":"center"} -->
 	<div class="wp-block-columns construction-contact__grid are-vertically-aligned-center">
@@ -18,7 +22,7 @@
 			<p class="construction-contact__label"><?php echo esc_html( construction_t( 'contact.label' ) ); ?></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"construction-contact__email"} -->
-			<p class="construction-contact__email"><a href="mailto:info@construction.lv">info@construction.lv</a></p>
+			<p class="construction-contact__email"><a href="<?php echo $mail_href; ?>">info@construction.lv</a></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"construction-contact__telegram"} -->
 			<p class="construction-contact__telegram"><a href="https://t.me/construction" target="_blank" rel="noopener">Telegram · @construction</a></p>
@@ -33,10 +37,10 @@
 				<!-- wp:paragraph {"className":"construction-lead-form__hint"} -->
 				<p class="construction-lead-form__hint"><?php echo esc_html( construction_t( 'contact.hint' ) ); ?></p>
 				<!-- /wp:paragraph -->
-				<!-- wp:buttons -->
-				<div class="wp-block-buttons">
+				<!-- wp:buttons {"className":"construction-lead-form__actions"} -->
+				<div class="wp-block-buttons construction-lead-form__actions">
 					<!-- wp:button {"className":"construction-lead-form__go"} -->
-					<div class="wp-block-button construction-lead-form__go"><a class="wp-block-button__link wp-element-button" href="mailto:info@construction.lv"><?php echo esc_html( construction_t( 'contact.mail_cta' ) ); ?> →</a></div>
+					<div class="wp-block-button construction-lead-form__go"><a class="wp-block-button__link wp-element-button" href="<?php echo $mail_href; ?>"><?php echo esc_html( construction_t( 'contact.mail_cta' ) ); ?> →</a></div>
 					<!-- /wp:button -->
 				</div>
 				<!-- /wp:buttons -->

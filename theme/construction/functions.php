@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CONSTRUCTION_VERSION', '0.2.9' );
+define( 'CONSTRUCTION_VERSION', '0.3.7' );
 
 require get_template_directory() . '/inc/i18n.php';
 require get_template_directory() . '/inc/images.php';
@@ -54,9 +54,17 @@ function construction_enqueue_assets(): void {
 	);
 
 	wp_enqueue_script(
+		'gsap',
+		'https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js',
+		array(),
+		'3.12.7',
+		true
+	);
+
+	wp_enqueue_script(
 		'construction-main',
 		get_template_directory_uri() . '/assets/js/main.js',
-		array(),
+		array( 'gsap' ),
 		CONSTRUCTION_VERSION,
 		true
 	);
