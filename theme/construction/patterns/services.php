@@ -8,80 +8,44 @@
  * @package Construction
  */
 ?>
-<!-- wp:group {"align":"full","className":"construction-services","layout":{"type":"constrained"}} -->
+<!-- wp:group {"align":"full","className":"construction-services","layout":{"type":"default"}} -->
 <div class="wp-block-group alignfull construction-services" id="services">
-	<!-- wp:columns {"align":"wide","className":"construction-services__grid"} -->
-	<div class="wp-block-columns alignwide construction-services__grid">
-		<!-- wp:column {"width":"42%","className":"construction-services__intro"} -->
-		<div class="wp-block-column construction-services__intro" style="flex-basis:42%">
-			<!-- wp:heading {"fontSize":"x-large"} -->
-			<h2 class="wp-block-heading has-x-large-font-size"><?php echo esc_html( construction_t( 'We handle design, planning, and installation' ) ); ?></h2>
-			<!-- /wp:heading -->
-
-			<!-- wp:paragraph -->
-			<p><?php esc_html_e( 'No tehniskā projekta līdz fasādes montāžai — viena komanda, skaidri termiņi un caurspīdīgs process.', 'construction' ); ?></p>
-			<!-- /wp:paragraph -->
+	<!-- wp:html -->
+	<div class="construction-services__grid">
+		<div class="construction-services__intro">
+			<h2><?php echo esc_html( construction_t( 'services.title' ) ); ?></h2>
+			<p><?php echo esc_html( construction_t( 'services.intro' ) ); ?></p>
 		</div>
-		<!-- /wp:column -->
-
-		<!-- wp:column {"width":"58%","className":"construction-services__list"} -->
-		<div class="wp-block-column construction-services__list" style="flex-basis:58%">
-			<!-- wp:group {"className":"construction-service-card","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center"}} -->
-			<div class="wp-block-group construction-service-card">
-				<!-- wp:group {"className":"construction-service-card__thumb construction-service-card__thumb--1","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group construction-service-card__thumb construction-service-card__thumb--1"></div>
-				<!-- /wp:group -->
-				<!-- wp:group {"layout":{"type":"constrained"}} -->
-				<div class="wp-block-group">
-					<!-- wp:heading {"level":3} -->
-					<h3 class="wp-block-heading"><?php esc_html_e( 'Projektēšana', 'construction' ); ?></h3>
-					<!-- /wp:heading -->
-					<!-- wp:paragraph -->
-					<p><?php esc_html_e( 'Aprēķini, tehniskās shēmas un projektēšana no A līdz Z.', 'construction' ); ?></p>
-					<!-- /wp:paragraph -->
+		<div class="construction-services__list">
+			<div class="construction-service-card">
+				<div class="construction-service-card__thumb">
+					<img src="<?php echo esc_url( construction_image_url( 'service_1' ) ); ?>" alt="" loading="lazy" decoding="async" />
 				</div>
-				<!-- /wp:group -->
-			</div>
-			<!-- /wp:group -->
-
-			<!-- wp:group {"className":"construction-service-card","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center"}} -->
-			<div class="wp-block-group construction-service-card">
-				<!-- wp:group {"className":"construction-service-card__thumb construction-service-card__thumb--2","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group construction-service-card__thumb construction-service-card__thumb--2"></div>
-				<!-- /wp:group -->
-				<!-- wp:group {"layout":{"type":"constrained"}} -->
-				<div class="wp-block-group">
-					<!-- wp:heading {"level":3} -->
-					<h3 class="wp-block-heading"><?php esc_html_e( 'Fasāžu dizains', 'construction' ); ?></h3>
-					<!-- /wp:heading -->
-					<!-- wp:paragraph -->
-					<p><?php esc_html_e( 'Ventilējamās fasādes ar arhitektūras vizualizāciju.', 'construction' ); ?></p>
-					<!-- /wp:paragraph -->
+				<div>
+					<h3><?php echo esc_html( construction_t( 'services.item1.title' ) ); ?></h3>
+					<p><?php echo esc_html( construction_t( 'services.item1.text' ) ); ?></p>
 				</div>
-				<!-- /wp:group -->
 			</div>
-			<!-- /wp:group -->
-
-			<!-- wp:group {"className":"construction-service-card","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center"}} -->
-			<div class="wp-block-group construction-service-card">
-				<!-- wp:group {"className":"construction-service-card__thumb construction-service-card__thumb--3","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group construction-service-card__thumb construction-service-card__thumb--3"></div>
-				<!-- /wp:group -->
-				<!-- wp:group {"layout":{"type":"constrained"}} -->
-				<div class="wp-block-group">
-					<!-- wp:heading {"level":3} -->
-					<h3 class="wp-block-heading"><?php esc_html_e( 'Fasāžu montāža', 'construction' ); ?></h3>
-					<!-- /wp:heading -->
-					<!-- wp:paragraph -->
-					<p><?php esc_html_e( 'Profesionāla montāža un apdares materiālu uzstādīšana.', 'construction' ); ?></p>
-					<!-- /wp:paragraph -->
+			<div class="construction-service-card">
+				<div class="construction-service-card__thumb">
+					<img src="<?php echo esc_url( construction_image_url( 'service_2' ) ); ?>" alt="" loading="lazy" decoding="async" />
 				</div>
-				<!-- /wp:group -->
+				<div>
+					<h3><?php echo esc_html( construction_t( 'services.item2.title' ) ); ?></h3>
+					<p><?php echo esc_html( construction_t( 'services.item2.text' ) ); ?></p>
+				</div>
 			</div>
-			<!-- /wp:group -->
+			<div class="construction-service-card">
+				<div class="construction-service-card__thumb">
+					<img src="<?php echo esc_url( construction_image_url( 'service_3' ) ); ?>" alt="" loading="lazy" decoding="async" />
+				</div>
+				<div>
+					<h3><?php echo esc_html( construction_t( 'services.item3.title' ) ); ?></h3>
+					<p><?php echo esc_html( construction_t( 'services.item3.text' ) ); ?></p>
+				</div>
+			</div>
 		</div>
-		<!-- /wp:column -->
 	</div>
-	<!-- /wp:columns -->
+	<!-- /wp:html -->
 </div>
 <!-- /wp:group -->

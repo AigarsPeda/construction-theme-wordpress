@@ -11,24 +11,20 @@
 ?>
 <!-- wp:group {"align":"full","className":"construction-footer","layout":{"type":"default"}} -->
 <div class="wp-block-group alignfull construction-footer">
-	<!-- wp:group {"className":"construction-footer__inner","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"center"}} -->
-	<div class="wp-block-group construction-footer__inner">
-		<!-- wp:buttons -->
-		<div class="wp-block-buttons">
-			<!-- wp:button {"className":"is-style-fill"} -->
-			<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#contact"><?php echo esc_html( construction_t( 'Take the quiz' ) ); ?></a></div>
-			<!-- /wp:button -->
-		</div>
-		<!-- /wp:buttons -->
-
-		<!-- wp:paragraph {"className":"construction-footer__links"} -->
-		<p class="construction-footer__links"><a href="#projects"><?php echo esc_html( construction_t( 'Projects' ) ); ?></a> · <a href="#photos"><?php echo esc_html( construction_t( 'Photos' ) ); ?></a> · <a href="#about"><?php echo esc_html( construction_t( 'About us' ) ); ?></a></p>
-		<!-- /wp:paragraph -->
-
-		<!-- wp:paragraph {"className":"construction-footer__top"} -->
-		<p class="construction-footer__top"><a href="#top" aria-label="Augšā">↑</a></p>
-		<!-- /wp:paragraph -->
+	<!-- wp:html -->
+	<div class="construction-footer__inner">
+		<a class="wp-block-button__link wp-element-button" href="#contact"><?php echo esc_html( construction_t( 'hero.cta' ) ); ?></a>
+		<p class="construction-footer__links">
+			<a href="#services"><?php echo esc_html( construction_t( 'nav.projects' ) ); ?></a>
+			·
+			<a href="#about"><?php echo esc_html( construction_t( 'nav.photos' ) ); ?></a>
+			·
+			<a href="#about"><?php echo esc_html( construction_t( 'nav.about' ) ); ?></a>
+		</p>
+		<p class="construction-footer__top">
+			<a href="#top" aria-label="<?php echo esc_attr( construction_t( 'back.top' ) ); ?>">↑</a>
+		</p>
 	</div>
-	<!-- /wp:group -->
+	<!-- /wp:html -->
 </div>
 <!-- /wp:group -->

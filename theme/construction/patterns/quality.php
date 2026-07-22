@@ -8,74 +8,38 @@
  * @package Construction
  */
 ?>
-<!-- wp:group {"align":"full","className":"construction-quality","layout":{"type":"constrained"}} -->
+<!-- wp:group {"align":"full","className":"construction-quality","layout":{"type":"default"}} -->
 <div class="wp-block-group alignfull construction-quality" id="about">
-	<!-- wp:heading {"textAlign":"left","align":"wide","fontSize":"x-large"} -->
-	<h2 class="wp-block-heading alignwide has-text-align-left has-x-large-font-size"><?php echo esc_html( construction_t( 'Fast timelines and high-quality work' ) ); ?></h2>
-	<!-- /wp:heading -->
-
-	<!-- wp:columns {"align":"wide","className":"construction-quality__grid"} -->
-	<div class="wp-block-columns alignwide construction-quality__grid">
-		<!-- wp:column -->
-		<div class="wp-block-column">
-			<!-- wp:group {"className":"construction-quality__card","layout":{"type":"constrained"}} -->
-			<div class="wp-block-group construction-quality__card">
-				<!-- wp:group {"className":"construction-quality__media construction-quality__media--1","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group construction-quality__media construction-quality__media--1"></div>
-				<!-- /wp:group -->
-				<!-- wp:heading {"level":3} -->
-				<h3 class="wp-block-heading"><?php esc_html_e( 'Augsti kvalitātes standarti', 'construction' ); ?></h3>
-				<!-- /wp:heading -->
+	<!-- wp:html -->
+	<div class="construction-quality__inner">
+		<h2><?php echo esc_html( construction_t( 'quality.title' ) ); ?></h2>
+		<div class="construction-quality__grid">
+			<div class="construction-quality__card">
+				<div class="construction-quality__media">
+					<img src="<?php echo esc_url( construction_image_url( 'quality_1' ) ); ?>" alt="" loading="lazy" decoding="async" />
+				</div>
+				<h3><?php echo esc_html( construction_t( 'quality.item1' ) ); ?></h3>
 			</div>
-			<!-- /wp:group -->
-		</div>
-		<!-- /wp:column -->
-
-		<!-- wp:column -->
-		<div class="wp-block-column">
-			<!-- wp:group {"className":"construction-quality__card","layout":{"type":"constrained"}} -->
-			<div class="wp-block-group construction-quality__card">
-				<!-- wp:group {"className":"construction-quality__media construction-quality__media--2","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group construction-quality__media construction-quality__media--2"></div>
-				<!-- /wp:group -->
-				<!-- wp:heading {"level":3} -->
-				<h3 class="wp-block-heading"><?php esc_html_e( 'Apmierināti klienti', 'construction' ); ?></h3>
-				<!-- /wp:heading -->
+			<div class="construction-quality__card">
+				<div class="construction-quality__media">
+					<img src="<?php echo esc_url( construction_image_url( 'quality_2' ) ); ?>" alt="" loading="lazy" decoding="async" />
+				</div>
+				<h3><?php echo esc_html( construction_t( 'quality.item2' ) ); ?></h3>
 			</div>
-			<!-- /wp:group -->
-		</div>
-		<!-- /wp:column -->
-
-		<!-- wp:column -->
-		<div class="wp-block-column">
-			<!-- wp:group {"className":"construction-quality__card","layout":{"type":"constrained"}} -->
-			<div class="wp-block-group construction-quality__card">
-				<!-- wp:group {"className":"construction-quality__media construction-quality__media--3","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group construction-quality__media construction-quality__media--3"></div>
-				<!-- /wp:group -->
-				<!-- wp:heading {"level":3} -->
-				<h3 class="wp-block-heading"><?php esc_html_e( 'Individuāli projekti', 'construction' ); ?></h3>
-				<!-- /wp:heading -->
+			<div class="construction-quality__card">
+				<div class="construction-quality__media">
+					<img src="<?php echo esc_url( construction_image_url( 'quality_3' ) ); ?>" alt="" loading="lazy" decoding="async" />
+				</div>
+				<h3><?php echo esc_html( construction_t( 'quality.item3' ) ); ?></h3>
 			</div>
-			<!-- /wp:group -->
-		</div>
-		<!-- /wp:column -->
-
-		<!-- wp:column -->
-		<div class="wp-block-column">
-			<!-- wp:group {"className":"construction-quality__card","layout":{"type":"constrained"}} -->
-			<div class="wp-block-group construction-quality__card">
-				<!-- wp:group {"className":"construction-quality__media construction-quality__media--4","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group construction-quality__media construction-quality__media--4"></div>
-				<!-- /wp:group -->
-				<!-- wp:heading {"level":3} -->
-				<h3 class="wp-block-heading"><?php esc_html_e( 'Būvniecības brigādes', 'construction' ); ?></h3>
-				<!-- /wp:heading -->
+			<div class="construction-quality__card">
+				<div class="construction-quality__media">
+					<img src="<?php echo esc_url( construction_image_url( 'quality_4' ) ); ?>" alt="" loading="lazy" decoding="async" />
+				</div>
+				<h3><?php echo esc_html( construction_t( 'quality.item4' ) ); ?></h3>
 			</div>
-			<!-- /wp:group -->
 		</div>
-		<!-- /wp:column -->
 	</div>
-	<!-- /wp:columns -->
+	<!-- /wp:html -->
 </div>
 <!-- /wp:group -->

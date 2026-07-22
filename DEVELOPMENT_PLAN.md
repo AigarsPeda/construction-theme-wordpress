@@ -8,6 +8,7 @@ Last updated: 2026-07-22
 - Custom theme we own (no Elementor / marketplace theme lock-in)
 - Multilingual: **Latvian (default)**, English, Russian via **Polylang** (free)
 - Design direction: **Mockup 1** (Дом Строй style — split hero, services, quality grid, dark reviews, contact footer)
+- **Responsive** on phone, tablet, and desktop
 - Code workspace: `/Users/aigarspeda/Desktop/construction`
 - Later: migrate Local → production server
 
@@ -145,7 +146,8 @@ construction/
 ### Phase 0 — Foundations
 - [x] Placeholder brand **Construction**
 - [x] Theme scaffold in Desktop + symlink into Local
-- [ ] Activate theme in WP Admin (Appearance → Themes)
+- [x] Homepage as a real Page (**Sākums**) under Pages + static front page
+- [ ] Activate theme in WP Admin (Appearance → Themes) if not already
 - [ ] Finish Polylang: LV default, EN, RU
 - [ ] Create LV/EN/RU menus and language switcher
 - [ ] Init git / push to GitHub when ready
