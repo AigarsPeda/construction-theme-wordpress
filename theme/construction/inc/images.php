@@ -6,7 +6,8 @@
  * On import they are uploaded to wp-content/uploads and attachment IDs
  * are stored in the construction_media_ids option.
  *
- * Theme assets keep only chrome: logo SVG + screenshot.png.
+ * Theme assets keep only chrome: logo placeholder SVG + screenshot.png.
+ * Site logo is uploaded via Appearance → Construction (Media Library).
  *
  * @package Construction
  */

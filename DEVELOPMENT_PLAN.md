@@ -177,9 +177,9 @@ construction/
 - [ ] Mobile pass, accessibility basics, performance check
 
 ### Phase 5 — Server transfer
-- [ ] Choose host
-- [ ] Migrate (All-in-One WP Migration / Duplicator / manual)
-- [ ] SSL, search-replace URLs, re-check Polylang
+- [ ] Choose host + domain (fill table in [DEPLOY.md](DEPLOY.md))
+- [ ] Full site migrate Local → prod (All-in-One WP Migration / Duplicator) — see [DEPLOY.md](DEPLOY.md)
+- [ ] SSL, permalinks, Polylang + smoke-test checklist in DEPLOY.md
 
 ---
 

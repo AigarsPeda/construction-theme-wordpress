@@ -11,7 +11,8 @@
 
 $lang         = construction_current_lang();
 $home_url     = esc_url( construction_home_url() );
-$logo_src     = esc_url( get_template_directory_uri() . '/assets/images/logo-placeholder.svg' );
+$logo_src     = esc_url( construction_logo_url() );
+$logo_alt     = esc_attr( construction_logo_alt() );
 $menu_label   = esc_attr( construction_t( 'nav.menu' ) );
 $close_label  = esc_attr( construction_t( 'nav.close' ) );
 $lang_label   = esc_html( construction_t( 'nav.language' ) );
@@ -48,7 +49,7 @@ $drawer_nav_html = wp_nav_menu(
 	<!-- wp:html -->
 	<div class="construction-header__inner">
 		<div class="construction-brand">
-			<figure class="construction-logo-mark"><a href="<?php echo $home_url; ?>"><img src="<?php echo $logo_src; ?>" alt="Logo" width="40" height="40"/></a></figure>
+			<figure class="construction-logo-mark"><a href="<?php echo $home_url; ?>"><img src="<?php echo $logo_src; ?>" alt="<?php echo $logo_alt; ?>" width="40" height="40"/></a></figure>
 			<p class="construction-logo"><a href="<?php echo $home_url; ?>" rel="home"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></a></p>
 		</div>
 

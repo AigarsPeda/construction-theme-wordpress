@@ -7,11 +7,16 @@ Custom **Gutenberg / block theme** for a construction company site.
 - Polylang-ready: Latvian (default), English, Russian
 - Source of truth for GitHub: this repo folder
 
+**Day-to-day admin answers** (logo, contact, languages, rebuilds): see **[ADMIN_GUIDE.md](ADMIN_GUIDE.md)**.  
+**Move Local → live server** (full site: content, media, plugins, settings): see **[DEPLOY.md](DEPLOY.md)**.
+
 ## Repo layout
 
 ```
 construction/
 ├── README.md
+├── ADMIN_GUIDE.md             ← how-to for WP Admin questions
+├── DEPLOY.md                  ← Local → production (full site migrate)
 ├── DEVELOPMENT_PLAN.md
 └── theme/
     └── construction/          ← install this folder as the WP theme
@@ -44,12 +49,16 @@ Copy `theme/construction` into:
 
 ## Install on production
 
+For a **full copy** of the current Local site (pages, images, Polylang, plugin settings, Construction options), follow **[DEPLOY.md](DEPLOY.md)**.
+
+Theme-only install (empty WP, then rebuild content by hand):
+
 1. Push this repo to GitHub.
 2. On the server, place `theme/construction` into `wp-content/themes/construction`  
    (via Git deploy, SFTP, or zip upload).
 3. In WP Admin: **Appearance → Themes → Activate “Construction”**.
 4. Install/activate **Polylang**, set languages: **LV (default)**, EN, RU.
-5. Migrate content/DB from Local (All-in-One WP Migration, Duplicator, or similar), **or** rebuild pages on prod.
+5. Prefer migrating from Local ([DEPLOY.md](DEPLOY.md)) instead of rebuilding everything manually.
 
 ### Zip upload (no Git on server)
 
@@ -62,10 +71,13 @@ Then: **Appearance → Themes → Add New → Upload Theme → construction.zip*
 
 ## After activate
 
-1. **Settings → Reading** — set a static front page (or keep `front-page.html` template; it renders homepage patterns automatically).
-2. **Appearance → Editor** (Site Editor) — edit header/footer if needed.
-3. **Appearance → Menus** / Navigation block — Projekti, Foto, Par mums.
-4. **Languages (Polylang)** — LV / EN / RU + language switcher.
+1. **Appearance → Construction** — upload logo; set phone, email, addresses.
+2. **Settings → Reading** — set a static front page (or keep `front-page.html` template; it renders homepage patterns automatically).
+3. **Appearance → Editor** (Site Editor) — edit header/footer if needed.
+4. **Appearance → Menus** / Navigation block — Projekti, Foto, Par mums.
+5. **Languages (Polylang)** — LV / EN / RU + language switcher.
+
+More how-tos: **[ADMIN_GUIDE.md](ADMIN_GUIDE.md)**.
 
 ## What “Gutenberg” means here
 
@@ -80,3 +92,5 @@ Gutenberg is WordPress’s block editor. This theme is built *for* it (templates
 | Phone | +371 2000 0000 |
 | Email | info@construction.lv |
 | Telegram | @construction |
+
+Override phone/email/address/logo in **Appearance → Construction** (see [ADMIN_GUIDE.md](ADMIN_GUIDE.md)).

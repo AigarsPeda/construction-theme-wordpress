@@ -1,7 +1,7 @@
 <?php
 /**
- * Editable site contact details (Appearance → Construction).
- * Languages come from Polylang when available.
+ * Editable site settings (Appearance → Construction).
+ * Logo, contact details. Languages come from Polylang when available.
  *
  * @package Construction
  */
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Default contact values.
  *
- * @return array{email: string, phone: string, phone_href: string, address_lv: string, address_en: string, address_ru: string}
+ * @return array{email: string, phone: string, phone_href: string, address_lv: string, address_en: string, address_ru: string, logo_id: string}
  */
 function construction_contact_defaults(): array {
 	return array(
@@ -25,13 +25,14 @@ function construction_contact_defaults(): array {
 		'address_lv' => 'Rīga, Latvija',
 		'address_en' => 'Riga, Latvia',
 		'address_ru' => 'Рига, Латвия',
+		'logo_id'    => '0',
 	);
 }
 
 /**
  * Saved contact settings merged with defaults.
  *
- * @return array{email: string, phone: string, phone_href: string, address_lv: string, address_en: string, address_ru: string}
+ * @return array{email: string, phone: string, phone_href: string, address_lv: string, address_en: string, address_ru: string, logo_id: string}
  */
 function construction_contact_settings(): array {
 	$saved = get_option( 'construction_contact', array() );
@@ -40,6 +41,37 @@ function construction_contact_settings(): array {
 	}
 
 	return array_merge( construction_contact_defaults(), array_map( 'strval', $saved ) );
+}
+
+/**
+ * Header logo URL (uploaded Media Library image, else theme placeholder).
+ */
+function construction_logo_url(): string {
+	$id = (int) construction_contact( 'logo_id' );
+	if ( $id > 0 ) {
+		$url = wp_get_attachment_image_url( $id, 'full' );
+		if ( is_string( $url ) && $url !== '' ) {
+			return $url;
+		}
+	}
+
+	return get_template_directory_uri() . '/assets/images/logo-placeholder.svg';
+}
+
+/**
+ * Alt text for the header logo.
+ */
+function construction_logo_alt(): string {
+	$id = (int) construction_contact( 'logo_id' );
+	if ( $id > 0 ) {
+		$alt = get_post_meta( $id, '_wp_attachment_image_alt', true );
+		if ( is_string( $alt ) && $alt !== '' ) {
+			return $alt;
+		}
+	}
+
+	$name = get_bloginfo( 'name' );
+	return is_string( $name ) && $name !== '' ? $name : 'Logo';
 }
 
 /**
@@ -194,6 +226,11 @@ function construction_sanitize_contact_settings( $input ): array {
 		$href = preg_replace( '/[^\d+]/', '', $phone ) ?: $defaults['phone_href'];
 	}
 
+	$logo_id = isset( $input['logo_id'] ) ? absint( $input['logo_id'] ) : 0;
+	if ( $logo_id > 0 && ! wp_attachment_is_image( $logo_id ) ) {
+		$logo_id = 0;
+	}
+
 	return array(
 		'email'      => $email !== '' ? $email : $defaults['email'],
 		'phone'      => $phone !== '' ? $phone : $defaults['phone'],
@@ -201,8 +238,35 @@ function construction_sanitize_contact_settings( $input ): array {
 		'address_lv' => isset( $input['address_lv'] ) ? sanitize_text_field( (string) $input['address_lv'] ) : $defaults['address_lv'],
 		'address_en' => isset( $input['address_en'] ) ? sanitize_text_field( (string) $input['address_en'] ) : $defaults['address_en'],
 		'address_ru' => isset( $input['address_ru'] ) ? sanitize_text_field( (string) $input['address_ru'] ) : $defaults['address_ru'],
+		'logo_id'    => (string) $logo_id,
 	);
 }
+
+/**
+ * Media library picker on the Construction settings screen.
+ */
+function construction_settings_admin_assets( string $hook_suffix ): void {
+	if ( $hook_suffix !== 'appearance_page_construction-settings' ) {
+		return;
+	}
+
+	wp_enqueue_media();
+	wp_enqueue_script(
+		'construction-settings',
+		get_template_directory_uri() . '/assets/js/settings-admin.js',
+		array( 'jquery' ),
+		CONSTRUCTION_VERSION,
+		true
+	);
+	wp_localize_script(
+		'construction-settings',
+		'constructionSettings',
+		array(
+			'placeholderLogo' => get_template_directory_uri() . '/assets/images/logo-placeholder.svg',
+		)
+	);
+}
+add_action( 'admin_enqueue_scripts', 'construction_settings_admin_assets' );
 
 /**
  * After contact settings save, refresh homepage contact text.
@@ -222,15 +286,29 @@ function construction_render_settings_page(): void {
 		return;
 	}
 
-	$c = construction_contact_settings();
+	$c       = construction_contact_settings();
+	$logo_id = (int) $c['logo_id'];
+	$logo_url = construction_logo_url();
 	?>
 	<div class="wrap">
 		<h1><?php echo esc_html__( 'Construction settings', 'construction' ); ?></h1>
-		<p><?php echo esc_html__( 'Edit contact details used in the header, mobile menu, and contact section. Languages come from Polylang automatically.', 'construction' ); ?></p>
+		<p><?php echo esc_html__( 'Logo and contact details used in the header, mobile menu, and contact section. Languages come from Polylang automatically.', 'construction' ); ?></p>
 
 		<form method="post" action="options.php">
 			<?php settings_fields( 'construction_settings' ); ?>
 			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row"><?php echo esc_html__( 'Logo', 'construction' ); ?></th>
+					<td>
+						<div id="construction-logo-preview" style="margin-bottom:12px;">
+							<img src="<?php echo esc_url( $logo_url ); ?>" alt="" style="max-width:80px;max-height:80px;width:auto;height:auto;display:block;background:#f0f0f1;padding:8px;" />
+						</div>
+						<input type="hidden" name="construction_contact[logo_id]" id="construction_logo_id" value="<?php echo esc_attr( (string) $logo_id ); ?>" />
+						<button type="button" class="button" id="construction-logo-upload"><?php echo esc_html__( 'Select logo', 'construction' ); ?></button>
+						<button type="button" class="button" id="construction-logo-remove"<?php echo $logo_id > 0 ? '' : ' style="display:none"'; ?>><?php echo esc_html__( 'Remove logo', 'construction' ); ?></button>
+						<p class="description"><?php echo esc_html__( 'SVG or PNG recommended. Shown at about 40×40 in the header. Leave empty to use the theme placeholder.', 'construction' ); ?></p>
+					</td>
+				</tr>
 				<tr>
 					<th scope="row"><label for="construction_email"><?php echo esc_html__( 'Email', 'construction' ); ?></label></th>
 					<td><input name="construction_contact[email]" id="construction_email" type="email" class="regular-text" value="<?php echo esc_attr( $c['email'] ); ?>" /></td>
