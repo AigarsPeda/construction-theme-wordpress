@@ -1,0 +1,19 @@
+/*
+Theme Name: BūvNams
+Theme URI: https://construction.local
+Author: BūvNams
+Description: Custom block theme for a construction company. Built for Gutenberg (block editor) with Polylang-ready Latvian, English, and Russian. No page builder required.
+Requires at least: 6.4
+Tested up to: 6.7
+Requires PHP: 8.0
+Version: 0.1.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: buvnams
+Tags: full-site-editing, block-patterns, block-styles, wide-blocks, translation-ready, custom-colors, custom-logo, editor-style
+*/
+
+/*
+ * Frontend styles live in assets/css/main.css (enqueued from functions.php).
+ * This file only identifies the theme to WordPress.
+ */
