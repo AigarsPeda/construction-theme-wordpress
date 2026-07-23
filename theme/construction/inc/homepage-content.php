@@ -585,9 +585,13 @@ HTML;
 /**
  * Delete old front pages and recreate linked LV / EN / RU homes for Polylang.
  *
- * @return array{lv:int,en:int,ru:int}|WP_Error
+ * Default ($force = false): create missing language homes only — never deletes
+ * or overwrites existing page content in the database.
+ * $force = true: wipe matching homes and reseed from theme defaults (destructive).
+ *
+ * @return array{lv?:int,en?:int,ru?:int}|WP_Error
  */
-function construction_rebuild_polylang_homes() {
+function construction_rebuild_polylang_homes( bool $force = false ) {
 	if ( ! function_exists( 'pll_set_post_language' ) || ! function_exists( 'pll_save_post_translations' ) ) {
 		return new WP_Error( 'no_polylang', 'Polylang is not active.' );
 	}
@@ -597,6 +601,127 @@ function construction_rebuild_polylang_homes() {
 		return $media;
 	}
 
+	$existing = construction_get_home_page_ids();
+	if ( ! $force && count( $existing ) === 3 ) {
+		update_option( 'show_on_front', 'page' );
+		update_option( 'page_on_front', $existing['lv'] );
+		update_option( 'construction_home_page_id', $existing['lv'] );
+		return $existing;
+	}
+
+	if ( $force ) {
+		foreach ( construction_find_home_page_candidate_ids() as $old_id ) {
+			wp_delete_post( $old_id, true );
+		}
+		$existing = array();
+	}
+
+	$defs = array(
+		'lv' => array(
+			'title'   => 'Sākums',
+			'slug'    => 'sakums',
+			'content' => construction_homepage_content_for_lang( 'lv' ),
+		),
+		'en' => array(
+			'title'   => 'Home',
+			'slug'    => 'home',
+			'content' => construction_homepage_content_for_lang( 'en' ),
+		),
+		'ru' => array(
+			'title'   => 'Главная',
+			'slug'    => 'glavnaya',
+			'content' => construction_homepage_content_for_lang( 'ru' ),
+		),
+	);
+
+	$ids = $existing;
+	foreach ( $defs as $lang => $def ) {
+		if ( isset( $ids[ $lang ] ) && get_post( (int) $ids[ $lang ] ) ) {
+			continue; // Keep WordPress content.
+		}
+
+		$id = wp_insert_post(
+			array(
+				'post_title'   => $def['title'],
+				'post_name'    => $def['slug'],
+				'post_status'  => 'publish',
+				'post_type'    => 'page',
+				'post_content' => $def['content'],
+			),
+			true
+		);
+		if ( is_wp_error( $id ) ) {
+			return $id;
+		}
+		$ids[ $lang ] = (int) $id;
+		pll_set_post_language( (int) $id, $lang );
+	}
+
+	if ( count( $ids ) === 3 ) {
+		pll_save_post_translations( $ids );
+	}
+
+	update_option( 'show_on_front', 'page' );
+	update_option( 'page_on_front', $ids['lv'] );
+	update_option( 'construction_home_page_id', $ids['lv'] );
+	update_option( 'construction_flush_rewrites', '1' );
+
+	construction_rebuild_language_menus( $ids );
+
+	return $ids;
+}
+
+/**
+ * Existing Polylang-linked home page IDs (if any).
+ *
+ * @return array{lv?:int,en?:int,ru?:int}
+ */
+function construction_get_home_page_ids(): array {
+	$ids   = array();
+	$front = (int) get_option( 'page_on_front' );
+
+	if ( $front > 0 && function_exists( 'pll_get_post' ) ) {
+		foreach ( construction_languages() as $lang ) {
+			$translated = pll_get_post( $front, $lang );
+			if ( $translated ) {
+				$ids[ $lang ] = (int) $translated;
+			}
+		}
+		if ( count( $ids ) === 3 ) {
+			return $ids;
+		}
+	}
+
+	$slugs = array(
+		'lv' => 'sakums',
+		'en' => 'home',
+		'ru' => 'glavnaya',
+	);
+	foreach ( $slugs as $lang => $slug ) {
+		$found = get_posts(
+			array(
+				'name'             => $slug,
+				'post_type'        => 'page',
+				'post_status'      => 'publish',
+				'posts_per_page'   => 1,
+				'fields'           => 'ids',
+				'suppress_filters' => false,
+			)
+		);
+		if ( ! empty( $found[0] ) ) {
+			$ids[ $lang ] = (int) $found[0];
+		}
+	}
+
+	return $ids;
+}
+
+/**
+ * Candidate page IDs that look like home pages (for forced reset only).
+ *
+ * @return list<int>
+ */
+function construction_find_home_page_candidate_ids(): array {
 	$old_ids = array();
 	foreach ( array( 'sakums', 'home', 'glavnaya', 'sakums-english' ) as $slug ) {
 		$found = get_posts(
@@ -627,58 +752,7 @@ function construction_rebuild_polylang_homes() {
 		}
 	}
 
-	$old_ids = array_unique( array_map( 'intval', $old_ids ) );
-	foreach ( $old_ids as $old_id ) {
-		wp_delete_post( $old_id, true );
-	}
-
-	$defs = array(
-		'lv' => array(
-			'title'   => 'Sākums',
-			'slug'    => 'sakums',
-			'content' => construction_homepage_content_for_lang( 'lv' ),
-		),
-		'en' => array(
-			'title'   => 'Home',
-			'slug'    => 'home',
-			'content' => construction_homepage_content_for_lang( 'en' ),
-		),
-		'ru' => array(
-			'title'   => 'Главная',
-			'slug'    => 'glavnaya',
-			'content' => construction_homepage_content_for_lang( 'ru' ),
-		),
-	);
-
-	$ids = array();
-	foreach ( $defs as $lang => $def ) {
-		$id = wp_insert_post(
-			array(
-				'post_title'   => $def['title'],
-				'post_name'    => $def['slug'],
-				'post_status'  => 'publish',
-				'post_type'    => 'page',
-				'post_content' => $def['content'],
-			),
-			true
-		);
-		if ( is_wp_error( $id ) ) {
-			return $id;
-		}
-		$ids[ $lang ] = (int) $id;
-		pll_set_post_language( (int) $id, $lang );
-	}
-
-	pll_save_post_translations( $ids );
-
-	update_option( 'show_on_front', 'page' );
-	update_option( 'page_on_front', $ids['lv'] );
-	update_option( 'construction_home_page_id', $ids['lv'] );
-	update_option( 'construction_flush_rewrites', '1' );
-
-	construction_rebuild_language_menus( $ids );
-
-	return $ids;
+	return array_values( array_unique( array_map( 'intval', $old_ids ) ) );
 }
 
 /**

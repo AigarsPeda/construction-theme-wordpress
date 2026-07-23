@@ -67,12 +67,7 @@ If the logo jumps back to Latvian after a theme update, hard-refresh the browser
 
 Homes are linked as translations in Polylang. Edit each language separately (or use Polylang’s translation workflow).
 
-### Rebuild homepage content from the theme (dev)
-
-If pages got out of sync with theme patterns:
-
-`https://construction.local/?construction_rebuild_homes=1`  
-(while logged in as an admin)
+To **reset** from theme seed (destroys edits): `?construction_rebuild_homes=1&force=1` — see “Where content lives” above.
 
 ---
 
@@ -82,10 +77,7 @@ Gallery pages: **projekti** (LV) / **projects** (EN) / **proekty** (RU).
 
 Images come from the **Media Library**. Click a photo on the page to open the lightbox.
 
-### Rebuild projects pages (dev)
-
-`https://construction.local/?construction_rebuild_projects=1`  
-(while logged in as an admin)
+Edit gallery page text in **Pages**. Forced reseed: `?construction_rebuild_projects=1&force=1`.
 
 ---
 
@@ -104,30 +96,57 @@ No extra setting — same logo / phone / email as desktop.
 
 ---
 
-## SEO / browser tab title
+## Where content lives
 
-### Without an SEO plugin (default)
+**All page content lives in the WordPress database.** Edit it under **Pages → Edit** (each Polylang language separately).
 
-Homepage and Projects tab titles come from the theme (`seo.home.title` / `seo.projects.title` in `inc/i18n.php`).  
-Site name after the dash: **Settings → General → Site Title**.
+| What | Where |
+|---|---|
+| Hero, services, FAQ, reviews, projects gallery text | **Pages → Edit** (block editor) |
+| Browser tab title, meta, focus keyword | **Rank Math** on that page |
+| Logo, phone, email (header / mobile menu) | **Appearance → Construction** |
+| Site name | **Settings → General** |
+| Header “Menu / Close” labels | Theme chrome strings (rarely changed) |
 
-### With an SEO plugin (recommended if you want to edit in Admin)
+`construction_strings()` in the theme is a **seed only** (first install / forced reset). Changing PHP does **not** update live pages.
 
-Install one of: **Rank Math**, **Yoast SEO**, **All in One SEO**, **SEOPress**, or **Slim SEO**.
+### Rebuild URLs (use carefully)
 
-The Construction theme then **stops overriding** titles and meta tags, so the plugin controls the browser tab.
+| URL | Effect |
+|---|---|
+| `?construction_rebuild_homes=1` | Create missing home pages only — **keeps** existing DB content |
+| `?construction_rebuild_homes=1&force=1` | **Deletes and reseeds** homes from theme (destructive) |
+| `?construction_rebuild_projects=1` | Create missing projects pages only |
+| `?construction_rebuild_projects=1&force=1` | **Deletes and reseeds** projects pages |
 
-**Typical flow (Rank Math example):**
+Saving **Appearance → Construction** no longer rebuilds pages (so your edits stay safe).
 
-1. Plugins → Add New → install/activate **Rank Math** (or Slim SEO if you want something lighter).
-2. Open the page (e.g. **Sākums** / **Home** / **Главная**) in the editor.
-3. Set **SEO title** (and meta description) in the plugin box.
-4. Repeat for each language version of the page.
-5. Update / hard-refresh — check the browser tab.
+---
 
-**Polylang:** edit SEO fields on **each** language page (LV, EN, RU). Rank Math works with free Polylang for basic titles; Yoast’s deepest multilingual features may need paid add-ons.
+## SEO / browser tab title (Rank Math)
 
-You do **not** need an SEO plugin just for the tab title — but a plugin is the easiest way to avoid editing theme files.
+Rank Math scores **do not** read the theme PHP file. They only look at:
+
+1. The **Focus Keyword** field in Rank Math (must be filled in), and  
+2. The page content already in WordPress, plus SEO title / meta description in Rank Math.
+
+If the checklist says “Set a Focus Keyword…” nothing else will turn green until you set it.
+
+### Steps
+
+1. Open the page (e.g. **Sākums** / **Home**).
+2. In the editor sidebar, open **Rank Math SEO** (or the Rank Math panel below the content).
+3. Set **Focus Keyword**, e.g.:
+   - LV: `būvniecības vadība un uzraudzība`
+   - EN: `construction management and supervision`
+   - RU: `управление и надзор в строительстве`
+4. Set **SEO Title** so it **starts with** that phrase (or includes it near the start).
+5. Set **SEO Meta Description** and include the phrase once.
+6. Click **Update**, then reopen Rank Math Score — keyword checks should improve.
+
+“Use Content AI” can stay red (upsell). Internal links / keyword in every H2 are optional.
+
+Without Rank Math, the theme still has fallback SEO strings; with Rank Math active, the plugin wins.
 
 ---
 
@@ -156,6 +175,4 @@ After pulling CSS/JS changes, hard-refresh the browser (theme version is bumped 
 
 See the table in [DEPLOY.md](DEPLOY.md) (“Performance / Lighthouse”).
 
-After image-related theme updates, rebuild homepage content so the DB picks up new `<img>` markup:
-
-`https://construction.local/?construction_rebuild_homes=1` (logged-in admin)
+Image markup improvements apply to **new** content or a **forced** page reseed (`&force=1`). Prefer editing images in the block editor so the database stays the source of truth.

@@ -271,16 +271,16 @@ function construction_project_image_url( string $key, string $size = 'large' ): 
 /**
  * Gutenberg image block markup bound to a Media Library attachment.
  *
- * Uses srcset/sizes from WordPress; lazy-loads below-fold images.
+ * Uses minimal <img> markup the block editor can validate (no srcset/loading attrs).
  *
  * @param string $key        Catalog key.
  * @param string $class_name Extra figure class.
  * @param string $alt        Alt text.
  * @param string $size       Image size slug (avoid "full" for display).
  * @param bool   $lightbox   Wrap in lightbox link to full-size image.
- * @param bool   $priority   LCP candidate: eager + fetchpriority=high.
+ * @param bool   $priority   Kept for call-site compatibility (front-end CSS/JS can still optimize).
  */
-function construction_media_image_block( string $key, string $class_name, string $alt, string $size = 'large', bool $lightbox = false, bool $priority = false ): string {
+function construction_media_image_block( string $key, string $class_name, string $alt, string $size = 'large', bool $lightbox = false, bool $priority = false ): string { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
 	$id = construction_media_id( $key );
 	if ( $id <= 0 ) {
 		return '';
@@ -297,35 +297,27 @@ function construction_media_image_block( string $key, string $class_name, string
 		$size = 'large';
 	}
 
+	$url = wp_get_attachment_image_url( $id, $size );
+	if ( ! is_string( $url ) || $url === '' ) {
+		$url = wp_get_attachment_url( $id );
+	}
+	if ( ! is_string( $url ) || $url === '' ) {
+		return '';
+	}
+
 	$class_name = trim( $class_name );
 	$classes    = 'wp-block-image size-' . esc_attr( $size );
 	if ( $class_name !== '' ) {
 		$classes .= ' ' . esc_attr( $class_name );
 	}
 
-	$img_attrs = array(
-		'class'    => 'wp-image-' . $id,
-		'alt'      => $alt,
-		'decoding' => 'async',
-		'sizes'    => construction_image_sizes_attr( $class_name ),
-	);
-
-	if ( $priority ) {
-		$img_attrs['loading']       = 'eager';
-		$img_attrs['fetchpriority'] = 'high';
-	} else {
-		$img_attrs['loading'] = 'lazy';
-	}
-
-	$img = wp_get_attachment_image( $id, $size, false, $img_attrs );
-	if ( ! is_string( $img ) || $img === '' ) {
-		return '';
-	}
+	// Editor-valid markup: src, alt, class only (matches core image block save).
+	$img = '<img src="' . esc_url( $url ) . '" alt="' . esc_attr( $alt ) . '" class="wp-image-' . $id . '"/>';
 
 	if ( $lightbox ) {
 		$full = esc_url( construction_image_url( $key, 'full' ) );
 		if ( $full === '' ) {
-			$full = esc_url( construction_image_url( $key, $size ) );
+			$full = esc_url( $url );
 		}
 		$link_dest = 'custom';
 		$inner     = '<a href="' . $full . '" class="construction-lightbox glightbox" data-gallery="construction-projects">' . $img . '</a>';
@@ -340,6 +332,65 @@ function construction_media_image_block( string $key, string $class_name, string
 			<!-- /wp:image -->
 
 HTML;
+}
+
+/**
+ * Repair core/image blocks in stored post content so the editor accepts them.
+ * Strips srcset/sizes/loading/width/height that make Gutenberg mark blocks invalid.
+ */
+function construction_repair_image_blocks_in_content( string $content ): string {
+	return (string) preg_replace_callback(
+		'/<!-- wp:image (\{.*?\}) -->\s*<figure([^>]*)>(.*?)<\/figure>\s*<!-- \/wp:image -->/s',
+		static function ( array $m ): string {
+			$json  = $m[1];
+			$attrs = json_decode( $json, true );
+			if ( ! is_array( $attrs ) || empty( $attrs['id'] ) ) {
+				return $m[0];
+			}
+
+			$id         = (int) $attrs['id'];
+			$size       = isset( $attrs['sizeSlug'] ) ? (string) $attrs['sizeSlug'] : 'large';
+			$class_name = isset( $attrs['className'] ) ? (string) $attrs['className'] : '';
+			$link_dest  = isset( $attrs['linkDestination'] ) ? (string) $attrs['linkDestination'] : 'none';
+
+			$url = wp_get_attachment_image_url( $id, $size );
+			if ( ! is_string( $url ) || $url === '' ) {
+				$url = (string) wp_get_attachment_url( $id );
+			}
+			if ( $url === '' ) {
+				return $m[0];
+			}
+
+			// Keep existing alt if present.
+			$alt = '';
+			if ( preg_match( '/\salt="([^"]*)"/', $m[3], $am ) ) {
+				$alt = html_entity_decode( $am[1], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+			}
+
+			$classes = 'wp-block-image size-' . esc_attr( $size );
+			if ( $class_name !== '' ) {
+				$classes .= ' ' . esc_attr( $class_name );
+			}
+
+			$img = '<img src="' . esc_url( $url ) . '" alt="' . esc_attr( $alt ) . '" class="wp-image-' . $id . '"/>';
+
+			if ( $link_dest === 'custom' && preg_match( '/<a\s[^>]*href="([^"]+)"[^>]*>/i', $m[3], $lm ) ) {
+				$href  = $lm[1];
+				$class = 'construction-lightbox glightbox';
+				if ( preg_match( '/class="([^"]*)"/', $lm[0], $cm ) ) {
+					$class = $cm[1];
+				}
+				$inner = '<a href="' . esc_url( $href ) . '" class="' . esc_attr( $class ) . '" data-gallery="construction-projects">' . $img . '</a>';
+			} else {
+				$inner = $img;
+			}
+
+			return '<!-- wp:image ' . $json . ' -->' . "\n"
+				. '<figure class="' . $classes . '">' . $inner . '</figure>' . "\n"
+				. '<!-- /wp:image -->';
+		},
+		$content
+	);
 }
 
 /**

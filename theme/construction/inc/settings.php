@@ -269,16 +269,6 @@ function construction_settings_admin_assets( string $hook_suffix ): void {
 add_action( 'admin_enqueue_scripts', 'construction_settings_admin_assets' );
 
 /**
- * After contact settings save, refresh homepage contact text.
- */
-function construction_refresh_homes_after_contact_save( $old_value, $value ): void {
-	if ( function_exists( 'construction_rebuild_polylang_homes' ) ) {
-		construction_rebuild_polylang_homes();
-	}
-}
-add_action( 'update_option_construction_contact', 'construction_refresh_homes_after_contact_save', 10, 2 );
-
-/**
  * Settings page markup.
  */
 function construction_render_settings_page(): void {
@@ -292,7 +282,7 @@ function construction_render_settings_page(): void {
 	?>
 	<div class="wrap">
 		<h1><?php echo esc_html__( 'Construction settings', 'construction' ); ?></h1>
-		<p><?php echo esc_html__( 'Logo and contact details used in the header, mobile menu, and contact section. Languages come from Polylang automatically.', 'construction' ); ?></p>
+		<p><?php echo esc_html__( 'Logo and contact details for the header and mobile menu (live). Page body text (hero, services, FAQ, etc.) is edited under Pages — it lives in the WordPress database, not here.', 'construction' ); ?></p>
 
 		<form method="post" action="options.php">
 			<?php settings_fields( 'construction_settings' ); ?>

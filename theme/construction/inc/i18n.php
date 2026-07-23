@@ -123,21 +123,26 @@ function construction_lang_url( string $lang ): string {
 }
 
 /**
- * All theme UI strings.
+ * Theme string catalog.
+ *
+ * SOURCE OF TRUTH FOR PAGE COPY = WordPress database (Pages → Edit).
+ * This array is only a seed used when creating missing pages or a forced reset
+ * (`?construction_rebuild_homes=1&force=1`). Editing these strings does not
+ * change live page content. Also used for header/footer chrome labels.
  *
  * @return array<string, array{lv: string, en: string, ru: string}>
  */
 function construction_strings(): array {
 	return array(
 		'hero.title'           => array(
-			'lv' => 'Tava māja — tavi noteikumi',
-			'en' => 'Your house — your rules',
-			'ru' => 'Твой дом — твои правила',
+			'lv' => 'Būvniecība ar skaidru vadību',
+			'en' => 'Construction under clear control',
+			'ru' => 'Строительство под ясным контролем',
 		),
 		'hero.text'            => array(
-			'lv' => 'Projektējam un būvējam karkasa mājas pēc jūsu vajadzībām — no idejas līdz atslēgai.',
-			'en' => 'We design and build frame houses for your needs — from idea to turnkey.',
-			'ru' => 'Проектируем и строим каркасные дома под ваши задачи — от идеи до ключей.',
+			'lv' => 'Būvniecība, būvniecības vadība un uzraudzība — no plānošanas līdz objekta nodošanai.',
+			'en' => 'Construction, construction management and supervision — from planning to handover.',
+			'ru' => 'Строительство, управление и надзор — от планирования до сдачи объекта.',
 		),
 		'hero.cta'             => array(
 			'lv' => 'Sazinies ar mums',
@@ -145,14 +150,14 @@ function construction_strings(): array {
 			'ru' => 'Связаться с нами',
 		),
 		'hero.since'           => array(
-			'lv' => 'Būvējam karkasa mājas kopš 2008. gada',
-			'en' => 'Building frame houses since 2008',
-			'ru' => 'Строим каркасные дома с 2008 года',
+			'lv' => 'Būvniecība un uzraudzība kopš 2008. gada',
+			'en' => 'Construction and supervision since 2008',
+			'ru' => 'Строительство и надзор с 2008 года',
 		),
 		'hero.alt'             => array(
-			'lv' => 'Modernas karkasa mājas vizuālis',
-			'en' => 'Modern frame house visual',
-			'ru' => 'Визуал современного каркасного дома',
+			'lv' => 'Būvlaukums — būvniecība un uzraudzība',
+			'en' => 'Construction site — management and supervision',
+			'ru' => 'Стройплощадка — управление и надзор',
 		),
 		'nav.projects'         => array(
 			'lv' => 'Projekti',
@@ -190,24 +195,24 @@ function construction_strings(): array {
 			'ru' => 'Язык',
 		),
 		'seo.home.title'       => array(
-			'lv' => 'Karkasa mājas — projektēšana un būvniecība',
-			'en' => 'Frame houses — design and construction',
-			'ru' => 'Каркасные дома — проектирование и строительство',
+			'lv' => 'Būvniecība, vadība un uzraudzība',
+			'en' => 'Construction management and supervision',
+			'ru' => 'Строительство, управление и надзор',
 		),
 		'seo.home.desc'        => array(
-			'lv' => 'Projektējam un būvējam karkasa mājas Latvijā — no idejas līdz atslēgai. Skaidri termiņi, kvalitāte un viena komanda.',
-			'en' => 'We design and build frame houses in Latvia — from idea to turnkey. Clear timelines, quality, and one dedicated team.',
-			'ru' => 'Проектируем и строим каркасные дома в Латвии — от идеи до ключей. Понятные сроки, качество и одна команда.',
+			'lv' => 'Būvniecība un būvniecības vadība un uzraudzība Latvijā — no projekta līdz nodošanai. Skaidri termiņi, kvalitāte un viena komanda.',
+			'en' => 'Construction and construction management and supervision in Latvia — from project to handover. Clear timelines, quality, and one dedicated team.',
+			'ru' => 'Строительство, управление и строительный надзор в Латвии — от проекта до сдачи. Понятные сроки, качество и одна команда.',
 		),
 		'seo.projects.title'   => array(
-			'lv' => 'Projekti un galerija',
-			'en' => 'Projects and gallery',
-			'ru' => 'Проекты и галерея',
+			'lv' => 'Projekti — būvniecība un uzraudzība',
+			'en' => 'Projects — construction and supervision',
+			'ru' => 'Проекты — строительство и надзор',
 		),
 		'seo.projects.desc'    => array(
-			'lv' => 'Apskati mūsu projektu galeriju — karkasa mājas, būvlaukumi un gatavie objekti.',
-			'en' => 'Browse our project gallery — frame houses, construction sites, and finished builds.',
-			'ru' => 'Смотрите галерею проектов — каркасные дома, стройки и готовые объекты.',
+			'lv' => 'Apskati mūsu projektu galeriju — būvlaukumi, vadība objektā un gatavie darbi.',
+			'en' => 'Browse our project gallery — construction sites, on-site management, and finished works.',
+			'ru' => 'Смотрите галерею проектов — стройплощадки, управление на объекте и готовые работы.',
 		),
 		'projects.eyebrow'     => array(
 			'lv' => 'Galerija',
@@ -220,9 +225,9 @@ function construction_strings(): array {
 			'ru' => 'Наши проекты',
 		),
 		'projects.intro'       => array(
-			'lv' => 'Atlasīti objekti un būvniecības mirkļi — no karkasa līdz gatavai mājai.',
-			'en' => 'Selected builds and construction moments — from frame to finished home.',
-			'ru' => 'Избранные объекты и моменты строительства — от каркаса до готового дома.',
+			'lv' => 'Atlasīti objekti — būvniecība, vadība un uzraudzība katrā posmā.',
+			'en' => 'Selected projects — construction, management, and supervision at every stage.',
+			'ru' => 'Избранные объекты — строительство, управление и надзор на каждом этапе.',
 		),
 		'projects.cta'         => array(
 			'lv' => 'Sazinies ar mums',
@@ -295,44 +300,44 @@ function construction_strings(): array {
 			'ru' => 'Готовый проект',
 		),
 		'services.title'       => array(
-			'lv' => 'Uzņemamies projektēšanu, dizainu un objekta montāžu',
-			'en' => 'We handle design, planning, and installation',
-			'ru' => 'Берём на себя проектирование, дизайн и монтаж объекта',
+			'lv' => 'Būvniecība, vadība un uzraudzība vienā komandā',
+			'en' => 'Construction, management, and supervision in one team',
+			'ru' => 'Строительство, управление и надзор в одной команде',
 		),
 		'services.intro'       => array(
-			'lv' => 'No tehniskā projekta līdz fasādes montāžai — viena komanda, skaidri termiņi un caurspīdīgs process.',
-			'en' => 'From technical design to façade installation — one team, clear timelines, and a transparent process.',
-			'ru' => 'От технического проекта до монтажа фасада — одна команда, понятные сроки и прозрачный процесс.',
+			'lv' => 'No plānošanas līdz nodošanai — skaidra būvniecības vadība, uzraudzība objektā un caurspīdīgs process.',
+			'en' => 'From planning to handover — clear construction management, on-site supervision, and a transparent process.',
+			'ru' => 'От планирования до сдачи — ясное управление строительством, надзор на объекте и прозрачный процесс.',
 		),
 		'services.item1.title' => array(
-			'lv' => 'Projektēšana',
-			'en' => 'Design',
-			'ru' => 'Проектирование',
+			'lv' => 'Būvniecība',
+			'en' => 'Construction',
+			'ru' => 'Строительство',
 		),
 		'services.item1.text'  => array(
-			'lv' => 'Aprēķini, tehniskās shēmas un projektēšana no A līdz Z.',
-			'en' => 'Calculations, technical drawings, and full design from A to Z.',
-			'ru' => 'Расчёты, технические схемы и проектирование от А до Я.',
+			'lv' => 'Objekta būvdarbi ar plānotu grafiku, brigādēm un kvalitātes kontroli.',
+			'en' => 'On-site construction with a planned schedule, crews, and quality control.',
+			'ru' => 'Строительные работы на объекте с графиком, бригадами и контролем качества.',
 		),
 		'services.item2.title' => array(
-			'lv' => 'Fasāžu dizains',
-			'en' => 'Façade design',
-			'ru' => 'Дизайн фасадов',
+			'lv' => 'Būvniecības vadība',
+			'en' => 'Construction management',
+			'ru' => 'Управление строительством',
 		),
 		'services.item2.text'  => array(
-			'lv' => 'Ventilējamās fasādes ar arhitektūras vizualizāciju.',
-			'en' => 'Ventilated façades with architectural visualization.',
-			'ru' => 'Вентилируемые фасады с архитектурной визуализацией.',
+			'lv' => 'Koordinācija, termiņi, tāmes un komunikācija ar visām iesaistītajām pusēm.',
+			'en' => 'Coordination, timelines, budgets, and communication with all parties involved.',
+			'ru' => 'Координация, сроки, сметы и коммуникация со всеми участниками.',
 		),
 		'services.item3.title' => array(
-			'lv' => 'Fasāžu montāža',
-			'en' => 'Façade installation',
-			'ru' => 'Монтаж фасадов',
+			'lv' => 'Uzraudzība',
+			'en' => 'Supervision',
+			'ru' => 'Надзор',
 		),
 		'services.item3.text'  => array(
-			'lv' => 'Profesionāla montāža un apdares materiālu uzstādīšana.',
-			'en' => 'Professional installation and finishing materials.',
-			'ru' => 'Профессиональный монтаж и установка отделочных материалов.',
+			'lv' => 'Būvniecības uzraudzība objektā — pārbaudes, dokumentācija un atbilstība projektam.',
+			'en' => 'Construction supervision on site — inspections, documentation, and compliance with the plan.',
+			'ru' => 'Строительный надзор на объекте — проверки, документация и соответствие проекту.',
 		),
 		'quality.title'        => array(
 			'lv' => 'Ātri termiņi un augsta darba kvalitāte',
@@ -380,14 +385,14 @@ function construction_strings(): array {
 			'ru' => 'Профессиональная команда, понятные сроки и отличный результат. Рекомендуем!',
 		),
 		'reviews.2'            => array(
-			'lv' => 'No projekta līdz montāžai viss noritēja raiti. Māja izdevās tieši tā, kā gribējām.',
-			'en' => 'From design to installation everything went smoothly. The house turned out exactly as we wanted.',
-			'ru' => 'От проекта до монтажа всё прошло гладко. Дом получился именно таким, как хотели.',
+			'lv' => 'No projekta līdz uzraudzībai viss noritēja raiti. Objekts nodots tieši tā, kā bijām vienojušies.',
+			'en' => 'From planning to supervision everything went smoothly. The site was handed over exactly as agreed.',
+			'ru' => 'От проекта до надзора всё прошло гладко. Объект сдали именно так, как договаривались.',
 		),
 		'reviews.3'            => array(
-			'lv' => 'Lieliska komunikācija un kvalitatīva fasāde. Paldies Construction komandai.',
-			'en' => 'Great communication and a high-quality façade. Thanks to the Construction team.',
-			'ru' => 'Отличная коммуникация и качественный фасад. Спасибо команде Construction.',
+			'lv' => 'Lieliska komunikācija un skaidra būvniecības vadība. Paldies Construction komandai.',
+			'en' => 'Great communication and clear construction management. Thanks to the Construction team.',
+			'ru' => 'Отличная коммуникация и ясное управление строительством. Спасибо команде Construction.',
 		),
 		'reviews.4'            => array(
 			'lv' => 'Ātri, kārtīgi un bez pārsteigumiem budžetā. Noteikti strādāsim atkal.',
@@ -430,14 +435,14 @@ function construction_strings(): array {
 			'ru' => 'Технические чертежи, материалы и прозрачная смета — до начала работ.',
 		),
 		'process.3.title'      => array(
-			'lv' => 'Būvniecība',
-			'en' => 'Construction',
-			'ru' => 'Строительство',
+			'lv' => 'Būvniecība un uzraudzība',
+			'en' => 'Construction & supervision',
+			'ru' => 'Строительство и надзор',
 		),
 		'process.3.text'       => array(
-			'lv' => 'Brigādes objektā ar grafika atjauninājumiem un kvalitātes pārbaudēm katrā posmā.',
-			'en' => 'Crews on site with schedule updates and quality checks at every stage.',
-			'ru' => 'Бригады на объекте с обновлениями графика и контролем качества на каждом этапе.',
+			'lv' => 'Darbi objektā ar grafika atjauninājumiem, kvalitātes pārbaudēm un būvniecības uzraudzību katrā posmā.',
+			'en' => 'Work on site with schedule updates, quality checks, and construction supervision at every stage.',
+			'ru' => 'Работы на объекте с обновлениями графика, контролем качества и строительным надзором на каждом этапе.',
 		),
 		'process.4.title'      => array(
 			'lv' => 'Nodošana',
@@ -470,9 +475,9 @@ function construction_strings(): array {
 			'ru' => 'Сколько обычно длится проект?',
 		),
 		'faq.1.a'              => array(
-			'lv' => 'Termiņi ir atkarīgi no apjoma. Fasādes darbi bieži aizņem vairākas nedēļas; pilna būve tiek plānota posmos ar skaidriem atskaites punktiem līgumā.',
-			'en' => 'Timelines depend on scope. A façade project often takes several weeks; full builds are planned in phases with clear milestones in the contract.',
-			'ru' => 'Сроки зависят от объёма. Фасадные работы часто занимают несколько недель; полное строительство планируется этапами с понятными вехами в договоре.',
+			'lv' => 'Termiņi ir atkarīgi no apjoma. Būvniecības un uzraudzības darbi tiek plānoti posmos ar skaidriem atskaites punktiem līgumā.',
+			'en' => 'Timelines depend on scope. Construction and supervision work is planned in phases with clear milestones in the contract.',
+			'ru' => 'Сроки зависят от объёма. Строительство и надзор планируются этапами с понятными вехами в договоре.',
 		),
 		'faq.2.q'              => array(
 			'lv' => 'Kur jūs strādājat?',

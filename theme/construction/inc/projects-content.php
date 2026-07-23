@@ -92,9 +92,12 @@ HTML;
 /**
  * Create / refresh linked LV / EN / RU Projects pages.
  *
- * @return array{lv:int,en:int,ru:int}|WP_Error
+ * Default: create missing only — never overwrite existing DB content.
+ * $force = true: delete and reseed (destructive).
+ *
+ * @return array{lv?:int,en?:int,ru?:int}|WP_Error
  */
-function construction_rebuild_polylang_projects() {
+function construction_rebuild_polylang_projects( bool $force = false ) {
 	if ( ! function_exists( 'pll_set_post_language' ) || ! function_exists( 'pll_save_post_translations' ) ) {
 		return new WP_Error( 'no_polylang', 'Polylang is not active.' );
 	}
@@ -107,6 +110,115 @@ function construction_rebuild_polylang_projects() {
 		return new WP_Error( 'missing_images', 'Missing source images: ' . implode( ', ', $media['missing'] ) );
 	}
 
+	$existing = construction_get_projects_page_ids();
+	if ( ! $force && count( $existing ) === 3 ) {
+		update_option( 'construction_projects_page_ids', $existing );
+		return $existing;
+	}
+
+	if ( $force ) {
+		foreach ( construction_find_projects_page_candidate_ids() as $old_id ) {
+			wp_delete_post( $old_id, true );
+		}
+		$existing = array();
+	}
+
+	$defs = array(
+		'lv' => array(
+			'title'   => 'Projekti',
+			'slug'    => 'projekti',
+			'content' => construction_projects_page_content_for_lang( 'lv' ),
+		),
+		'en' => array(
+			'title'   => 'Projects',
+			'slug'    => 'projects',
+			'content' => construction_projects_page_content_for_lang( 'en' ),
+		),
+		'ru' => array(
+			'title'   => 'Проекты',
+			'slug'    => 'proekty',
+			'content' => construction_projects_page_content_for_lang( 'ru' ),
+		),
+	);
+
+	$ids = $existing;
+	foreach ( $defs as $lang => $def ) {
+		if ( isset( $ids[ $lang ] ) && get_post( (int) $ids[ $lang ] ) ) {
+			continue;
+		}
+
+		$id = wp_insert_post(
+			array(
+				'post_title'   => $def['title'],
+				'post_name'    => $def['slug'],
+				'post_status'  => 'publish',
+				'post_type'    => 'page',
+				'post_content' => $def['content'],
+			),
+			true
+		);
+		if ( is_wp_error( $id ) ) {
+			return $id;
+		}
+		$ids[ $lang ] = (int) $id;
+		pll_set_post_language( (int) $id, $lang );
+	}
+
+	if ( count( $ids ) === 3 ) {
+		pll_save_post_translations( $ids );
+	}
+	update_option( 'construction_projects_page_ids', $ids );
+	update_option( 'construction_flush_rewrites', '1' );
+
+	construction_rebuild_language_menus();
+
+	return $ids;
+}
+
+/**
+ * @return array{lv?:int,en?:int,ru?:int}
+ */
+function construction_get_projects_page_ids(): array {
+	$stored = get_option( 'construction_projects_page_ids', array() );
+	$ids    = array();
+	if ( is_array( $stored ) ) {
+		foreach ( construction_languages() as $lang ) {
+			if ( ! empty( $stored[ $lang ] ) && get_post( (int) $stored[ $lang ] ) ) {
+				$ids[ $lang ] = (int) $stored[ $lang ];
+			}
+		}
+		if ( count( $ids ) === 3 ) {
+			return $ids;
+		}
+	}
+
+	$slugs = array(
+		'lv' => 'projekti',
+		'en' => 'projects',
+		'ru' => 'proekty',
+	);
+	foreach ( $slugs as $lang => $slug ) {
+		$found = get_posts(
+			array(
+				'name'           => $slug,
+				'post_type'      => 'page',
+				'post_status'    => 'publish',
+				'posts_per_page' => 1,
+				'fields'         => 'ids',
+			)
+		);
+		if ( ! empty( $found[0] ) ) {
+			$ids[ $lang ] = (int) $found[0];
+		}
+	}
+
+	return $ids;
+}
+
+/**
+ * @return list<int>
+ */
+function construction_find_projects_page_candidate_ids(): array {
 	$old_ids = array();
 	foreach ( array( 'projekti', 'projects', 'proekty' ) as $slug ) {
 		$found = get_posts(
@@ -136,53 +248,5 @@ function construction_rebuild_polylang_projects() {
 		}
 	}
 
-	$old_ids = array_unique( array_map( 'intval', $old_ids ) );
-	foreach ( $old_ids as $old_id ) {
-		wp_delete_post( $old_id, true );
-	}
-
-	$defs = array(
-		'lv' => array(
-			'title'   => 'Projekti',
-			'slug'    => 'projekti',
-			'content' => construction_projects_page_content_for_lang( 'lv' ),
-		),
-		'en' => array(
-			'title'   => 'Projects',
-			'slug'    => 'projects',
-			'content' => construction_projects_page_content_for_lang( 'en' ),
-		),
-		'ru' => array(
-			'title'   => 'Проекты',
-			'slug'    => 'proekty',
-			'content' => construction_projects_page_content_for_lang( 'ru' ),
-		),
-	);
-
-	$ids = array();
-	foreach ( $defs as $lang => $def ) {
-		$id = wp_insert_post(
-			array(
-				'post_title'   => $def['title'],
-				'post_name'    => $def['slug'],
-				'post_status'  => 'publish',
-				'post_type'    => 'page',
-				'post_content' => $def['content'],
-			),
-			true
-		);
-		if ( is_wp_error( $id ) ) {
-			return $id;
-		}
-		$ids[ $lang ] = (int) $id;
-		pll_set_post_language( (int) $id, $lang );
-	}
-
-	pll_save_post_translations( $ids );
-	update_option( 'construction_projects_page_ids', $ids );
-	update_option( 'construction_flush_rewrites', '1' );
-
-	construction_rebuild_language_menus();
-
-	return $ids;
+	return array_values( array_unique( array_map( 'intval', $old_ids ) ) );
 }

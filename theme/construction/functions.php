@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CONSTRUCTION_VERSION', '0.6.7' );
+define( 'CONSTRUCTION_VERSION', '0.6.10' );
 
 require get_template_directory() . '/inc/i18n.php';
 require get_template_directory() . '/inc/settings.php';
@@ -161,10 +161,10 @@ function construction_register_pattern_categories(): void {
 add_action( 'init', 'construction_register_pattern_categories' );
 
 /**
- * Rebuild LV/EN/RU homepages from scratch (admin URL or one-time key).
+ * Seed LV/EN/RU homepages if missing (never overwrites existing DB content).
  *
- * Admin: /wp-admin/?construction_rebuild_homes=1
- * Or one-time: /?construction_rebuild_homes_key=KEY
+ * Safe:  /wp-admin/?construction_rebuild_homes=1
+ * Reset: /wp-admin/?construction_rebuild_homes=1&force=1  (destructive — theme seed replaces pages)
  */
 function construction_admin_rebuild_homes(): void {
 	$by_admin = is_admin()
@@ -180,7 +180,8 @@ function construction_admin_rebuild_homes(): void {
 		return;
 	}
 
-	$result = construction_rebuild_polylang_homes();
+	$force  = isset( $_GET['force'] ) && (string) wp_unslash( $_GET['force'] ) === '1'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$result = construction_rebuild_polylang_homes( $force );
 	if ( is_wp_error( $result ) ) {
 		wp_die( esc_html( $result->get_error_message() ) );
 	}
@@ -201,9 +202,10 @@ add_action( 'admin_init', 'construction_admin_rebuild_homes' );
 add_action( 'init', 'construction_admin_rebuild_homes', 5 );
 
 /**
- * Rebuild LV/EN/RU Projects gallery pages.
+ * Seed LV/EN/RU Projects pages if missing (never overwrites existing DB content).
  *
- * Admin: /wp-admin/?construction_rebuild_projects=1
+ * Safe:  /wp-admin/?construction_rebuild_projects=1
+ * Reset: /wp-admin/?construction_rebuild_projects=1&force=1
  */
 function construction_admin_rebuild_projects(): void {
 	$by_admin = is_admin()
@@ -219,7 +221,8 @@ function construction_admin_rebuild_projects(): void {
 		return;
 	}
 
-	$result = construction_rebuild_polylang_projects();
+	$force  = isset( $_GET['force'] ) && (string) wp_unslash( $_GET['force'] ) === '1'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$result = construction_rebuild_polylang_projects( $force );
 	if ( is_wp_error( $result ) ) {
 		wp_die( esc_html( $result->get_error_message() ) );
 	}
