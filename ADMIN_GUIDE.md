@@ -11,13 +11,19 @@ All site chrome settings live under **Appearance → Construction** in WP Admin.
 
 ## Change the logo
 
-1. Go to **Appearance → Construction**.
-2. Under **Logo**, click **Select logo**.
-3. Upload or pick an image from the Media Library (SVG or PNG recommended).
-4. Click **Save Changes**.
+WordPress has two different images:
 
-**Remove logo** restores the theme placeholder.  
-The header shows the mark at about **40×40**; a square or near-square file looks best.
+| Setting | What it is |
+|---|---|
+| **Site Logo** (header) | Brand mark next to the site name |
+| **Site Icon** (Settings → General) | Favicon in the browser tab — **not** the header logo |
+
+**Easiest for this theme:** **Appearance → Construction → Select logo** → pick/upload from Media → Save.  
+That stores a Media Library file and sets WordPress’s native **Site Logo** (`custom_logo`) so the header uses it.
+
+You can also set Site Logo via **Appearance → Customize → Site Identity** (when Customizer is available).
+
+**Remove logo** restores the theme placeholder.
 
 ---
 

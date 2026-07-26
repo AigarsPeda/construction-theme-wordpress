@@ -24,6 +24,17 @@
 			multiple: false,
 		});
 
+		frame.on('open', function () {
+			var selection = frame.state().get('selection');
+			var current = parseInt($id.val(), 10) || 0;
+			selection.reset();
+			if (current > 0) {
+				var attachment = wp.media.attachment(current);
+				attachment.fetch();
+				selection.add(attachment);
+			}
+		});
+
 		frame.on('select', function () {
 			var attachment = frame.state().get('selection').first().toJSON();
 			var url = attachment.url || '';

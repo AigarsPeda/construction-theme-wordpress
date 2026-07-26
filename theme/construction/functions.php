@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CONSTRUCTION_VERSION', '0.6.10' );
+define( 'CONSTRUCTION_VERSION', '0.6.12' );
 
 require get_template_directory() . '/inc/i18n.php';
 require get_template_directory() . '/inc/settings.php';
@@ -29,6 +29,16 @@ function construction_setup(): void {
 	add_theme_support( 'wp-block-styles' );
 	add_theme_support( 'editor-styles' );
 	add_editor_style( 'assets/css/main.css' );
+
+	add_theme_support(
+		'custom-logo',
+		array(
+			'height'      => 80,
+			'width'       => 80,
+			'flex-height' => true,
+			'flex-width'  => true,
+		)
+	);
 
 	// Display sizes (avoid shipping full-resolution photos in the layout).
 	add_image_size( 'construction-hero', 1400, 1050, false );

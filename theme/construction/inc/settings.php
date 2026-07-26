@@ -44,10 +44,27 @@ function construction_contact_settings(): array {
 }
 
 /**
- * Header logo URL (uploaded Media Library image, else theme placeholder).
+ * Media attachment ID for the site logo (WordPress custom_logo, else Construction setting).
+ */
+function construction_logo_id(): int {
+	$custom = (int) get_theme_mod( 'custom_logo', 0 );
+	if ( $custom > 0 && wp_attachment_is_image( $custom ) ) {
+		return $custom;
+	}
+
+	$id = (int) construction_contact( 'logo_id' );
+	if ( $id > 0 && wp_attachment_is_image( $id ) ) {
+		return $id;
+	}
+
+	return 0;
+}
+
+/**
+ * Header logo URL (WordPress Site Logo / Media, else theme placeholder).
  */
 function construction_logo_url(): string {
-	$id = (int) construction_contact( 'logo_id' );
+	$id = construction_logo_id();
 	if ( $id > 0 ) {
 		$url = wp_get_attachment_image_url( $id, 'full' );
 		if ( is_string( $url ) && $url !== '' ) {
@@ -62,7 +79,7 @@ function construction_logo_url(): string {
  * Alt text for the header logo.
  */
 function construction_logo_alt(): string {
-	$id = (int) construction_contact( 'logo_id' );
+	$id = construction_logo_id();
 	if ( $id > 0 ) {
 		$alt = get_post_meta( $id, '_wp_attachment_image_alt', true );
 		if ( is_string( $alt ) && $alt !== '' ) {
@@ -231,6 +248,13 @@ function construction_sanitize_contact_settings( $input ): array {
 		$logo_id = 0;
 	}
 
+	// Keep WordPress native Site Logo (custom_logo) in sync — same Media Library file.
+	if ( $logo_id > 0 ) {
+		set_theme_mod( 'custom_logo', $logo_id );
+	} else {
+		remove_theme_mod( 'custom_logo' );
+	}
+
 	return array(
 		'email'      => $email !== '' ? $email : $defaults['email'],
 		'phone'      => $phone !== '' ? $phone : $defaults['phone'],
@@ -276,8 +300,8 @@ function construction_render_settings_page(): void {
 		return;
 	}
 
-	$c       = construction_contact_settings();
-	$logo_id = (int) $c['logo_id'];
+	$c        = construction_contact_settings();
+	$logo_id  = construction_logo_id();
 	$logo_url = construction_logo_url();
 	?>
 	<div class="wrap">
@@ -296,7 +320,7 @@ function construction_render_settings_page(): void {
 						<input type="hidden" name="construction_contact[logo_id]" id="construction_logo_id" value="<?php echo esc_attr( (string) $logo_id ); ?>" />
 						<button type="button" class="button" id="construction-logo-upload"><?php echo esc_html__( 'Select logo', 'construction' ); ?></button>
 						<button type="button" class="button" id="construction-logo-remove"<?php echo $logo_id > 0 ? '' : ' style="display:none"'; ?>><?php echo esc_html__( 'Remove logo', 'construction' ); ?></button>
-						<p class="description"><?php echo esc_html__( 'SVG or PNG recommended. Shown at about 40×40 in the header. Leave empty to use the theme placeholder.', 'construction' ); ?></p>
+						<p class="description"><?php echo esc_html__( 'Picks a file from the Media Library and sets the WordPress Site Logo (same as Appearance → Customize → Site Logo when available). Not the same as Settings → General → Site Icon (favicon). SVG or PNG recommended; shown at about 40×40 in the header.', 'construction' ); ?></p>
 					</td>
 				</tr>
 				<tr>
