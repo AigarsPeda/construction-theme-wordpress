@@ -775,6 +775,17 @@ function construction_rebuild_language_menus( array $page_ids = array() ): void 
 	if ( ! is_array( $project_ids ) ) {
 		$project_ids = array();
 	}
+	if ( empty( $project_ids ) && function_exists( 'construction_get_projects_page_ids' ) ) {
+		$project_ids = construction_get_projects_page_ids();
+	}
+
+	$contact_ids = get_option( 'construction_contacts_page_ids', array() );
+	if ( ! is_array( $contact_ids ) ) {
+		$contact_ids = array();
+	}
+	if ( empty( $contact_ids ) && function_exists( 'construction_get_contacts_page_ids' ) ) {
+		$contact_ids = construction_get_contacts_page_ids();
+	}
 
 	$menu_ids = array();
 
@@ -804,6 +815,20 @@ function construction_rebuild_language_menus( array $page_ids = array() ): void 
 					'menu-item-title'     => construction_string( 'nav.projects', $lang ),
 					'menu-item-object'    => 'page',
 					'menu-item-object-id' => (int) $project_ids[ $lang ],
+					'menu-item-type'      => 'post_type',
+					'menu-item-status'    => 'publish',
+				)
+			);
+		}
+
+		if ( ! empty( $contact_ids[ $lang ] ) ) {
+			wp_update_nav_menu_item(
+				$menu_id,
+				0,
+				array(
+					'menu-item-title'     => construction_string( 'nav.contact', $lang ),
+					'menu-item-object'    => 'page',
+					'menu-item-object-id' => (int) $contact_ids[ $lang ],
 					'menu-item-type'      => 'post_type',
 					'menu-item-status'    => 'publish',
 				)

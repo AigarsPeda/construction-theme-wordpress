@@ -214,6 +214,31 @@ function construction_strings(): array {
 			'en' => 'Browse our project gallery — construction sites, on-site management, and finished works.',
 			'ru' => 'Смотрите галерею проектов — стройплощадки, управление на объекте и готовые работы.',
 		),
+		'seo.contacts.title'   => array(
+			'lv' => 'Kontakti',
+			'en' => 'Contact',
+			'ru' => 'Контакты',
+		),
+		'seo.contacts.desc'    => array(
+			'lv' => 'Sazinies ar Construction — e-pasts, tālrunis un adrese. Atbildēsim ātri.',
+			'en' => 'Get in touch with Construction — email, phone, and address. We reply quickly.',
+			'ru' => 'Свяжитесь с Construction — email, телефон и адрес. Ответим быстро.',
+		),
+		'contacts.title'       => array(
+			'lv' => 'Kontakti',
+			'en' => 'Contact',
+			'ru' => 'Контакты',
+		),
+		'contacts.email_label' => array(
+			'lv' => 'E-pasts',
+			'en' => 'Email',
+			'ru' => 'Email',
+		),
+		'contacts.phone_label' => array(
+			'lv' => 'Tālrunis',
+			'en' => 'Phone',
+			'ru' => 'Телефон',
+		),
 		'projects.eyebrow'     => array(
 			'lv' => 'Galerija',
 			'en' => 'Gallery',

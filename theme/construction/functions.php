@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CONSTRUCTION_VERSION', '0.6.12' );
+define( 'CONSTRUCTION_VERSION', '0.7.2' );
 
 require get_template_directory() . '/inc/i18n.php';
 require get_template_directory() . '/inc/settings.php';
@@ -19,6 +19,7 @@ require get_template_directory() . '/inc/images.php';
 require get_template_directory() . '/inc/seo.php';
 require get_template_directory() . '/inc/homepage-content.php';
 require get_template_directory() . '/inc/projects-content.php';
+require get_template_directory() . '/inc/contacts-content.php';
 
 /**
  * Theme setup.
@@ -251,6 +252,47 @@ function construction_admin_rebuild_projects(): void {
 }
 add_action( 'admin_init', 'construction_admin_rebuild_projects' );
 add_action( 'init', 'construction_admin_rebuild_projects', 5 );
+
+/**
+ * Seed LV/EN/RU Contacts pages if missing.
+ *
+ * Safe:  /wp-admin/?construction_rebuild_contacts=1
+ * Reset: /wp-admin/?construction_rebuild_contacts=1&force=1
+ */
+function construction_admin_rebuild_contacts(): void {
+	$by_admin = is_admin()
+		&& current_user_can( 'manage_options' )
+		&& isset( $_GET['construction_rebuild_contacts'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+	$key    = (string) get_option( 'construction_rebuild_contacts_key', '' );
+	$by_key = $key !== ''
+		&& isset( $_GET['construction_rebuild_contacts_key'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		&& hash_equals( $key, (string) wp_unslash( $_GET['construction_rebuild_contacts_key'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+	if ( ! $by_admin && ! $by_key ) {
+		return;
+	}
+
+	$force  = isset( $_GET['force'] ) && (string) wp_unslash( $_GET['force'] ) === '1'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$result = construction_rebuild_polylang_contacts( $force );
+	if ( is_wp_error( $result ) ) {
+		wp_die( esc_html( $result->get_error_message() ) );
+	}
+
+	delete_option( 'construction_rebuild_contacts_key' );
+	flush_rewrite_rules( false );
+	delete_option( 'construction_flush_rewrites' );
+
+	if ( $by_admin ) {
+		wp_safe_redirect( admin_url( 'edit.php?post_type=page&construction_contacts_ready=1' ) );
+		exit;
+	}
+
+	wp_safe_redirect( home_url( '/?construction_contacts_ready=1' ) );
+	exit;
+}
+add_action( 'admin_init', 'construction_admin_rebuild_contacts' );
+add_action( 'init', 'construction_admin_rebuild_contacts', 5 );
 
 /**
  * Import images into Media Library only.

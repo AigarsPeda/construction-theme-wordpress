@@ -77,6 +77,22 @@ To **reset** from theme seed (destroys edits): `?construction_rebuild_homes=1&fo
 
 ---
 
+## Contacts page
+
+Pages: **kontakti** (LV) / **contacts** (EN) / **kontakty** (RU).
+
+Linked in the Primary menu (desktop + mobile drawer) and footer.
+
+Edit text under **Pages**. Contact values in the header still come from **Appearance → Construction**.
+
+Seed missing pages (keeps existing content):
+
+`/wp-admin/?construction_rebuild_contacts=1`
+
+Forced reseed: add `&force=1`.
+
+---
+
 ## Projects gallery
 
 Gallery pages: **projekti** (LV) / **projects** (EN) / **proekty** (RU).

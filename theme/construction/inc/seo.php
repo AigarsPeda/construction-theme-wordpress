@@ -72,6 +72,9 @@ function construction_seo_description(): string {
 		if ( in_array( $slug, array( 'projekti', 'projects', 'proekty' ), true ) ) {
 			return construction_t( 'seo.projects.desc' );
 		}
+		if ( in_array( $slug, array( 'kontakti', 'contacts', 'kontakty' ), true ) ) {
+			return construction_t( 'seo.contacts.desc' );
+		}
 
 		$excerpt = get_the_excerpt();
 		if ( is_string( $excerpt ) && $excerpt !== '' ) {
@@ -124,6 +127,10 @@ function construction_document_title_parts( array $parts ): array {
 		$slug = get_post_field( 'post_name', get_queried_object_id() );
 		if ( in_array( $slug, array( 'projekti', 'projects', 'proekty' ), true ) ) {
 			$parts['title'] = construction_t( 'seo.projects.title' );
+			$parts['site']  = $brand;
+		}
+		if ( in_array( $slug, array( 'kontakti', 'contacts', 'kontakty' ), true ) ) {
+			$parts['title'] = construction_t( 'seo.contacts.title' );
 			$parts['site']  = $brand;
 		}
 	}

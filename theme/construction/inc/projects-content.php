@@ -59,7 +59,7 @@ function construction_projects_page_content_for_lang( string $lang ): string {
 	}
 
 	$contact_cta  = $t( 'projects.cta' );
-	$contact_href = esc_url( trailingslashit( construction_front_url_for_lang( $lang ) ) . '#contact' );
+	$contact_href = esc_url( construction_contacts_url_for_lang( $lang ) );
 
 	return <<<HTML
 <!-- wp:group {"align":"full","className":"construction-projects","layout":{"type":"default"},"anchor":"projects"} -->
