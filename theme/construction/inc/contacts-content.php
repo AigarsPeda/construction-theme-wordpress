@@ -61,6 +61,10 @@ function construction_contacts_page_content_for_lang( string $lang ): string {
 			<!-- wp:heading {"level":1,"className":"construction-contacts-page__title"} -->
 			<h1 class="wp-block-heading construction-contacts-page__title">{$t( 'contacts.title' )}</h1>
 			<!-- /wp:heading -->
+
+			<!-- wp:paragraph {"className":"construction-contacts-page__lead"} -->
+			<p class="construction-contacts-page__lead">{$t( 'contacts.lead' )}</p>
+			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
 

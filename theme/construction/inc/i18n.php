@@ -215,19 +215,24 @@ function construction_strings(): array {
 			'ru' => 'Смотрите галерею проектов — стройплощадки, управление на объекте и готовые работы.',
 		),
 		'seo.contacts.title'   => array(
-			'lv' => 'Kontakti',
-			'en' => 'Contact',
-			'ru' => 'Контакты',
+			'lv' => 'Kontakti — Construction',
+			'en' => 'Contact — Construction',
+			'ru' => 'Контакты — Construction',
 		),
 		'seo.contacts.desc'    => array(
-			'lv' => 'Sazinies ar Construction — e-pasts, tālrunis un adrese. Atbildēsim ātri.',
-			'en' => 'Get in touch with Construction — email, phone, and address. We reply quickly.',
-			'ru' => 'Свяжитесь с Construction — email, телефон и адрес. Ответим быстро.',
+			'lv' => 'Kontakti Construction: e-pasts, tālrunis un adrese Rīgā. Sazinies par būvniecību, vadību un uzraudzību.',
+			'en' => 'Contact Construction: email, phone, and address in Riga. Get in touch about construction management and supervision.',
+			'ru' => 'Контакты Construction: email, телефон и адрес в Риге. Свяжитесь по вопросам строительства, управления и надзора.',
 		),
 		'contacts.title'       => array(
 			'lv' => 'Kontakti',
 			'en' => 'Contact',
 			'ru' => 'Контакты',
+		),
+		'contacts.lead'        => array(
+			'lv' => 'Rakstiet vai zvaniet — atbildēsim un vienosimies par nākamo soli.',
+			'en' => 'Email or call us — we will reply and agree on the next step.',
+			'ru' => 'Напишите или позвоните — ответим и согласуем следующий шаг.',
 		),
 		'contacts.email_label' => array(
 			'lv' => 'E-pasts',

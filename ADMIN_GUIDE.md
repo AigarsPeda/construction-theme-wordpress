@@ -85,11 +85,15 @@ Linked in the Primary menu (desktop + mobile drawer) and footer.
 
 Edit text under **Pages**. Contact values in the header still come from **Appearance → Construction**.
 
+**Rank Math focus keywords** (already seeded on Local): LV `kontakti` · EN `contact` · RU `контакты`.
+
+A contact page will not hit Rank Math’s “600 words” target — that check can stay red. Keyword in title/meta/URL/content, an image alt, and an internal link matter more.
+
 Seed missing pages (keeps existing content):
 
 `/wp-admin/?construction_rebuild_contacts=1`
 
-Forced reseed: add `&force=1`.
+Forced reseed: add `&force=1` (overwrites DB content from theme seed).
 
 ---
 
@@ -140,6 +144,8 @@ No extra setting — same logo / phone / email as desktop.
 | `?construction_rebuild_homes=1&force=1` | **Deletes and reseeds** homes from theme (destructive) |
 | `?construction_rebuild_projects=1` | Create missing projects pages only |
 | `?construction_rebuild_projects=1&force=1` | **Deletes and reseeds** projects pages |
+| `?construction_rebuild_contacts=1` | Create missing contacts pages only |
+| `?construction_rebuild_contacts=1&force=1` | **Deletes and reseeds** contacts pages |
 
 Saving **Appearance → Construction** no longer rebuilds pages (so your edits stay safe).
 

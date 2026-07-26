@@ -1383,11 +1383,19 @@ p.construction-lang a[aria-current="true"] {
 }
 
 .construction-contacts-page__title {
-	margin: 0 !important;
+	margin: 0 0 0.65rem !important;
 	font-size: clamp(1.35rem, 2.4vw, 1.75rem);
 	line-height: 1.15;
 	letter-spacing: -0.02em;
 	font-weight: 700;
+}
+
+.construction-contacts-page__lead {
+	margin: 0 0 1.25rem !important;
+	color: var(--bn-muted, #5c6570);
+	font-size: 1.05rem;
+	line-height: 1.55;
+	max-width: 36rem;
 }
 
 .construction-contacts-page__panel {
