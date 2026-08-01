@@ -201,13 +201,21 @@
 			`;
 		};
 
-		const animateOpen = (fromCard) => {
+		const animateOpen = (fromCard, animate = true) => {
 			const gsap = window.gsap;
 			modal.hidden = false;
 			modal.classList.add('is-open');
 			setBodyLock(true);
 
-			if (!gsap || reduceMotionProjects || !modalDialog) {
+			// Deep-link from homepage (or reduced motion): show instantly, no grow animation.
+			if (!animate || !gsap || reduceMotionProjects || !modalDialog) {
+				if (gsap) {
+					gsap.killTweensOf([modal, modalDialog]);
+					gsap.set(modal, { clearProps: 'opacity,visibility' });
+					gsap.set(modalDialog, { clearProps: 'transform' });
+				}
+				modal.style.opacity = '';
+				modal.style.visibility = '';
 				modal.classList.add('is-visible');
 				return;
 			}
@@ -287,7 +295,7 @@
 			});
 		};
 
-		const openProject = (index, fromCard) => {
+		const openProject = (index, fromCard, { animate = true } = {}) => {
 			const card = cards[index];
 			if (!card || !modalBody) {
 				return;
@@ -324,7 +332,7 @@
 			}
 			showImage(0);
 			setHash(slug);
-			animateOpen(fromCard || card);
+			animateOpen(fromCard || card, animate);
 
 			const closeBtn = modalBody.querySelector('[data-nav="close"]');
 			if (closeBtn) {
@@ -389,7 +397,7 @@
 			});
 		}
 
-		const syncFromHash = () => {
+		const syncFromHash = ({ animate = false } = {}) => {
 			const slug = (location.hash || '').replace(/^#/, '');
 			if (!slug) {
 				if (modal.classList.contains('is-open')) {
@@ -404,13 +412,14 @@
 			if (activeIndex === index && modal.classList.contains('is-open')) {
 				return;
 			}
-			openProject(index, cards[index]);
+			// From homepage / deep link: open instantly. Grid clicks still animate.
+			openProject(index, null, { animate });
 		};
 
 		if (location.hash) {
-			syncFromHash();
+			syncFromHash({ animate: false });
 		}
-		window.addEventListener('hashchange', syncFromHash);
+		window.addEventListener('hashchange', () => syncFromHash({ animate: false }));
 	} else if (typeof window.GLightbox === 'function' && document.querySelector('.construction-projects__grid .construction-lightbox')) {
 		// Legacy flat gallery fallback.
 		const triggers = Array.from(document.querySelectorAll('.construction-projects__grid .construction-lightbox'));
