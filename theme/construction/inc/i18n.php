@@ -255,9 +255,9 @@ function construction_strings(): array {
 			'ru' => 'Реализованные проекты',
 		),
 		'projects.intro'       => array(
-			'lv' => 'Atlasīti objekti — būvniecība, vadība un uzraudzība katrā posmā. Spiediet projektu, lai atvērtu to augšā.',
-			'en' => 'Selected projects — construction, management, and supervision at every stage. Click a project to open it above.',
-			'ru' => 'Избранные объекты — строительство, управление и надзор на каждом этапе. Нажмите проект, чтобы открыть его сверху.',
+			'lv' => 'Atlasīti objekti — būvniecība, vadība un uzraudzība katrā posmā. Spiediet projektu, lai atvērtu to logam.',
+			'en' => 'Selected projects — construction, management, and supervision at every stage. Click a project to open it in a modal.',
+			'ru' => 'Избранные объекты — строительство, управление и надзор на каждом этапе. Нажмите проект, чтобы открыть его в окне.',
 		),
 		'projects.cta'         => array(
 			'lv' => 'Sazinies ar mums',

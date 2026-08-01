@@ -89,38 +89,55 @@
 		});
 	})();
 
-	// Projekti page: open selected project in a top detail panel (old-site style).
+	// Projekti page: open each project in an animated modal (grid stays put).
 	const projectsRoot = document.querySelector('.construction-projects');
 	if (projectsRoot && projectsRoot.querySelector('.construction-project-card')) {
+		const grid = projectsRoot.querySelector('.construction-projects__grid');
 		const cards = Array.from(projectsRoot.querySelectorAll('.construction-project-card'));
-		let viewer = projectsRoot.querySelector('.construction-project-viewer');
-		if (!viewer) {
-			viewer = document.createElement('div');
-			viewer.className = 'construction-project-viewer';
-			viewer.hidden = true;
-			viewer.setAttribute('aria-live', 'polite');
-			const grid = projectsRoot.querySelector('.construction-projects__grid');
-			if (grid && grid.parentNode) {
-				grid.parentNode.insertBefore(viewer, grid);
-			}
+		const legacyViewer = projectsRoot.querySelector('.construction-project-viewer');
+		if (legacyViewer) {
+			legacyViewer.hidden = true;
+			legacyViewer.innerHTML = '';
 		}
 
 		const labelClose = projectsRoot.getAttribute('data-label-close') || 'Close';
 		const labelPrev = projectsRoot.getAttribute('data-label-prev') || 'Previous';
 		const labelNext = projectsRoot.getAttribute('data-label-next') || 'Next';
+		const reduceMotionProjects = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		let activeIndex = -1;
 		let activeImageIndex = 0;
+		let lastFocus = null;
+
+		let modal = document.querySelector('.construction-project-modal');
+		if (!modal) {
+			modal = document.createElement('div');
+			modal.className = 'construction-project-modal';
+			modal.hidden = true;
+			modal.setAttribute('role', 'dialog');
+			modal.setAttribute('aria-modal', 'true');
+			modal.innerHTML = `
+				<div class="construction-project-modal__backdrop" data-modal-close="1"></div>
+				<div class="construction-project-modal__dialog" role="document">
+					<div class="construction-project-modal__body"></div>
+				</div>
+			`;
+			document.body.appendChild(modal);
+		}
+		const modalBody = modal.querySelector('.construction-project-modal__body');
+		const modalDialog = modal.querySelector('.construction-project-modal__dialog');
 
 		const getCardImages = (card) => {
 			const links = Array.from(card.querySelectorAll('a.construction-lightbox[href]'));
-			return links.map((link) => {
-				const img = link.querySelector('img');
-				return {
-					full: link.getAttribute('href'),
-					thumb: img ? img.getAttribute('src') : link.getAttribute('href'),
-					alt: img ? img.getAttribute('alt') || '' : '',
-				};
-			}).filter((item) => item.full);
+			return links
+				.map((link) => {
+					const img = link.querySelector('img');
+					return {
+						full: link.getAttribute('href'),
+						thumb: img ? img.getAttribute('src') : link.getAttribute('href'),
+						alt: img ? img.getAttribute('alt') || '' : '',
+					};
+				})
+				.filter((item) => item.full);
 		};
 
 		const setHash = (slug) => {
@@ -132,8 +149,13 @@
 			}
 		};
 
+		const setBodyLock = (locked) => {
+			document.documentElement.classList.toggle('has-project-modal', locked);
+			document.body.classList.toggle('has-project-modal', locked);
+		};
+
 		const showImage = (imageIndex) => {
-			if (activeIndex < 0) {
+			if (activeIndex < 0 || !modalBody) {
 				return;
 			}
 			const images = getCardImages(cards[activeIndex]);
@@ -142,56 +164,25 @@
 			}
 			activeImageIndex = ((imageIndex % images.length) + images.length) % images.length;
 			const current = images[activeImageIndex];
-			const stageImg = viewer.querySelector('.construction-project-viewer__stage img');
+			const stageImg = modalBody.querySelector('.construction-project-viewer__stage img');
 			if (stageImg) {
 				stageImg.src = current.full;
 				stageImg.alt = current.alt;
 			}
-			viewer.querySelectorAll('.construction-project-viewer__thumb').forEach((btn, i) => {
+			modalBody.querySelectorAll('.construction-project-viewer__thumb').forEach((btn, i) => {
 				btn.classList.toggle('is-active', i === activeImageIndex);
 			});
 		};
 
-		const scrollViewerIntoViewIfNeeded = () => {
-			const rect = viewer.getBoundingClientRect();
-			// Only nudge if the panel is mostly off-screen — never on image changes.
-			if (rect.top < 8 || rect.top > window.innerHeight * 0.4) {
-				viewer.scrollIntoView({ behavior: 'auto', block: 'start' });
-			}
-		};
-
-		const openProject = (index, { scroll = true } = {}) => {
-			const card = cards[index];
-			if (!card) {
-				return;
-			}
-			const images = getCardImages(card);
-			if (images.length === 0) {
-				return;
-			}
-
-			const alreadyOpen = activeIndex === index && viewer.classList.contains('is-open');
-			activeIndex = index;
-			const titleEl = card.querySelector('.construction-project-card__title');
-			const textEl = card.querySelector('.construction-project-card__text');
-			const title = titleEl ? titleEl.textContent.trim() : '';
-			const text = textEl ? textEl.textContent.trim() : '';
-			const slug = card.id || card.getAttribute('data-project-slug') || '';
-
-			cards.forEach((node, i) => {
-				node.classList.toggle('is-active', i === index);
-			});
-
-			if (!alreadyOpen) {
-				const thumbs = images
-					.map((item, i) => {
-						return `<button type="button" class="construction-project-viewer__thumb" data-image-index="${i}" aria-label="${i + 1}">
+		const buildDetailMarkup = (images) => {
+			const thumbs = images
+				.map(
+					(item, i) => `<button type="button" class="construction-project-viewer__thumb" data-image-index="${i}" aria-label="${i + 1}">
 						<img src="${item.thumb}" alt="">
-					</button>`;
-					})
-					.join('');
-
-				viewer.innerHTML = `
+					</button>`
+				)
+				.join('');
+			return `
 				<div class="construction-project-viewer__media">
 					<figure class="construction-project-viewer__stage">
 						<img src="" alt="">
@@ -204,47 +195,149 @@
 						<button type="button" class="construction-project-viewer__nav" data-nav="next" aria-label="${labelNext}">›</button>
 						<button type="button" class="construction-project-viewer__close" data-nav="close" aria-label="${labelClose}">×</button>
 					</div>
-					<h2 class="construction-project-viewer__title"></h2>
+					<h2 class="construction-project-viewer__title" id="construction-project-modal-title"></h2>
 					<p class="construction-project-viewer__text"></p>
 				</div>
 			`;
-				const titleNode = viewer.querySelector('.construction-project-viewer__title');
-				const textNode = viewer.querySelector('.construction-project-viewer__text');
-				if (titleNode) {
-					titleNode.textContent = title;
-				}
-				if (textNode) {
-					textNode.textContent = text;
-				}
-				viewer.hidden = false;
-				viewer.classList.add('is-open');
-			}
-
-			showImage(0);
-			setHash(slug);
-			if (scroll && !alreadyOpen) {
-				requestAnimationFrame(scrollViewerIntoViewIfNeeded);
-			}
 		};
 
-		const closeViewer = () => {
-			viewer.hidden = true;
-			viewer.classList.remove('is-open');
-			viewer.innerHTML = '';
+		const animateOpen = (fromCard) => {
+			const gsap = window.gsap;
+			modal.hidden = false;
+			modal.classList.add('is-open');
+			setBodyLock(true);
+
+			if (!gsap || reduceMotionProjects || !modalDialog) {
+				modal.classList.add('is-visible');
+				return;
+			}
+
+			gsap.killTweensOf([modal, modalDialog]);
+			gsap.set(modal, { autoAlpha: 0 });
+			gsap.set(modalDialog, { scale: 0.92, y: 24, transformOrigin: '50% 50%' });
+
+			// Optional: nudge start toward the clicked card for a “grown from card” feel.
+			if (fromCard) {
+				const from = fromCard.getBoundingClientRect();
+				const dialogRect = modalDialog.getBoundingClientRect();
+				if (from.width > 40 && dialogRect.width > 40) {
+					const x = from.left + from.width / 2 - (dialogRect.left + dialogRect.width / 2);
+					const y = from.top + from.height / 2 - (dialogRect.top + dialogRect.height / 2);
+					gsap.set(modalDialog, { x: x * 0.35, y: y * 0.35 + 24 });
+				}
+			}
+
+			gsap.to(modal, { autoAlpha: 1, duration: 0.25, ease: 'power1.out' });
+			gsap.to(modalDialog, {
+				x: 0,
+				y: 0,
+				scale: 1,
+				duration: 0.4,
+				ease: 'power2.out',
+				clearProps: 'transform',
+				onComplete: () => modal.classList.add('is-visible'),
+			});
+		};
+
+		const animateClose = (onDone) => {
+			const gsap = window.gsap;
+			const finish = () => {
+				modal.classList.remove('is-open', 'is-visible');
+				modal.hidden = true;
+				if (modalBody) {
+					modalBody.innerHTML = '';
+				}
+				setBodyLock(false);
+				if (typeof onDone === 'function') {
+					onDone();
+				}
+			};
+
+			if (!gsap || reduceMotionProjects || !modalDialog) {
+				finish();
+				return;
+			}
+			gsap.killTweensOf([modal, modalDialog]);
+			gsap.to(modalDialog, {
+				scale: 0.96,
+				y: 12,
+				duration: 0.2,
+				ease: 'power1.in',
+			});
+			gsap.to(modal, {
+				autoAlpha: 0,
+				duration: 0.2,
+				ease: 'power1.in',
+				onComplete: finish,
+			});
+		};
+
+		const closeProject = () => {
+			if (activeIndex < 0 && modal.hidden) {
+				return;
+			}
+			cards.forEach((node) => node.classList.remove('is-active'));
 			activeIndex = -1;
 			activeImageIndex = 0;
-			cards.forEach((node) => node.classList.remove('is-active'));
 			setHash('');
+			animateClose(() => {
+				if (lastFocus && typeof lastFocus.focus === 'function') {
+					lastFocus.focus();
+				}
+			});
 		};
 
-		const openBySlug = (slug) => {
-			const index = cards.findIndex((card) => card.id === slug || card.getAttribute('data-project-slug') === slug);
-			if (index >= 0) {
-				openProject(index, { scroll: true });
+		const openProject = (index, fromCard) => {
+			const card = cards[index];
+			if (!card || !modalBody) {
+				return;
+			}
+			const images = getCardImages(card);
+			if (images.length === 0) {
+				return;
+			}
+			if (activeIndex === index && modal.classList.contains('is-open')) {
+				return;
+			}
+
+			lastFocus = document.activeElement;
+			activeIndex = index;
+			const titleEl = card.querySelector('.construction-project-card__title');
+			const textEl = card.querySelector('.construction-project-card__text');
+			const title = titleEl ? titleEl.textContent.trim() : '';
+			const text = textEl ? textEl.textContent.trim() : '';
+			const slug = card.id || card.getAttribute('data-project-slug') || '';
+
+			cards.forEach((node, i) => {
+				node.classList.toggle('is-active', i === index);
+			});
+
+			modalBody.innerHTML = buildDetailMarkup(images);
+			modal.setAttribute('aria-labelledby', 'construction-project-modal-title');
+			const titleNode = modalBody.querySelector('.construction-project-viewer__title');
+			const textNode = modalBody.querySelector('.construction-project-viewer__text');
+			if (titleNode) {
+				titleNode.textContent = title;
+			}
+			if (textNode) {
+				textNode.textContent = text;
+			}
+			showImage(0);
+			setHash(slug);
+			animateOpen(fromCard || card);
+
+			const closeBtn = modalBody.querySelector('[data-nav="close"]');
+			if (closeBtn) {
+				closeBtn.focus();
 			}
 		};
 
-		viewer.addEventListener('click', (event) => {
+		modal.addEventListener('click', (event) => {
+			if (event.target.closest('[data-modal-close], [data-nav="close"]')) {
+				event.preventDefault();
+				closeProject();
+				return;
+			}
 			const thumb = event.target.closest('[data-image-index]');
 			if (thumb) {
 				event.preventDefault();
@@ -256,30 +349,51 @@
 				return;
 			}
 			const action = nav.getAttribute('data-nav');
-			if (action === 'close') {
-				closeViewer();
-			} else if (action === 'prev' && activeIndex >= 0) {
+			if (action === 'prev') {
 				showImage(activeImageIndex - 1);
-			} else if (action === 'next' && activeIndex >= 0) {
+			} else if (action === 'next') {
 				showImage(activeImageIndex + 1);
 			}
 		});
 
-		cards.forEach((card, index) => {
-			card.addEventListener('click', (event) => {
+		document.addEventListener('keydown', (event) => {
+			if (!modal.classList.contains('is-open')) {
+				return;
+			}
+			if (event.key === 'Escape') {
+				event.preventDefault();
+				closeProject();
+			} else if (event.key === 'ArrowLeft') {
+				event.preventDefault();
+				showImage(activeImageIndex - 1);
+			} else if (event.key === 'ArrowRight') {
+				event.preventDefault();
+				showImage(activeImageIndex + 1);
+			}
+		});
+
+		if (grid) {
+			grid.addEventListener('click', (event) => {
+				const card = event.target.closest('.construction-project-card');
+				if (!card || !grid.contains(card)) {
+					return;
+				}
 				const link = event.target.closest('a.construction-lightbox');
-				if (link || event.target.closest('.construction-project-card__title, .construction-project-card__text, .construction-project-card__cover, img')) {
+				if (link) {
 					event.preventDefault();
 				}
-				openProject(index, { scroll: true });
+				const index = cards.indexOf(card);
+				if (index >= 0) {
+					openProject(index, card);
+				}
 			});
-		});
+		}
 
 		const syncFromHash = () => {
 			const slug = (location.hash || '').replace(/^#/, '');
 			if (!slug) {
-				if (activeIndex >= 0) {
-					closeViewer();
+				if (modal.classList.contains('is-open')) {
+					closeProject();
 				}
 				return;
 			}
@@ -287,11 +401,10 @@
 			if (index < 0) {
 				return;
 			}
-			// Already showing this project — don't re-open / re-scroll.
-			if (activeIndex === index && viewer.classList.contains('is-open')) {
+			if (activeIndex === index && modal.classList.contains('is-open')) {
 				return;
 			}
-			openProject(index, { scroll: true });
+			openProject(index, cards[index]);
 		};
 
 		if (location.hash) {

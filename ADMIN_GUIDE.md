@@ -101,7 +101,7 @@ Forced reseed: add `&force=1` (overwrites DB content from theme seed).
 
 Pages: **projekti** (LV) / **projects** (EN) / **proekty** (RU).
 
-Each project is a named card (title + text + Media Library images). Clicking a project opens a **detail panel at the top** of the page (large photo, thumbnails, title); the full grid stays below. Use ‹ › to move between projects, × to close.
+Each project is a named card. Clicking one opens an **animated modal** with that project’s photos and text. The grid underneath does not move. Close with ×, backdrop click, or Escape. Arrow keys / ‹ › change photos. Homepage links `/projekti/#slug` open the same modal.
 
 Homepage teasers link to `/projekti/#slug` and open that project in the top panel.
 
