@@ -483,7 +483,7 @@
 
 	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-	// Homepage Realizētie projekti: slow infinite horizontal marquee.
+	// Homepage Realizētie projekti: slow infinite marquee + drag/scrub.
 	(() => {
 		const marquee = document.querySelector('[data-home-projects-marquee]');
 		const track = document.querySelector('[data-home-projects-track]');
@@ -515,23 +515,134 @@
 		});
 		track.appendChild(clone);
 
+		const speed = 32; // px per second — same calm pace as before
+		let loopWidth = 0;
+		let offset = 0;
+		let dragging = false;
+		let dragMoved = false;
+		let pointerId = null;
+		let startX = 0;
+		let startOffset = 0;
+		let lastTs = 0;
+
+		const wrap = (value) => {
+			if (loopWidth <= 0) {
+				return value;
+			}
+			let next = value;
+			while (next <= -loopWidth) {
+				next += loopWidth;
+			}
+			while (next > 0) {
+				next -= loopWidth;
+			}
+			return next;
+		};
+
+		const apply = () => {
+			track.style.transform = `translate3d(${offset}px, 0, 0)`;
+		};
+
 		const measure = () => {
 			const styles = window.getComputedStyle(track);
 			const gap = Number.parseFloat(styles.columnGap || styles.gap) || 18;
-			const distance = set.getBoundingClientRect().width + gap;
-			const duration = Math.max(45, distance / 32);
-			track.style.setProperty('--bn-marquee-distance', `${distance}px`);
-			track.style.setProperty('--bn-marquee-duration', `${duration}s`);
-			track.classList.add('is-marquee-animated');
+			loopWidth = set.getBoundingClientRect().width + gap;
+			offset = wrap(offset);
+			apply();
 		};
 
-		const runMeasure = () => window.requestAnimationFrame(measure);
+		const onPointerDown = (event) => {
+			if (event.button !== undefined && event.button !== 0) {
+				return;
+			}
+			dragging = true;
+			dragMoved = false;
+			pointerId = event.pointerId;
+			startX = event.clientX;
+			startOffset = offset;
+			marquee.classList.add('is-dragging');
+			if (marquee.setPointerCapture) {
+				marquee.setPointerCapture(event.pointerId);
+			}
+		};
+
+		const onPointerMove = (event) => {
+			if (!dragging || (pointerId !== null && event.pointerId !== pointerId)) {
+				return;
+			}
+			const delta = event.clientX - startX;
+			if (Math.abs(delta) > 4) {
+				dragMoved = true;
+			}
+			offset = wrap(startOffset + delta);
+			apply();
+		};
+
+		const onPointerUp = (event) => {
+			if (!dragging || (pointerId !== null && event.pointerId !== pointerId)) {
+				return;
+			}
+			dragging = false;
+			pointerId = null;
+			marquee.classList.remove('is-dragging');
+			lastTs = 0;
+			if (dragMoved) {
+				const suppressClick = (clickEvent) => {
+					clickEvent.preventDefault();
+					clickEvent.stopPropagation();
+					marquee.removeEventListener('click', suppressClick, true);
+				};
+				marquee.addEventListener('click', suppressClick, true);
+			}
+		};
+
+		marquee.addEventListener('pointerdown', onPointerDown);
+		marquee.addEventListener('pointermove', onPointerMove);
+		marquee.addEventListener('pointerup', onPointerUp);
+		marquee.addEventListener('pointercancel', onPointerUp);
+
+		marquee.addEventListener(
+			'wheel',
+			(event) => {
+				const delta =
+					Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+				if (!delta) {
+					return;
+				}
+				event.preventDefault();
+				offset = wrap(offset - delta);
+				apply();
+				lastTs = 0;
+			},
+			{ passive: false }
+		);
+
+		const tick = (ts) => {
+			if (!lastTs) {
+				lastTs = ts;
+			}
+			const dt = Math.min(0.064, (ts - lastTs) / 1000);
+			lastTs = ts;
+			if (!dragging) {
+				offset = wrap(offset - speed * dt);
+				apply();
+			}
+			window.requestAnimationFrame(tick);
+		};
+
+		const start = () => {
+			measure();
+			window.requestAnimationFrame(tick);
+		};
+
 		if (document.fonts && document.fonts.ready) {
-			document.fonts.ready.then(runMeasure).catch(runMeasure);
+			document.fonts.ready.then(start).catch(start);
 		} else {
-			runMeasure();
+			start();
 		}
-		window.addEventListener('resize', runMeasure);
+		window.addEventListener('resize', () => {
+			window.requestAnimationFrame(measure);
+		});
 	})();
 
 	const gsap = window.gsap;
