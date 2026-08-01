@@ -1,0 +1,14 @@
+{
+	"apiVersion": 3,
+	"name": "construction/projects-grid",
+	"title": "Projects grid",
+	"category": "theme",
+	"icon": "portfolio",
+	"description": "Lists all published projects for the current language. Add or edit projects under Projects in the admin.",
+	"textdomain": "construction",
+	"supports": {
+		"html": false,
+		"align": ["full"],
+		"multiple": false
+	}
+}

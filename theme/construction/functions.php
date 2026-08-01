@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CONSTRUCTION_VERSION', '0.8.31' );
+define( 'CONSTRUCTION_VERSION', '0.9.2' );
 
 require get_template_directory() . '/inc/i18n.php';
 require get_template_directory() . '/inc/settings.php';
@@ -19,6 +19,8 @@ require get_template_directory() . '/inc/images.php';
 require get_template_directory() . '/inc/seo.php';
 require get_template_directory() . '/inc/homepage-content.php';
 require get_template_directory() . '/inc/projects-content.php';
+require get_template_directory() . '/inc/projects-cpt.php';
+require get_template_directory() . '/inc/blocks.php';
 require get_template_directory() . '/inc/contacts-content.php';
 
 /**
@@ -30,6 +32,7 @@ function construction_setup(): void {
 	add_theme_support( 'wp-block-styles' );
 	add_theme_support( 'editor-styles' );
 	add_editor_style( 'assets/css/main.css' );
+	add_theme_support( 'post-thumbnails' );
 
 	add_theme_support(
 		'custom-logo',

@@ -99,13 +99,46 @@ Forced reseed: add `&force=1` (overwrites DB content from theme seed).
 
 ## Projects (Projekti)
 
-Pages: **projekti** (LV) / **projects** (EN) / **proekty** (RU).
+**Add / edit projects in one place:** **Projects** in the WP Admin menu (not by editing page blocks by hand).
 
-Each project is a named card. Clicking one opens an **animated modal** with that project’s photos and text. The grid underneath does not move. Close with ×, backdrop click, or Escape. Arrow keys / ‹ › change photos. Homepage links `/projekti/#slug` open the same modal.
+**One project = one row** for all languages. Titles and descriptions for LV / EN / RU live on the same edit screen (language tabs). Cover image and gallery are shared.
 
-Homepage teasers link to `/projekti/#slug` and open that project in the top panel.
+| Field | Where |
+|---|---|
+| Titles & descriptions (LV / EN / RU) | **Languages** box — switch tabs |
+| Cover image | Featured image (Cover image) |
+| Gallery photos | **Project gallery** box — Add images, drag to reorder (shared for all languages) |
+| Shareable slug | Permalink under the title (e.g. `salaspils`) |
 
-Edit text and swap images under **Pages** (block editor). Forced reseed: `?construction_rebuild_projects=1&force=1`.
+Share URL (also shown in the **Shareable link** box):
+
+`https://yoursite/projekti/#salaspils`  
+(EN/RU use `/projects/` or `/proekty/` with the same `#slug`.)
+
+That link opens the project modal on the projects page. The slug must be unique among projects. If it is already used, WordPress shows an error and keeps the previous slug.
+
+### Languages
+
+Do **not** create separate Polylang translations for Projects. Edit LV / EN / RU fields on the single project. (Pages and menus still use Polylang as usual.)
+
+### Automatic homepage + projects page
+
+- Homepage **Completed projects** marquee uses the **Home projects marquee** block — it lists published projects automatically.
+- Projects page uses the **Projects grid** block — same source.
+
+You do **not** need to add cards manually on those pages. Publish a project → it appears in both places (correct language text on each site language).
+
+**Edit from the page editor:** open the Projects (or Home) page → select the projects block → click a project card. A panel opens with language tabs, plus slug, cover, and gallery. Save there, or use **Open full editor** for the complete Projects screen.
+
+Pages: **projekti** (LV) / **projects** (EN) / **proekty** (RU). Clicking a card opens the modal (gallery, title, description). Close with ×, backdrop, or Escape.
+
+### Seed / merge / reset CPT
+
+Safe (only if no projects exist): `/wp-admin/?construction_seed_projects=1`  
+Forced reseed (deletes CPT projects and recreates the 5 catalog ones): add `&force=1`  
+Merge old Polylang triples into one post per project: `/wp-admin/?construction_merge_projects=1`
+
+Reset projects **page** chrome to the dynamic block: `?construction_rebuild_projects=1&force=1`
 
 ---
 
@@ -130,7 +163,9 @@ No extra setting — same logo / phone / email as desktop.
 
 | What | Where |
 |---|---|
-| Hero, services (intro + 3 vertical phase sections), FAQ, realized projects, projects page | **Pages → Edit** (block editor) |
+| Hero, services (intro + 3 vertical phase sections), FAQ | **Pages → Edit** (block editor) |
+| Realized projects (home) + projects page grid | **Projects** CPT (auto via blocks) |
+| Projects page | **Pages** holds the Projects grid block only |
 | Browser tab title, meta, focus keyword | **Rank Math** on that page |
 | Logo, phone, email (header / mobile menu) | **Appearance → Construction** |
 | Site name | **Settings → General** |
@@ -145,7 +180,10 @@ No extra setting — same logo / phone / email as desktop.
 | `?construction_rebuild_homes=1` | Create missing home pages only — **keeps** existing DB content |
 | `?construction_rebuild_homes=1&force=1` | **Deletes and reseeds** homes from theme (destructive) |
 | `?construction_rebuild_projects=1` | Create missing projects pages only |
-| `?construction_rebuild_projects=1&force=1` | **Deletes and reseeds** projects pages |
+| `?construction_rebuild_projects=1&force=1` | **Deletes and reseeds** projects pages (dynamic block) |
+| `?construction_seed_projects=1` | Seed Projects CPT from catalog if empty |
+| `?construction_seed_projects=1&force=1` | **Deletes and reseeds** all CPT projects (5 multilingual posts) |
+| `?construction_merge_projects=1` | Merge old 3-posts-per-project rows into one post each |
 | `?construction_rebuild_contacts=1` | Create missing contacts pages only |
 | `?construction_rebuild_contacts=1&force=1` | **Deletes and reseeds** contacts pages |
 

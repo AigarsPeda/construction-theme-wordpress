@@ -1,0 +1,14 @@
+{
+	"apiVersion": 3,
+	"name": "construction/home-projects",
+	"title": "Home projects marquee",
+	"category": "theme",
+	"icon": "images-alt2",
+	"description": "Homepage completed-projects marquee. Updates automatically when you publish a project.",
+	"textdomain": "construction",
+	"supports": {
+		"html": false,
+		"align": ["full"],
+		"multiple": false
+	}
+}

@@ -758,7 +758,7 @@ body.construction-menu-open {
 }
 
 .construction-services-phase + .construction-services-phase {
-	padding-top: clamp(1.75rem, 3.5vw, 2.5rem);
+	padding-top: clamp(2rem, 4vw, 2.85rem);
 	border-top: 1px solid color-mix(in srgb, var(--bn-ink) 10%, transparent);
 }
 
@@ -766,52 +766,58 @@ body.construction-menu-open {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	gap: 0.5rem;
-	margin-bottom: 0.85rem;
+	gap: 0.45rem;
+	margin-bottom: clamp(1.15rem, 2.4vw, 1.55rem);
 	max-width: 36rem;
 }
 
-.construction-services .construction-services-phase__label {
+/* Phase = chapter headline; service cards = supporting list */
+.construction-services .construction-services-phase__label,
+.construction-services-phase h2.construction-services-phase__label {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: baseline;
-	gap: 0.5rem 0.7rem;
+	gap: 0.45rem 0.75rem;
 	margin: 0;
 	font-family: "Archivo", sans-serif;
-	font-size: clamp(1.25rem, 2.6vw, 1.55rem);
-	font-weight: 700;
-	letter-spacing: -0.02em;
-	line-height: 1.2;
+	font-size: clamp(1.5rem, 3.2vw, 1.95rem);
+	font-weight: 800;
+	letter-spacing: -0.035em;
+	line-height: 1.12;
 	text-align: left;
+	color: var(--bn-ink);
+	text-wrap: balance;
 }
 
 .construction-services-phase__num {
 	display: inline-block;
 	margin: 0;
 	font-family: "Archivo", sans-serif;
-	font-size: 0.85em;
-	font-weight: 600;
-	letter-spacing: 0.04em;
+	font-size: 0.62em;
+	font-weight: 700;
+	letter-spacing: 0.1em;
 	line-height: 1;
 	color: var(--bn-timber);
 	flex: 0 0 auto;
+	transform: translateY(-0.06em);
 }
 
 .construction-services-phase__lead {
 	margin: 0;
 	color: var(--bn-steel);
-	font-size: 1rem;
-	line-height: 1.65;
+	font-size: clamp(0.95rem, 1.5vw, 1.02rem);
+	line-height: 1.6;
 	max-width: 34rem;
 }
 
 .construction-services-phase__items {
 	display: grid;
 	grid-template-columns: 1fr;
-	gap: 0.95rem;
+	gap: 1.1rem;
 	margin: 0;
-	padding-top: 0;
+	padding: 0.15rem 0 0 1.05rem;
 	border-top: 0;
+	border-left: 2px solid color-mix(in srgb, var(--bn-timber) 45%, transparent);
 }
 
 .construction-service-card {
@@ -841,12 +847,13 @@ body.construction-menu-open {
 
 .construction-service-card__title,
 .construction-service-card h3 {
-	margin: 0 0 0.3rem;
+	margin: 0 0 0.25rem;
 	font-family: "Archivo", sans-serif;
-	font-size: clamp(1.02rem, 1.6vw, 1.1rem);
-	font-weight: 600;
+	font-size: clamp(0.98rem, 1.4vw, 1.05rem);
+	font-weight: 500;
 	line-height: 1.35;
-	letter-spacing: -0.01em;
+	letter-spacing: 0;
+	color: color-mix(in srgb, var(--bn-ink) 82%, var(--bn-steel));
 }
 
 .construction-service-card__text,
@@ -854,8 +861,8 @@ body.construction-menu-open {
 	margin: 0;
 	padding: 0;
 	color: var(--bn-steel);
-	font-size: 0.96rem;
-	line-height: 1.65;
+	font-size: 0.94rem;
+	line-height: 1.6;
 	max-width: none;
 }
 
