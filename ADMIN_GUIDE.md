@@ -97,13 +97,15 @@ Forced reseed: add `&force=1` (overwrites DB content from theme seed).
 
 ---
 
-## Projects gallery
+## Projects (Projekti)
 
-Gallery pages: **projekti** (LV) / **projects** (EN) / **proekty** (RU).
+Pages: **projekti** (LV) / **projects** (EN) / **proekty** (RU).
 
-Images come from the **Media Library**. Click a photo on the page to open the lightbox.
+Each project is a named card (title + text + Media Library images). Clicking a project opens a **detail panel at the top** of the page (large photo, thumbnails, title); the full grid stays below. Use ‹ › to move between projects, × to close.
 
-Edit gallery page text in **Pages**. Forced reseed: `?construction_rebuild_projects=1&force=1`.
+Homepage teasers link to `/projekti/#slug` and open that project in the top panel.
+
+Edit text and swap images under **Pages** (block editor). Forced reseed: `?construction_rebuild_projects=1&force=1`.
 
 ---
 
@@ -128,7 +130,7 @@ No extra setting — same logo / phone / email as desktop.
 
 | What | Where |
 |---|---|
-| Hero, services, FAQ, reviews, projects gallery text | **Pages → Edit** (block editor) |
+| Hero, services, FAQ, realized projects, projects page | **Pages → Edit** (block editor) |
 | Browser tab title, meta, focus keyword | **Rank Math** on that page |
 | Logo, phone, email (header / mobile menu) | **Appearance → Construction** |
 | Site name | **Settings → General** |

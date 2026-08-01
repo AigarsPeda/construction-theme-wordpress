@@ -89,9 +89,217 @@
 		});
 	})();
 
-	// Project gallery lightbox with a virtual ring (clone last/first)
-	// so next/prev always slide in one direction — no awkward wrap.
-	if (typeof window.GLightbox === 'function' && document.querySelector('.construction-projects__grid .construction-lightbox')) {
+	// Projekti page: open selected project in a top detail panel (old-site style).
+	const projectsRoot = document.querySelector('.construction-projects');
+	if (projectsRoot && projectsRoot.querySelector('.construction-project-card')) {
+		const cards = Array.from(projectsRoot.querySelectorAll('.construction-project-card'));
+		let viewer = projectsRoot.querySelector('.construction-project-viewer');
+		if (!viewer) {
+			viewer = document.createElement('div');
+			viewer.className = 'construction-project-viewer';
+			viewer.hidden = true;
+			viewer.setAttribute('aria-live', 'polite');
+			const grid = projectsRoot.querySelector('.construction-projects__grid');
+			if (grid && grid.parentNode) {
+				grid.parentNode.insertBefore(viewer, grid);
+			}
+		}
+
+		const labelClose = projectsRoot.getAttribute('data-label-close') || 'Close';
+		const labelPrev = projectsRoot.getAttribute('data-label-prev') || 'Previous';
+		const labelNext = projectsRoot.getAttribute('data-label-next') || 'Next';
+		let activeIndex = -1;
+		let activeImageIndex = 0;
+
+		const getCardImages = (card) => {
+			const links = Array.from(card.querySelectorAll('a.construction-lightbox[href]'));
+			return links.map((link) => {
+				const img = link.querySelector('img');
+				return {
+					full: link.getAttribute('href'),
+					thumb: img ? img.getAttribute('src') : link.getAttribute('href'),
+					alt: img ? img.getAttribute('alt') || '' : '',
+				};
+			}).filter((item) => item.full);
+		};
+
+		const setHash = (slug) => {
+			const next = slug ? `#${slug}` : location.pathname + location.search;
+			if (history.replaceState) {
+				history.replaceState(null, '', next);
+			} else if (slug) {
+				location.hash = slug;
+			}
+		};
+
+		const showImage = (imageIndex) => {
+			if (activeIndex < 0) {
+				return;
+			}
+			const images = getCardImages(cards[activeIndex]);
+			if (images.length === 0) {
+				return;
+			}
+			activeImageIndex = ((imageIndex % images.length) + images.length) % images.length;
+			const current = images[activeImageIndex];
+			const stageImg = viewer.querySelector('.construction-project-viewer__stage img');
+			if (stageImg) {
+				stageImg.src = current.full;
+				stageImg.alt = current.alt;
+			}
+			viewer.querySelectorAll('.construction-project-viewer__thumb').forEach((btn, i) => {
+				btn.classList.toggle('is-active', i === activeImageIndex);
+			});
+		};
+
+		const scrollViewerIntoViewIfNeeded = () => {
+			const rect = viewer.getBoundingClientRect();
+			// Only nudge if the panel is mostly off-screen — never on image changes.
+			if (rect.top < 8 || rect.top > window.innerHeight * 0.4) {
+				viewer.scrollIntoView({ behavior: 'auto', block: 'start' });
+			}
+		};
+
+		const openProject = (index, { scroll = true } = {}) => {
+			const card = cards[index];
+			if (!card) {
+				return;
+			}
+			const images = getCardImages(card);
+			if (images.length === 0) {
+				return;
+			}
+
+			const alreadyOpen = activeIndex === index && viewer.classList.contains('is-open');
+			activeIndex = index;
+			const titleEl = card.querySelector('.construction-project-card__title');
+			const textEl = card.querySelector('.construction-project-card__text');
+			const title = titleEl ? titleEl.textContent.trim() : '';
+			const text = textEl ? textEl.textContent.trim() : '';
+			const slug = card.id || card.getAttribute('data-project-slug') || '';
+
+			cards.forEach((node, i) => {
+				node.classList.toggle('is-active', i === index);
+			});
+
+			if (!alreadyOpen) {
+				const thumbs = images
+					.map((item, i) => {
+						return `<button type="button" class="construction-project-viewer__thumb" data-image-index="${i}" aria-label="${i + 1}">
+						<img src="${item.thumb}" alt="">
+					</button>`;
+					})
+					.join('');
+
+				viewer.innerHTML = `
+				<div class="construction-project-viewer__media">
+					<figure class="construction-project-viewer__stage">
+						<img src="" alt="">
+					</figure>
+					<div class="construction-project-viewer__thumbs">${thumbs}</div>
+				</div>
+				<div class="construction-project-viewer__meta">
+					<div class="construction-project-viewer__controls">
+						<button type="button" class="construction-project-viewer__nav" data-nav="prev" aria-label="${labelPrev}">‹</button>
+						<button type="button" class="construction-project-viewer__nav" data-nav="next" aria-label="${labelNext}">›</button>
+						<button type="button" class="construction-project-viewer__close" data-nav="close" aria-label="${labelClose}">×</button>
+					</div>
+					<h2 class="construction-project-viewer__title"></h2>
+					<p class="construction-project-viewer__text"></p>
+				</div>
+			`;
+				const titleNode = viewer.querySelector('.construction-project-viewer__title');
+				const textNode = viewer.querySelector('.construction-project-viewer__text');
+				if (titleNode) {
+					titleNode.textContent = title;
+				}
+				if (textNode) {
+					textNode.textContent = text;
+				}
+				viewer.hidden = false;
+				viewer.classList.add('is-open');
+			}
+
+			showImage(0);
+			setHash(slug);
+			if (scroll && !alreadyOpen) {
+				requestAnimationFrame(scrollViewerIntoViewIfNeeded);
+			}
+		};
+
+		const closeViewer = () => {
+			viewer.hidden = true;
+			viewer.classList.remove('is-open');
+			viewer.innerHTML = '';
+			activeIndex = -1;
+			activeImageIndex = 0;
+			cards.forEach((node) => node.classList.remove('is-active'));
+			setHash('');
+		};
+
+		const openBySlug = (slug) => {
+			const index = cards.findIndex((card) => card.id === slug || card.getAttribute('data-project-slug') === slug);
+			if (index >= 0) {
+				openProject(index, { scroll: true });
+			}
+		};
+
+		viewer.addEventListener('click', (event) => {
+			const thumb = event.target.closest('[data-image-index]');
+			if (thumb) {
+				event.preventDefault();
+				showImage(Number(thumb.getAttribute('data-image-index')));
+				return;
+			}
+			const nav = event.target.closest('[data-nav]');
+			if (!nav) {
+				return;
+			}
+			const action = nav.getAttribute('data-nav');
+			if (action === 'close') {
+				closeViewer();
+			} else if (action === 'prev' && activeIndex >= 0) {
+				showImage(activeImageIndex - 1);
+			} else if (action === 'next' && activeIndex >= 0) {
+				showImage(activeImageIndex + 1);
+			}
+		});
+
+		cards.forEach((card, index) => {
+			card.addEventListener('click', (event) => {
+				const link = event.target.closest('a.construction-lightbox');
+				if (link || event.target.closest('.construction-project-card__title, .construction-project-card__text, .construction-project-card__cover, img')) {
+					event.preventDefault();
+				}
+				openProject(index, { scroll: true });
+			});
+		});
+
+		const syncFromHash = () => {
+			const slug = (location.hash || '').replace(/^#/, '');
+			if (!slug) {
+				if (activeIndex >= 0) {
+					closeViewer();
+				}
+				return;
+			}
+			const index = cards.findIndex((card) => card.id === slug || card.getAttribute('data-project-slug') === slug);
+			if (index < 0) {
+				return;
+			}
+			// Already showing this project — don't re-open / re-scroll.
+			if (activeIndex === index && viewer.classList.contains('is-open')) {
+				return;
+			}
+			openProject(index, { scroll: true });
+		};
+
+		if (location.hash) {
+			syncFromHash();
+		}
+		window.addEventListener('hashchange', syncFromHash);
+	} else if (typeof window.GLightbox === 'function' && document.querySelector('.construction-projects__grid .construction-lightbox')) {
+		// Legacy flat gallery fallback.
 		const triggers = Array.from(document.querySelectorAll('.construction-projects__grid .construction-lightbox'));
 		const realItems = triggers.map((node) => ({
 			href: node.getAttribute('href'),
@@ -126,7 +334,6 @@
 				lightbox.settings.slideEffect = 'none';
 				lightbox.goToSlide(index);
 				lightbox.settings.slideEffect = previousEffect;
-				// Allow GLightbox to finish DOM updates before accepting another jump.
 				requestAnimationFrame(() => {
 					jumping = false;
 				});
@@ -137,10 +344,8 @@
 					return;
 				}
 				if (current.index === lastCloneIndex) {
-					// Landed on cloned first after sliding past last → snap to real first.
 					jumpWithoutSlide(firstRealIndex);
 				} else if (current.index === 0) {
-					// Landed on cloned last after sliding before first → snap to real last.
 					jumpWithoutSlide(lastRealIndex);
 				}
 			});

@@ -279,8 +279,10 @@ function construction_project_image_url( string $key, string $size = 'large' ): 
  * @param string $size       Image size slug (avoid "full" for display).
  * @param bool   $lightbox   Wrap in lightbox link to full-size image.
  * @param bool   $priority   Kept for call-site compatibility (front-end CSS/JS can still optimize).
+ * @param string $gallery    data-gallery value when $lightbox is true.
+ * @param string $link_url   Optional page/URL link when not using lightbox (editable image link).
  */
-function construction_media_image_block( string $key, string $class_name, string $alt, string $size = 'large', bool $lightbox = false, bool $priority = false ): string { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+function construction_media_image_block( string $key, string $class_name, string $alt, string $size = 'large', bool $lightbox = false, bool $priority = false, string $gallery = 'construction-projects', string $link_url = '' ): string { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
 	$id = construction_media_id( $key );
 	if ( $id <= 0 ) {
 		return '';
@@ -319,8 +321,12 @@ function construction_media_image_block( string $key, string $class_name, string
 		if ( $full === '' ) {
 			$full = esc_url( $url );
 		}
+		$gallery   = sanitize_title( $gallery !== '' ? $gallery : 'construction-projects' );
 		$link_dest = 'custom';
-		$inner     = '<a href="' . $full . '" class="construction-lightbox glightbox" data-gallery="construction-projects">' . $img . '</a>';
+		$inner     = '<a href="' . $full . '" class="construction-lightbox glightbox" data-gallery="' . esc_attr( $gallery ) . '">' . $img . '</a>';
+	} elseif ( $link_url !== '' ) {
+		$link_dest = 'custom';
+		$inner     = '<a href="' . esc_url( $link_url ) . '">' . $img . '</a>';
 	} else {
 		$link_dest = 'none';
 		$inner     = $img;
@@ -376,11 +382,18 @@ function construction_repair_image_blocks_in_content( string $content ): string 
 
 			if ( $link_dest === 'custom' && preg_match( '/<a\s[^>]*href="([^"]+)"[^>]*>/i', $m[3], $lm ) ) {
 				$href  = $lm[1];
-				$class = 'construction-lightbox glightbox';
+				$class = '';
 				if ( preg_match( '/class="([^"]*)"/', $lm[0], $cm ) ) {
 					$class = $cm[1];
 				}
-				$inner = '<a href="' . esc_url( $href ) . '" class="' . esc_attr( $class ) . '" data-gallery="construction-projects">' . $img . '</a>';
+				$attrs = 'href="' . esc_url( $href ) . '"';
+				if ( $class !== '' ) {
+					$attrs .= ' class="' . esc_attr( $class ) . '"';
+				}
+				if ( preg_match( '/data-gallery="([^"]*)"/', $lm[0], $gm ) ) {
+					$attrs .= ' data-gallery="' . esc_attr( $gm[1] ) . '"';
+				}
+				$inner = '<a ' . $attrs . '>' . $img . '</a>';
 			} else {
 				$inner = $img;
 			}
@@ -405,6 +418,9 @@ function construction_image_sizes_attr( string $class_name ): string {
 	}
 	if ( str_contains( $class_name, 'construction-quality__media' ) ) {
 		return '(max-width: 700px) 100vw, 25vw';
+	}
+	if ( str_contains( $class_name, 'construction-project-card__cover' ) || str_contains( $class_name, 'construction-home-projects__media' ) ) {
+		return '(max-width: 700px) 100vw, 33vw';
 	}
 	if ( str_contains( $class_name, 'construction-projects__item' ) ) {
 		return '(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 33vw';

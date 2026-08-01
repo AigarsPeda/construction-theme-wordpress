@@ -41,13 +41,66 @@ function construction_homepage_content_for_lang( string $lang ): string {
 	};
 
 	$hero_img     = construction_media_image_block( 'hero', 'construction-hero__image', construction_string( 'hero.alt', $lang ), 'construction-hero', false, true );
-	$service_1    = construction_media_image_block( 'service_1', 'construction-service-card__thumb', '', 'medium_large' );
-	$service_2    = construction_media_image_block( 'service_2', 'construction-service-card__thumb', '', 'medium_large' );
-	$service_3    = construction_media_image_block( 'service_3', 'construction-service-card__thumb', '', 'medium_large' );
-	$quality_1    = construction_media_image_block( 'quality_1', 'construction-quality__media', '', 'medium_large' );
-	$quality_2    = construction_media_image_block( 'quality_2', 'construction-quality__media', '', 'medium_large' );
-	$quality_3    = construction_media_image_block( 'quality_3', 'construction-quality__media', '', 'medium_large' );
-	$quality_4    = construction_media_image_block( 'quality_4', 'construction-quality__media', '', 'medium_large' );
+
+	$service_cards = '';
+	for ( $i = 1; $i <= 8; $i++ ) {
+		$title = $t( "services.item{$i}.title" );
+		$text  = $t( "services.item{$i}.text" );
+		$service_cards .= <<<ITEM
+			<!-- wp:group {"className":"construction-service-card","layout":{"type":"constrained"}} -->
+			<div class="wp-block-group construction-service-card">
+				<!-- wp:heading {"level":3} -->
+				<h3 class="wp-block-heading">{$title}</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph -->
+				<p>{$text}</p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+
+ITEM;
+	}
+
+	$home_project_cards = '';
+	foreach ( construction_project_entries() as $entry ) {
+		$slug  = sanitize_title( (string) $entry['slug'] );
+		$cover = (string) $entry['cover'];
+		$title = $t( "projects.item.{$slug}.title" );
+		$text  = $t( "projects.item.{$slug}.text" );
+		$href  = esc_url( construction_projects_url_for_lang( $lang, $slug ) );
+		$alt   = $title;
+		$meta  = construction_media_catalog()[ $cover ] ?? null;
+		if ( is_array( $meta ) && ! empty( $meta['alt_key'] ) ) {
+			$alt = construction_string( (string) $meta['alt_key'], $lang );
+		}
+		$cover_block = construction_media_image_block(
+			$cover,
+			'construction-home-projects__media',
+			$alt,
+			'medium_large',
+			false,
+			false,
+			'construction-projects',
+			$href
+		);
+		$home_project_cards .= <<<CARD
+			<!-- wp:group {"className":"construction-home-projects__card","layout":{"type":"constrained"}} -->
+			<div class="wp-block-group construction-home-projects__card">
+{$cover_block}				<!-- wp:heading {"level":3,"className":"construction-home-projects__name"} -->
+				<h3 class="wp-block-heading construction-home-projects__name"><a href="{$href}">{$title}</a></h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"className":"construction-home-projects__blurb"} -->
+				<p class="construction-home-projects__blurb">{$text}</p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+
+CARD;
+	}
+
+	$view_all     = $t( 'projects.view_all' );
+	$home_title   = $t( 'projects.home_title' );
+	$projects_all_url = esc_url( construction_projects_url_for_lang( $lang ) );
 
 	$mail_href = esc_url( construction_contact_mail_href( $lang ) );
 	$email     = esc_html( construction_contact( 'email' ) );
@@ -129,52 +182,7 @@ ITEM;
 
 		<!-- wp:column {"width":"58%","className":"construction-services__list"} -->
 		<div class="wp-block-column construction-services__list" style="flex-basis:58%">
-			<!-- wp:group {"className":"construction-service-card","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"top"}} -->
-			<div class="wp-block-group construction-service-card">
-{$service_1}
-				<!-- wp:group {"layout":{"type":"constrained"}} -->
-				<div class="wp-block-group">
-					<!-- wp:heading {"level":3} -->
-					<h3 class="wp-block-heading">{$t( 'services.item1.title' )}</h3>
-					<!-- /wp:heading -->
-					<!-- wp:paragraph -->
-					<p>{$t( 'services.item1.text' )}</p>
-					<!-- /wp:paragraph -->
-				</div>
-				<!-- /wp:group -->
-			</div>
-			<!-- /wp:group -->
-
-			<!-- wp:group {"className":"construction-service-card","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"top"}} -->
-			<div class="wp-block-group construction-service-card">
-{$service_2}				<!-- wp:group {"layout":{"type":"constrained"}} -->
-				<div class="wp-block-group">
-					<!-- wp:heading {"level":3} -->
-					<h3 class="wp-block-heading">{$t( 'services.item2.title' )}</h3>
-					<!-- /wp:heading -->
-					<!-- wp:paragraph -->
-					<p>{$t( 'services.item2.text' )}</p>
-					<!-- /wp:paragraph -->
-				</div>
-				<!-- /wp:group -->
-			</div>
-			<!-- /wp:group -->
-
-			<!-- wp:group {"className":"construction-service-card","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"top"}} -->
-			<div class="wp-block-group construction-service-card">
-{$service_3}				<!-- wp:group {"layout":{"type":"constrained"}} -->
-				<div class="wp-block-group">
-					<!-- wp:heading {"level":3} -->
-					<h3 class="wp-block-heading">{$t( 'services.item3.title' )}</h3>
-					<!-- /wp:heading -->
-					<!-- wp:paragraph -->
-					<p>{$t( 'services.item3.text' )}</p>
-					<!-- /wp:paragraph -->
-				</div>
-				<!-- /wp:group -->
-			</div>
-			<!-- /wp:group -->
-		</div>
+{$service_cards}		</div>
 		<!-- /wp:column -->
 	</div>
 	<!-- /wp:columns -->
@@ -281,152 +289,25 @@ ITEM;
 </div>
 <!-- /wp:group -->
 
-<!-- wp:group {"align":"full","className":"construction-quality","layout":{"type":"default"},"anchor":"about"} -->
-<div class="wp-block-group alignfull construction-quality" id="about">
-	<!-- wp:group {"className":"construction-quality__inner","layout":{"type":"default"}} -->
-	<div class="wp-block-group construction-quality__inner">
-		<!-- wp:heading -->
-		<h2 class="wp-block-heading">{$t( 'quality.title' )}</h2>
-		<!-- /wp:heading -->
-
-		<!-- wp:columns {"className":"construction-quality__grid"} -->
-		<div class="wp-block-columns construction-quality__grid">
-			<!-- wp:column -->
-			<div class="wp-block-column">
-				<!-- wp:group {"className":"construction-quality__card","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group construction-quality__card">
-{$quality_1}					<!-- wp:heading {"level":3} -->
-					<h3 class="wp-block-heading">{$t( 'quality.item1' )}</h3>
-					<!-- /wp:heading -->
-				</div>
-				<!-- /wp:group -->
-			</div>
-			<!-- /wp:column -->
-
-			<!-- wp:column -->
-			<div class="wp-block-column">
-				<!-- wp:group {"className":"construction-quality__card","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group construction-quality__card">
-{$quality_2}					<!-- wp:heading {"level":3} -->
-					<h3 class="wp-block-heading">{$t( 'quality.item2' )}</h3>
-					<!-- /wp:heading -->
-				</div>
-				<!-- /wp:group -->
-			</div>
-			<!-- /wp:column -->
-
-			<!-- wp:column -->
-			<div class="wp-block-column">
-				<!-- wp:group {"className":"construction-quality__card","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group construction-quality__card">
-{$quality_3}					<!-- wp:heading {"level":3} -->
-					<h3 class="wp-block-heading">{$t( 'quality.item3' )}</h3>
-					<!-- /wp:heading -->
-				</div>
-				<!-- /wp:group -->
-			</div>
-			<!-- /wp:column -->
-
-			<!-- wp:column -->
-			<div class="wp-block-column">
-				<!-- wp:group {"className":"construction-quality__card","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group construction-quality__card">
-{$quality_4}					<!-- wp:heading {"level":3} -->
-					<h3 class="wp-block-heading">{$t( 'quality.item4' )}</h3>
-					<!-- /wp:heading -->
-				</div>
-				<!-- /wp:group -->
-			</div>
-			<!-- /wp:column -->
-		</div>
-		<!-- /wp:columns -->
-	</div>
-	<!-- /wp:group -->
-</div>
-<!-- /wp:group -->
-
-<!-- wp:group {"align":"full","className":"construction-reviews","layout":{"type":"default"},"anchor":"reviews"} -->
-<div class="wp-block-group alignfull construction-reviews" id="reviews">
-	<!-- wp:group {"className":"construction-reviews__inner","layout":{"type":"default"}} -->
-	<div class="wp-block-group construction-reviews__inner">
-		<!-- wp:heading -->
-		<h2 class="wp-block-heading">{$t( 'reviews.title' )}</h2>
-		<!-- /wp:heading -->
-
-		<!-- wp:group {"className":"construction-reviews__summary","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between"}} -->
-		<div class="wp-block-group construction-reviews__summary">
-			<!-- wp:paragraph -->
-			<p><strong>4.9 ★</strong> · {$t( 'reviews.avg' )}</p>
-			<!-- /wp:paragraph -->
-			<!-- wp:paragraph -->
-			<p>{$t( 'reviews.count' )}</p>
+<!-- wp:group {"align":"full","className":"construction-home-projects","layout":{"type":"default"},"anchor":"realized-projects"} -->
+<div class="wp-block-group alignfull construction-home-projects" id="realized-projects">
+	<!-- wp:group {"className":"construction-home-projects__inner","layout":{"type":"default"}} -->
+	<div class="wp-block-group construction-home-projects__inner">
+		<!-- wp:group {"className":"construction-home-projects__head","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"end"}} -->
+		<div class="wp-block-group construction-home-projects__head">
+			<!-- wp:heading {"className":"construction-home-projects__title"} -->
+			<h2 class="wp-block-heading construction-home-projects__title">{$home_title}</h2>
+			<!-- /wp:heading -->
+			<!-- wp:paragraph {"className":"construction-home-projects__all"} -->
+			<p class="construction-home-projects__all"><a href="{$projects_all_url}">{$view_all} →</a></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
 
-		<!-- wp:columns {"className":"construction-reviews__grid"} -->
-		<div class="wp-block-columns construction-reviews__grid">
-			<!-- wp:column -->
-			<div class="wp-block-column">
-				<!-- wp:group {"className":"construction-review-card","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group construction-review-card">
-					<!-- wp:paragraph {"className":"construction-review-card__meta"} -->
-					<p class="construction-review-card__meta"><strong>Anna K.</strong> · ★★★★★</p>
-					<!-- /wp:paragraph -->
-					<!-- wp:paragraph -->
-					<p>{$t( 'reviews.1' )}</p>
-					<!-- /wp:paragraph -->
-				</div>
-				<!-- /wp:group -->
-			</div>
-			<!-- /wp:column -->
-
-			<!-- wp:column -->
-			<div class="wp-block-column">
-				<!-- wp:group {"className":"construction-review-card","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group construction-review-card">
-					<!-- wp:paragraph {"className":"construction-review-card__meta"} -->
-					<p class="construction-review-card__meta"><strong>Jānis P.</strong> · ★★★★★</p>
-					<!-- /wp:paragraph -->
-					<!-- wp:paragraph -->
-					<p>{$t( 'reviews.2' )}</p>
-					<!-- /wp:paragraph -->
-				</div>
-				<!-- /wp:group -->
-			</div>
-			<!-- /wp:column -->
-
-			<!-- wp:column -->
-			<div class="wp-block-column">
-				<!-- wp:group {"className":"construction-review-card","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group construction-review-card">
-					<!-- wp:paragraph {"className":"construction-review-card__meta"} -->
-					<p class="construction-review-card__meta"><strong>Elena M.</strong> · ★★★★★</p>
-					<!-- /wp:paragraph -->
-					<!-- wp:paragraph -->
-					<p>{$t( 'reviews.3' )}</p>
-					<!-- /wp:paragraph -->
-				</div>
-				<!-- /wp:group -->
-			</div>
-			<!-- /wp:column -->
-
-			<!-- wp:column -->
-			<div class="wp-block-column">
-				<!-- wp:group {"className":"construction-review-card","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group construction-review-card">
-					<!-- wp:paragraph {"className":"construction-review-card__meta"} -->
-					<p class="construction-review-card__meta"><strong>Mārtiņš L.</strong> · ★★★★★</p>
-					<!-- /wp:paragraph -->
-					<!-- wp:paragraph -->
-					<p>{$t( 'reviews.4' )}</p>
-					<!-- /wp:paragraph -->
-				</div>
-				<!-- /wp:group -->
-			</div>
-			<!-- /wp:column -->
-		</div>
-		<!-- /wp:columns -->
+		<!-- wp:group {"className":"construction-home-projects__grid","layout":{"type":"default"}} -->
+		<div class="wp-block-group construction-home-projects__grid">
+{$home_project_cards}		</div>
+		<!-- /wp:group -->
 	</div>
 	<!-- /wp:group -->
 </div>

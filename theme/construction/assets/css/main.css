@@ -60,8 +60,7 @@ body {
 .construction-header.alignfull,
 .construction-services.alignfull,
 .construction-process.alignfull,
-.construction-quality.alignfull,
-.construction-reviews.alignfull,
+.construction-home-projects.alignfull,
 .construction-faq.alignfull,
 .construction-contact.alignfull,
 .construction-credits.alignfull,
@@ -88,10 +87,8 @@ body {
 .construction-services.alignfull,
 .construction-process,
 .construction-process.alignfull,
-.construction-quality,
-.construction-quality.alignfull,
-.construction-reviews,
-.construction-reviews.alignfull,
+.construction-home-projects,
+.construction-home-projects.alignfull,
 .construction-faq,
 .construction-faq.alignfull,
 .construction-contact,
@@ -726,12 +723,16 @@ body.construction-menu-open {
 	margin: 0;
 }
 
+.construction-services__list {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 0;
+}
+
 .construction-service-card {
-	display: flex;
-	gap: 1rem;
+	display: block;
 	padding: 1rem 0;
 	border-bottom: 1px solid color-mix(in srgb, var(--bn-ink) 8%, transparent);
-	align-items: flex-start;
 }
 
 .construction-service-card:last-child {
@@ -739,7 +740,7 @@ body.construction-menu-open {
 }
 
 .construction-service-card h3 {
-	margin: 0 0 0.25rem;
+	margin: 0 0 0.35rem;
 	font-family: "Archivo", sans-serif;
 	font-size: 1.05rem;
 }
@@ -748,6 +749,7 @@ body.construction-menu-open {
 	margin: 0;
 	color: var(--bn-steel);
 	font-size: 0.95rem;
+	line-height: 1.5;
 }
 
 .construction-service-card__thumb {
@@ -1291,72 +1293,352 @@ p.construction-lang a[aria-current="true"] {
 	color: var(--bn-timber);
 }
 
+.construction-projects__intro {
+	margin: 0 0 1.35rem !important;
+	max-width: 40rem;
+	color: var(--bn-steel);
+	font-size: 1.02rem;
+	line-height: 1.55;
+}
+
 .construction-projects__grid {
 	display: grid !important;
 	grid-template-columns: 1fr;
-	gap: 0.65rem !important;
+	gap: 1.25rem !important;
 }
 
-.construction-projects__item {
+.construction-project-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
 	margin: 0 !important;
+	padding: 0 !important;
 	overflow: hidden;
-	border-radius: 14px;
-	background: var(--bn-mist);
+	border-radius: 16px;
+	background: color-mix(in srgb, var(--bn-mist) 88%, #fff);
+	border: 1px solid color-mix(in srgb, var(--bn-ink) 7%, transparent);
+	cursor: pointer;
+	transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-.construction-projects__item a.construction-lightbox {
-	display: block;
-	cursor: zoom-in;
+.construction-project-card:hover,
+.construction-project-card.is-active {
+	transform: translateY(-3px);
+	box-shadow: 0 18px 40px color-mix(in srgb, var(--bn-ink) 10%, transparent);
+}
+
+.construction-project-card.is-active {
+	border-color: color-mix(in srgb, var(--bn-timber) 55%, transparent);
+}
+
+.construction-project-card__cover {
+	margin: 0 !important;
 	line-height: 0;
+}
+
+.construction-project-card__cover a.construction-lightbox {
+	display: block;
+	cursor: pointer;
 	text-decoration: none;
 	color: inherit;
+	pointer-events: none;
 }
 
-.construction-projects__item img {
+.construction-project-card__cover img {
 	display: block;
 	width: 100%;
-	height: 100%;
 	aspect-ratio: 4 / 3;
 	object-fit: cover;
-	transition: transform 0.45s ease;
+	transition: transform 0.5s ease;
 }
 
-.construction-projects__item:hover img {
-	transform: scale(1.03);
+.construction-project-card:hover .construction-project-card__cover img {
+	transform: scale(1.04);
+}
+
+.construction-project-card__title {
+	margin: 0.95rem 1.05rem 0.3rem !important;
+	font-family: "Archivo", sans-serif;
+	font-size: 1.12rem;
+	line-height: 1.25;
+	letter-spacing: -0.02em;
+}
+
+.construction-project-card__text {
+	margin: 0 1.05rem 1.1rem !important;
+	color: var(--bn-steel);
+	font-size: 0.95rem;
+	line-height: 1.45;
+	flex: 1 1 auto;
+}
+
+.construction-project-card__more {
+	position: absolute !important;
+	width: 1px !important;
+	height: 1px !important;
+	padding: 0 !important;
+	margin: -1px !important;
+	overflow: hidden !important;
+	clip: rect(0, 0, 0, 0) !important;
+	white-space: nowrap !important;
+	border: 0 !important;
+}
+
+/* In-page project detail (top panel) */
+.construction-project-viewer {
+	display: none;
+	margin: 0 0 1.75rem;
+	padding: 0;
+}
+
+.construction-project-viewer.is-open {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1.25rem;
+	padding: 1rem;
+	border-radius: 18px;
+	background: color-mix(in srgb, var(--bn-mist) 70%, #fff);
+	border: 1px solid color-mix(in srgb, var(--bn-ink) 8%, transparent);
+}
+
+.construction-project-viewer__media {
+	display: grid;
+	gap: 0.75rem;
+}
+
+.construction-project-viewer__stage {
+	margin: 0;
+	overflow: hidden;
+	border-radius: 12px;
+	background: #111;
+	line-height: 0;
+}
+
+.construction-project-viewer__stage img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 16 / 10;
+	object-fit: cover;
+	transition: opacity 0.2s ease;
+}
+
+.construction-project-viewer__thumbs {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+	gap: 0.45rem;
+}
+
+.construction-project-viewer__thumb {
+	appearance: none;
+	border: 2px solid transparent;
+	padding: 0;
+	margin: 0;
+	border-radius: 8px;
+	overflow: hidden;
+	cursor: pointer;
+	background: var(--bn-mist);
+	line-height: 0;
+}
+
+.construction-project-viewer__thumb.is-active {
+	border-color: var(--bn-timber);
+}
+
+.construction-project-viewer__thumb img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+}
+
+.construction-project-viewer__meta {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	min-width: 0;
+}
+
+.construction-project-viewer__controls {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.4rem;
+}
+
+.construction-project-viewer__nav,
+.construction-project-viewer__close {
+	appearance: none;
+	width: 2.35rem;
+	height: 2.35rem;
+	border: 1px solid color-mix(in srgb, var(--bn-ink) 14%, transparent);
+	border-radius: 999px;
+	background: #fff;
+	color: var(--bn-ink);
+	font-size: 1.25rem;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.construction-project-viewer__nav:hover,
+.construction-project-viewer__close:hover {
+	border-color: var(--bn-timber);
+	color: var(--bn-timber);
+}
+
+.construction-project-viewer__title {
+	margin: 0;
+	font-family: "Archivo", sans-serif;
+	font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+	line-height: 1.2;
+	letter-spacing: -0.02em;
+	text-transform: uppercase;
+}
+
+.construction-project-viewer__text {
+	margin: 0;
+	color: var(--bn-steel);
+	font-size: 1rem;
+	line-height: 1.55;
 }
 
 @media (min-width: 640px) {
 	.construction-projects__grid {
 		grid-template-columns: repeat(2, 1fr);
-		gap: 0.85rem !important;
+		gap: 1.35rem !important;
+	}
+}
+
+@media (min-width: 900px) {
+	.construction-project-viewer.is-open {
+		grid-template-columns: 1.35fr 0.9fr;
+		gap: 1.75rem;
+		padding: 1.25rem;
+		align-items: start;
+	}
+
+	.construction-project-viewer__stage img {
+		min-height: 320px;
 	}
 }
 
 @media (min-width: 960px) {
 	.construction-projects__grid {
 		grid-template-columns: repeat(3, 1fr);
-		gap: 0.95rem !important;
+		gap: 1.5rem !important;
 	}
+}
 
-	.construction-projects__item:nth-child(1) {
-		grid-column: span 2;
-		grid-row: span 2;
+/* Homepage: Realizētie projekti teaser */
+.construction-home-projects__inner {
+	max-width: var(--bn-max);
+	margin-inline: auto;
+	width: 100%;
+}
+
+.construction-home-projects__head {
+	display: flex !important;
+	flex-wrap: wrap !important;
+	align-items: baseline !important;
+	justify-content: space-between !important;
+	gap: 0.65rem 1.5rem !important;
+	margin: 0 0 1.25rem !important;
+}
+
+.construction-home-projects__title {
+	margin: 0 !important;
+	font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+	line-height: 1.15;
+	letter-spacing: -0.02em;
+	font-weight: 700;
+}
+
+.construction-home-projects__all {
+	margin: 0 !important;
+	font-size: 0.95rem;
+	font-weight: 600;
+}
+
+.construction-home-projects__all a:hover {
+	color: var(--bn-timber);
+}
+
+.construction-home-projects__grid {
+	display: grid !important;
+	grid-template-columns: 1fr;
+	gap: 1.1rem !important;
+}
+
+.construction-home-projects__card {
+	margin: 0 !important;
+	padding: 0 !important;
+	overflow: hidden;
+	border-radius: 16px;
+	background: color-mix(in srgb, var(--bn-mist) 88%, #fff);
+	border: 1px solid color-mix(in srgb, var(--bn-ink) 7%, transparent);
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.construction-home-projects__card:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 16px 36px color-mix(in srgb, var(--bn-ink) 10%, transparent);
+}
+
+.construction-home-projects__media {
+	margin: 0 !important;
+	line-height: 0;
+}
+
+.construction-home-projects__media a {
+	display: block;
+	text-decoration: none;
+	color: inherit;
+}
+
+.construction-home-projects__media img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+	transition: transform 0.5s ease;
+}
+
+.construction-home-projects__card:hover .construction-home-projects__media img {
+	transform: scale(1.04);
+}
+
+.construction-home-projects__name {
+	margin: 0.85rem 1rem 0.25rem !important;
+	font-family: "Archivo", sans-serif;
+	font-size: 1.05rem;
+	line-height: 1.25;
+}
+
+.construction-home-projects__name a {
+	text-decoration: none;
+	color: inherit;
+}
+
+.construction-home-projects__name a:hover {
+	color: var(--bn-timber);
+}
+
+.construction-home-projects__blurb {
+	margin: 0 1rem 1rem !important;
+	color: var(--bn-steel);
+	font-size: 0.92rem;
+	line-height: 1.45;
+}
+
+@media (min-width: 640px) {
+	.construction-home-projects__grid {
+		grid-template-columns: repeat(2, 1fr);
 	}
+}
 
-	.construction-projects__item:nth-child(1) img {
-		aspect-ratio: auto;
-		min-height: 100%;
-		height: 100%;
-	}
-
-	.construction-projects__item:nth-child(6),
-	.construction-projects__item:nth-child(11) {
-		grid-column: span 2;
-	}
-
-	.construction-projects__item:nth-child(6) img,
-	.construction-projects__item:nth-child(11) img {
-		aspect-ratio: 16 / 9;
+@media (min-width: 960px) {
+	.construction-home-projects__grid {
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.25rem !important;
 	}
 }
 
@@ -1605,6 +1887,16 @@ p.construction-lang a[aria-current="true"] {
 		grid-template-columns: 0.9fr 1.1fr;
 		gap: 2.5rem;
 		align-items: start;
+	}
+
+	.construction-services__list {
+		grid-template-columns: 1fr 1fr;
+		column-gap: 1.5rem;
+		row-gap: 0;
+	}
+
+	.construction-service-card {
+		padding: 1rem 0;
 	}
 
 	.construction-contact__grid {
