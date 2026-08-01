@@ -155,6 +155,7 @@ function construction_homepage_content_for_lang( string $lang ): string {
 		$slug  = sanitize_title( (string) $entry['slug'] );
 		$cover = (string) $entry['cover'];
 		$title = $t( "projects.item.{$slug}.title" );
+		$label = $ta( "projects.item.{$slug}.title" );
 		$text  = $t( "projects.item.{$slug}.text" );
 		$href  = esc_url( construction_projects_url_for_lang( $lang, $slug ) );
 		$alt   = $title;
@@ -170,16 +171,19 @@ function construction_homepage_content_for_lang( string $lang ): string {
 			false,
 			false,
 			'construction-projects',
-			$href
+			''
 		);
 		$home_project_cards .= <<<CARD
 			<!-- wp:group {"className":"construction-home-projects__card","layout":{"type":"default"}} -->
 			<div class="wp-block-group construction-home-projects__card">
 {$cover_block}				<!-- wp:heading {"level":3,"className":"construction-home-projects__name"} -->
-				<h3 class="wp-block-heading construction-home-projects__name"><a href="{$href}">{$title}</a></h3>
+				<h3 class="wp-block-heading construction-home-projects__name">{$title}</h3>
 				<!-- /wp:heading -->
 				<!-- wp:paragraph {"className":"construction-home-projects__blurb"} -->
 				<p class="construction-home-projects__blurb">{$text}</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"className":"construction-home-projects__card-hit"} -->
+				<p class="construction-home-projects__card-hit"><a href="{$href}" aria-label="{$label}">{$title}</a></p>
 				<!-- /wp:paragraph -->
 			</div>
 			<!-- /wp:group -->

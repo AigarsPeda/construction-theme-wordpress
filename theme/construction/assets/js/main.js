@@ -516,8 +516,10 @@
 		track.appendChild(clone);
 
 		const speed = 32; // px per second — same calm pace as before
+		const dragThreshold = 6;
 		let loopWidth = 0;
 		let offset = 0;
+		let pointerActive = false;
 		let dragging = false;
 		let dragMoved = false;
 		let pointerId = null;
@@ -551,41 +553,16 @@
 			apply();
 		};
 
-		const onPointerDown = (event) => {
-			if (event.button !== undefined && event.button !== 0) {
+		const endPointer = (event) => {
+			if (!pointerActive || (pointerId !== null && event.pointerId !== pointerId)) {
 				return;
 			}
-			dragging = true;
-			dragMoved = false;
-			pointerId = event.pointerId;
-			startX = event.clientX;
-			startOffset = offset;
-			marquee.classList.add('is-dragging');
-			if (marquee.setPointerCapture) {
-				marquee.setPointerCapture(event.pointerId);
-			}
-		};
-
-		const onPointerMove = (event) => {
-			if (!dragging || (pointerId !== null && event.pointerId !== pointerId)) {
-				return;
-			}
-			const delta = event.clientX - startX;
-			if (Math.abs(delta) > 4) {
-				dragMoved = true;
-			}
-			offset = wrap(startOffset + delta);
-			apply();
-		};
-
-		const onPointerUp = (event) => {
-			if (!dragging || (pointerId !== null && event.pointerId !== pointerId)) {
-				return;
-			}
+			pointerActive = false;
 			dragging = false;
 			pointerId = null;
 			marquee.classList.remove('is-dragging');
 			lastTs = 0;
+			// Only block navigation after a real scrub — plain clicks must open the project.
 			if (dragMoved) {
 				const suppressClick = (clickEvent) => {
 					clickEvent.preventDefault();
@@ -596,10 +573,43 @@
 			}
 		};
 
+		const onPointerDown = (event) => {
+			if (event.button !== undefined && event.button !== 0) {
+				return;
+			}
+			// Do not capture yet — capturing on every down swallows card link clicks.
+			pointerActive = true;
+			dragging = false;
+			dragMoved = false;
+			pointerId = event.pointerId;
+			startX = event.clientX;
+			startOffset = offset;
+		};
+
+		const onPointerMove = (event) => {
+			if (!pointerActive || (pointerId !== null && event.pointerId !== pointerId)) {
+				return;
+			}
+			const delta = event.clientX - startX;
+			if (!dragging) {
+				if (Math.abs(delta) < dragThreshold) {
+					return;
+				}
+				dragging = true;
+				dragMoved = true;
+				marquee.classList.add('is-dragging');
+				if (marquee.setPointerCapture) {
+					marquee.setPointerCapture(event.pointerId);
+				}
+			}
+			offset = wrap(startOffset + delta);
+			apply();
+		};
+
 		marquee.addEventListener('pointerdown', onPointerDown);
 		marquee.addEventListener('pointermove', onPointerMove);
-		marquee.addEventListener('pointerup', onPointerUp);
-		marquee.addEventListener('pointercancel', onPointerUp);
+		marquee.addEventListener('pointerup', endPointer);
+		marquee.addEventListener('pointercancel', endPointer);
 
 		marquee.addEventListener(
 			'wheel',
