@@ -26,6 +26,113 @@ function construction_string( string $key, string $lang ): string {
 }
 
 /**
+ * Service journey phases for the homepage services section.
+ *
+ * @return list<array{key: string, items: list<int>}>
+ */
+function construction_service_phases(): array {
+	return array(
+		array(
+			'key'   => 'before',
+			'items' => array( 1, 2, 4 ),
+		),
+		array(
+			'key'   => 'during',
+			'items' => array( 5, 6, 3 ),
+		),
+		array(
+			'key'   => 'control',
+			'items' => array( 7, 8 ),
+		),
+	);
+}
+
+/**
+ * Block markup for one language's services journey (seed / rebuild).
+ * Chapter title left, phase sections stacked on the right (desktop).
+ */
+function construction_services_section_markup( string $lang ): string {
+	$t = static function ( string $key ) use ( $lang ): string {
+		return esc_html( construction_string( $key, $lang ) );
+	};
+
+	$phases = '';
+	foreach ( construction_service_phases() as $phase ) {
+		$key   = (string) $phase['key'];
+		$num   = $t( "services.phase.{$key}.num" );
+		$label = $t( "services.phase.{$key}.label" );
+		$lead  = $t( "services.phase.{$key}.lead" );
+		$items = '';
+		foreach ( $phase['items'] as $i ) {
+			$i     = (int) $i;
+			$title = $t( "services.item{$i}.title" );
+			$text  = $t( "services.item{$i}.text" );
+			$items .= <<<ITEM
+			<!-- wp:group {"className":"construction-service-card","layout":{"type":"default"}} -->
+			<div class="wp-block-group construction-service-card">
+				<!-- wp:heading {"level":3,"className":"construction-service-card__title"} -->
+				<h3 class="wp-block-heading construction-service-card__title">{$title}</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"className":"construction-service-card__text"} -->
+				<p class="construction-service-card__text">{$text}</p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+
+ITEM;
+		}
+
+		$phases .= <<<PHASE
+		<!-- wp:group {"className":"construction-services-phase construction-services-phase--{$key}","layout":{"type":"default"}} -->
+		<div class="wp-block-group construction-services-phase construction-services-phase--{$key}">
+			<!-- wp:group {"className":"construction-services-phase__head","layout":{"type":"default"}} -->
+			<div class="wp-block-group construction-services-phase__head">
+				<!-- wp:heading {"level":2,"className":"construction-services-phase__label"} -->
+				<h2 class="wp-block-heading construction-services-phase__label"><span class="construction-services-phase__num">{$num}</span> {$label}</h2>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"className":"construction-services-phase__lead"} -->
+				<p class="construction-services-phase__lead">{$lead}</p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+			<!-- wp:group {"className":"construction-services-phase__items","layout":{"type":"default"}} -->
+			<div class="wp-block-group construction-services-phase__items">
+{$items}			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:group -->
+
+PHASE;
+	}
+
+	return <<<HTML
+<!-- wp:group {"align":"full","className":"construction-services","layout":{"type":"default"},"anchor":"services"} -->
+<div class="wp-block-group alignfull construction-services" id="services">
+	<!-- wp:group {"className":"construction-services__layout","layout":{"type":"default"}} -->
+	<div class="wp-block-group construction-services__layout">
+		<!-- wp:group {"className":"construction-services__intro","layout":{"type":"default"}} -->
+		<div class="wp-block-group construction-services__intro">
+			<!-- wp:heading -->
+			<h2 class="wp-block-heading">{$t( 'services.title' )}</h2>
+			<!-- /wp:heading -->
+			<!-- wp:paragraph -->
+			<p>{$t( 'services.intro' )}</p>
+			<!-- /wp:paragraph -->
+		</div>
+		<!-- /wp:group -->
+
+		<!-- wp:group {"className":"construction-services__journey","layout":{"type":"default"}} -->
+		<div class="wp-block-group construction-services__journey">
+{$phases}		</div>
+		<!-- /wp:group -->
+	</div>
+	<!-- /wp:group -->
+</div>
+<!-- /wp:group -->
+HTML;
+}
+
+/**
  * Homepage block content for one language (visual editor friendly).
  */
 function construction_homepage_content_for_lang( string $lang ): string {
@@ -40,26 +147,8 @@ function construction_homepage_content_for_lang( string $lang ): string {
 		return esc_attr( construction_string( $key, $lang ) );
 	};
 
-	$hero_img     = construction_media_image_block( 'hero', 'construction-hero__image', construction_string( 'hero.alt', $lang ), 'construction-hero', false, true );
-
-	$service_cards = '';
-	for ( $i = 1; $i <= 8; $i++ ) {
-		$title = $t( "services.item{$i}.title" );
-		$text  = $t( "services.item{$i}.text" );
-		$service_cards .= <<<ITEM
-			<!-- wp:group {"className":"construction-service-card","layout":{"type":"constrained"}} -->
-			<div class="wp-block-group construction-service-card">
-				<!-- wp:heading {"level":3} -->
-				<h3 class="wp-block-heading">{$title}</h3>
-				<!-- /wp:heading -->
-				<!-- wp:paragraph -->
-				<p>{$text}</p>
-				<!-- /wp:paragraph -->
-			</div>
-			<!-- /wp:group -->
-
-ITEM;
-	}
+	$hero_img         = construction_media_image_block( 'hero', 'construction-hero__image', construction_string( 'hero.alt', $lang ), 'construction-hero', false, true );
+	$services_section = construction_services_section_markup( $lang );
 
 	$home_project_cards = '';
 	foreach ( construction_project_entries() as $entry ) {
@@ -164,130 +253,7 @@ ITEM;
 </div>
 <!-- /wp:group -->
 
-<!-- wp:group {"align":"full","className":"construction-services","layout":{"type":"default"},"anchor":"services"} -->
-<div class="wp-block-group alignfull construction-services" id="services">
-	<!-- wp:columns {"className":"construction-services__grid"} -->
-	<div class="wp-block-columns construction-services__grid">
-		<!-- wp:column {"width":"42%","className":"construction-services__intro"} -->
-		<div class="wp-block-column construction-services__intro" style="flex-basis:42%">
-			<!-- wp:heading -->
-			<h2 class="wp-block-heading">{$t( 'services.title' )}</h2>
-			<!-- /wp:heading -->
-
-			<!-- wp:paragraph -->
-			<p>{$t( 'services.intro' )}</p>
-			<!-- /wp:paragraph -->
-		</div>
-		<!-- /wp:column -->
-
-		<!-- wp:column {"width":"58%","className":"construction-services__list"} -->
-		<div class="wp-block-column construction-services__list" style="flex-basis:58%">
-{$service_cards}		</div>
-		<!-- /wp:column -->
-	</div>
-	<!-- /wp:columns -->
-</div>
-<!-- /wp:group -->
-
-<!-- wp:group {"align":"full","className":"construction-process","layout":{"type":"default"},"anchor":"process"} -->
-<div class="wp-block-group alignfull construction-process" id="process">
-	<!-- wp:group {"className":"construction-process__inner","layout":{"type":"default"}} -->
-	<div class="wp-block-group construction-process__inner">
-		<!-- wp:group {"className":"construction-process__header","layout":{"type":"default"}} -->
-		<div class="wp-block-group construction-process__header">
-			<!-- wp:paragraph {"className":"construction-eyebrow"} -->
-			<p class="construction-eyebrow">{$t( 'process.eyebrow' )}</p>
-			<!-- /wp:paragraph -->
-
-			<!-- wp:heading -->
-			<h2 class="wp-block-heading">{$t( 'process.title' )}</h2>
-			<!-- /wp:heading -->
-
-			<!-- wp:paragraph {"className":"construction-process__intro"} -->
-			<p class="construction-process__intro">{$t( 'process.intro' )}</p>
-			<!-- /wp:paragraph -->
-		</div>
-		<!-- /wp:group -->
-
-		<!-- wp:columns {"className":"construction-process__grid"} -->
-		<div class="wp-block-columns construction-process__grid">
-			<!-- wp:column -->
-			<div class="wp-block-column">
-				<!-- wp:group {"className":"construction-process-step","layout":{"type":"default"}} -->
-				<div class="wp-block-group construction-process-step">
-					<!-- wp:paragraph {"className":"construction-process-step__num"} -->
-					<p class="construction-process-step__num">01</p>
-					<!-- /wp:paragraph -->
-					<!-- wp:heading {"level":3} -->
-					<h3 class="wp-block-heading">{$t( 'process.1.title' )}</h3>
-					<!-- /wp:heading -->
-					<!-- wp:paragraph -->
-					<p>{$t( 'process.1.text' )}</p>
-					<!-- /wp:paragraph -->
-				</div>
-				<!-- /wp:group -->
-			</div>
-			<!-- /wp:column -->
-
-			<!-- wp:column -->
-			<div class="wp-block-column">
-				<!-- wp:group {"className":"construction-process-step","layout":{"type":"default"}} -->
-				<div class="wp-block-group construction-process-step">
-					<!-- wp:paragraph {"className":"construction-process-step__num"} -->
-					<p class="construction-process-step__num">02</p>
-					<!-- /wp:paragraph -->
-					<!-- wp:heading {"level":3} -->
-					<h3 class="wp-block-heading">{$t( 'process.2.title' )}</h3>
-					<!-- /wp:heading -->
-					<!-- wp:paragraph -->
-					<p>{$t( 'process.2.text' )}</p>
-					<!-- /wp:paragraph -->
-				</div>
-				<!-- /wp:group -->
-			</div>
-			<!-- /wp:column -->
-
-			<!-- wp:column -->
-			<div class="wp-block-column">
-				<!-- wp:group {"className":"construction-process-step","layout":{"type":"default"}} -->
-				<div class="wp-block-group construction-process-step">
-					<!-- wp:paragraph {"className":"construction-process-step__num"} -->
-					<p class="construction-process-step__num">03</p>
-					<!-- /wp:paragraph -->
-					<!-- wp:heading {"level":3} -->
-					<h3 class="wp-block-heading">{$t( 'process.3.title' )}</h3>
-					<!-- /wp:heading -->
-					<!-- wp:paragraph -->
-					<p>{$t( 'process.3.text' )}</p>
-					<!-- /wp:paragraph -->
-				</div>
-				<!-- /wp:group -->
-			</div>
-			<!-- /wp:column -->
-
-			<!-- wp:column -->
-			<div class="wp-block-column">
-				<!-- wp:group {"className":"construction-process-step","layout":{"type":"default"}} -->
-				<div class="wp-block-group construction-process-step">
-					<!-- wp:paragraph {"className":"construction-process-step__num"} -->
-					<p class="construction-process-step__num">04</p>
-					<!-- /wp:paragraph -->
-					<!-- wp:heading {"level":3} -->
-					<h3 class="wp-block-heading">{$t( 'process.4.title' )}</h3>
-					<!-- /wp:heading -->
-					<!-- wp:paragraph -->
-					<p>{$t( 'process.4.text' )}</p>
-					<!-- /wp:paragraph -->
-				</div>
-				<!-- /wp:group -->
-			</div>
-			<!-- /wp:column -->
-		</div>
-		<!-- /wp:columns -->
-	</div>
-	<!-- /wp:group -->
-</div>
-<!-- /wp:group -->
+{$services_section}
 
 <!-- wp:group {"align":"full","className":"construction-home-projects","layout":{"type":"default"},"anchor":"realized-projects"} -->
 <div class="wp-block-group alignfull construction-home-projects" id="realized-projects">

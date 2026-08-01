@@ -405,14 +405,59 @@ function construction_strings(): array {
 			'ru' => 'Готовый проект',
 		),
 		'services.title'       => array(
-			'lv' => 'Būvniecība, vadība un uzraudzība vienā komandā',
-			'en' => 'Construction, management, and supervision in one team',
-			'ru' => 'Строительство, управление и надзор в одной команде',
+			'lv' => 'Viss process, vienā komandā',
+			'en' => 'The full process, one team',
+			'ru' => 'Весь процесс, одна команда',
 		),
 		'services.intro'       => array(
-			'lv' => 'No plānošanas līdz nodošanai — skaidra būvniecības vadība, uzraudzība objektā un caurspīdīgs process.',
-			'en' => 'From planning to handover — clear construction management, on-site supervision, and a transparent process.',
-			'ru' => 'От планирования до сдачи — ясное управление строительством, надзор на объекте и прозрачный процесс.',
+			'lv' => 'No idejas līdz nodošanai trīs skaidros posmos. Katrā zināt, kas notiek un ko jūs iegūstat.',
+			'en' => 'From idea to handover in three clear stages. At each one, you know what happens and what you get.',
+			'ru' => 'От идеи до сдачи в трёх ясных этапах. На каждом понятно, что происходит и что вы получаете.',
+		),
+		'services.phase.before.num' => array(
+			'lv' => '01',
+			'en' => '01',
+			'ru' => '01',
+		),
+		'services.phase.before.label' => array(
+			'lv' => 'Pirms būvniecības',
+			'en' => 'Before construction',
+			'ru' => 'До строительства',
+		),
+		'services.phase.before.lead' => array(
+			'lv' => 'Skaidri lēmumi, budžets un līgumi, pirms darbi sākas.',
+			'en' => 'Clear decisions, budget, and contracts before work starts.',
+			'ru' => 'Ясные решения, бюджет и договоры до начала работ.',
+		),
+		'services.phase.during.num' => array(
+			'lv' => '02',
+			'en' => '02',
+			'ru' => '02',
+		),
+		'services.phase.during.label' => array(
+			'lv' => 'Būvniecības laikā',
+			'en' => 'During construction',
+			'ru' => 'Во время строительства',
+		),
+		'services.phase.during.lead' => array(
+			'lv' => 'Vadība un uzraudzība objektā. Jūsu intereses priekšplānā.',
+			'en' => 'Management and supervision on site. Your interests first.',
+			'ru' => 'Управление и надзор на объекте. Ваши интересы в приоритете.',
+		),
+		'services.phase.control.num' => array(
+			'lv' => '03',
+			'en' => '03',
+			'ru' => '03',
+		),
+		'services.phase.control.label' => array(
+			'lv' => 'Kontrole un nodošana',
+			'en' => 'Control and handover',
+			'ru' => 'Контроль и сдача',
+		),
+		'services.phase.control.lead' => array(
+			'lv' => 'Naudas plūsma un dokumenti, gatavi pārbaudei un nodošanai.',
+			'en' => 'Money flow and documents, ready for audit and handover.',
+			'ru' => 'Денежный поток и документы, готовые к проверке и сдаче.',
 		),
 		'services.item1.title' => array(
 			'lv' => 'Būvniecības konsultācijas',
@@ -420,9 +465,9 @@ function construction_strings(): array {
 			'ru' => 'Строительные консультации',
 		),
 		'services.item1.text'  => array(
-			'lv' => 'Palīdzam izvērtēt projekta iespējas, riskus un soļus pirms būvdarbu sākuma — lai lēmumi būtu skaidri un pamatoti.',
-			'en' => 'We help assess project options, risks, and next steps before work starts — so decisions are clear and well grounded.',
-			'ru' => 'Помогаем оценить возможности проекта, риски и шаги до начала работ — чтобы решения были ясными и обоснованными.',
+			'lv' => 'Iespējas, riski un nākamie soļi, skaidri pirms starta.',
+			'en' => 'Options, risks, and next steps, clear before you start.',
+			'ru' => 'Возможности, риски и следующие шаги, ясно до старта.',
 		),
 		'services.item2.title' => array(
 			'lv' => 'Līgumu un iepirkumu vadība',
@@ -430,9 +475,9 @@ function construction_strings(): array {
 			'ru' => 'Управление договорами и закупками',
 		),
 		'services.item2.text'  => array(
-			'lv' => 'Sagatavojam un vadām līgumus un iepirkumus, salīdzinām piedāvājumus un sekojam, lai nosacījumi tiktu izpildīti.',
-			'en' => 'We prepare and manage contracts and procurement, compare bids, and follow through so terms are met.',
-			'ru' => 'Готовим и ведём договоры и закупки, сравниваем предложения и контролируем выполнение условий.',
+			'lv' => 'Salīdzināti piedāvājumi un izpildīti līguma nosacījumi.',
+			'en' => 'Compared bids and contracts that get followed through.',
+			'ru' => 'Сравненные предложения и выполненные условия договора.',
 		),
 		'services.item3.title' => array(
 			'lv' => 'Klienta interešu aizstāvība',
@@ -440,9 +485,9 @@ function construction_strings(): array {
 			'ru' => 'Защита интересов клиента',
 		),
 		'services.item3.text'  => array(
-			'lv' => 'Pārstāvam jūsu intereses sarunās ar būvniekiem un piegādātājiem — kvalitāte, termiņi un budžets ir prioritāte.',
-			'en' => 'We represent your interests with contractors and suppliers — quality, deadlines, and budget stay the priority.',
-			'ru' => 'Представляем ваши интересы в переговорах с подрядчиками и поставщиками — качество, сроки и бюджет в приоритете.',
+			'lv' => 'Kvalitāte, termiņi un budžets. Mēs esam jūsu pusē.',
+			'en' => 'Quality, deadlines, and budget. We take your side.',
+			'ru' => 'Качество, сроки и бюджет. Мы на вашей стороне.',
 		),
 		'services.item4.title' => array(
 			'lv' => 'Izmaksu plānošana',
@@ -450,9 +495,9 @@ function construction_strings(): array {
 			'ru' => 'Планирование затрат',
 		),
 		'services.item4.text'  => array(
-			'lv' => 'Veidojam tāmi un izmaksu plānu, lai budžets būtu caurspīdīgs un izmaiņas būtu redzamas laikus.',
-			'en' => 'We build estimates and a cost plan so the budget stays transparent and changes are visible early.',
-			'ru' => 'Составляем смету и план затрат, чтобы бюджет был прозрачным, а изменения видны вовремя.',
+			'lv' => 'Caurspīdīga tāme. Izmaiņas redzamas laikus.',
+			'en' => 'A transparent estimate. Changes visible early.',
+			'ru' => 'Прозрачная смета. Изменения видны вовремя.',
 		),
 		'services.item5.title' => array(
 			'lv' => 'Projektu vadība',
@@ -460,9 +505,9 @@ function construction_strings(): array {
 			'ru' => 'Управление проектами',
 		),
 		'services.item5.text'  => array(
-			'lv' => 'Koordinējam grafiku, darbuzņēmējus un komunikāciju — lai projekts virzītos saskaņā ar plānu un termiņiem.',
-			'en' => 'We coordinate the schedule, contractors, and communication — so the project stays on plan and on time.',
-			'ru' => 'Координируем график, подрядчиков и коммуникацию — чтобы проект шёл по плану и в сроки.',
+			'lv' => 'Grafiks un darbuzņēmēji. Projekts iet pēc plāna.',
+			'en' => 'Schedule and contractors. The project stays on plan.',
+			'ru' => 'График и подрядчики. Проект идёт по плану.',
 		),
 		'services.item6.title' => array(
 			'lv' => 'Būvuzraudzība',
@@ -470,9 +515,9 @@ function construction_strings(): array {
 			'ru' => 'Строительный надзор',
 		),
 		'services.item6.text'  => array(
-			'lv' => 'Uzraugām darbus objektā — pārbaudes, atbilstība projektam un kvalitātes kontrole katrā posmā.',
-			'en' => 'We supervise work on site — inspections, compliance with the design, and quality control at every stage.',
-			'ru' => 'Контролируем работы на объекте — проверки, соответствие проекту и контроль качества на каждом этапе.',
+			'lv' => 'Pārbaudes objektā. Atbilstība projektam un kvalitātei.',
+			'en' => 'On-site checks. Design compliance and quality.',
+			'ru' => 'Проверки на объекте. Соответствие проекту и качеству.',
 		),
 		'services.item7.title' => array(
 			'lv' => 'Finanšu kontrole',
@@ -480,9 +525,9 @@ function construction_strings(): array {
 			'ru' => 'Финансовый контроль',
 		),
 		'services.item7.text'  => array(
-			'lv' => 'Sekojam maksājumiem, aktiem un budžeta izlietojumam, lai izmaksas nepaliktu ārpus kontroles.',
-			'en' => 'We track payments, certificates, and budget spend so costs do not drift out of control.',
-			'ru' => 'Отслеживаем платежи, акты и исполнение бюджета, чтобы затраты не выходили из-под контроля.',
+			'lv' => 'Maksājumi un budžets. Izmaksas paliek kontrolē.',
+			'en' => 'Payments and budget. Costs stay under control.',
+			'ru' => 'Платежи и бюджет. Затраты под контролем.',
 		),
 		'services.item8.title' => array(
 			'lv' => 'Dokumentācijas pārvaldība',
@@ -490,9 +535,9 @@ function construction_strings(): array {
 			'ru' => 'Управление документацией',
 		),
 		'services.item8.text'  => array(
-			'lv' => 'Sakārtojam un uzturam projekta dokumentāciju — akti, atskaites un materiāli gatavi nodošanai un pārbaudei.',
-			'en' => 'We organise and maintain project documentation — certificates, reports, and records ready for handover and audit.',
-			'ru' => 'Организуем и ведём проектную документацию — акты, отчёты и материалы готовы к сдаче и проверке.',
+			'lv' => 'Akti un atskaites, gatavi nodošanai.',
+			'en' => 'Certificates and reports, ready for handover.',
+			'ru' => 'Акты и отчёты, готовые к сдаче.',
 		),
 		'quality.title'        => array(
 			'lv' => 'Ātri termiņi un augsta darba kvalitāte',

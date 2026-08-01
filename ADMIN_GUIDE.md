@@ -130,7 +130,7 @@ No extra setting — same logo / phone / email as desktop.
 
 | What | Where |
 |---|---|
-| Hero, services, FAQ, realized projects, projects page | **Pages → Edit** (block editor) |
+| Hero, services (intro + 3 vertical phase sections), FAQ, realized projects, projects page | **Pages → Edit** (block editor) |
 | Browser tab title, meta, focus keyword | **Rank Math** on that page |
 | Logo, phone, email (header / mobile menu) | **Appearance → Construction** |
 | Site name | **Settings → General** |

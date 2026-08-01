@@ -674,7 +674,7 @@ body.construction-menu-open {
 }
 
 /* ——— Shared sections ——— */
-.construction-services__grid,
+.construction-services__layout,
 .construction-process__inner,
 .construction-quality__inner,
 .construction-contact__grid,
@@ -697,6 +697,7 @@ body.construction-menu-open {
 }
 
 .construction-services h2,
+.construction-services-phase h2,
 .construction-process h2,
 .construction-quality h2,
 .construction-faq h2,
@@ -711,45 +712,155 @@ body.construction-menu-open {
 }
 
 /* ——— Services ——— */
-.construction-services__grid {
+/*
+ * Chapter title left, phase headings + lists stacked on the right.
+ * Mobile: stack chapter → journey.
+ */
+
+.construction-services__layout {
 	display: grid;
 	grid-template-columns: 1fr;
-	gap: 1.75rem;
+	gap: clamp(2rem, 4vw, 3rem);
+	max-width: var(--bn-max);
+	width: 100%;
+	margin-inline: auto;
+}
+
+.construction-services__intro {
+	max-width: 22rem;
+}
+
+.construction-services__intro h2 {
+	max-width: 14ch;
+	margin: 0 0 0.75rem;
+	text-align: left;
 }
 
 .construction-services__intro p {
-	color: var(--bn-steel);
-	max-width: 36rem;
 	margin: 0;
+	color: var(--bn-steel);
+	font-size: clamp(1.02rem, 2vw, 1.1rem);
+	line-height: 1.65;
+	text-align: left;
 }
 
-.construction-services__list {
+.construction-services__journey {
+	display: flex;
+	flex-direction: column;
+	gap: clamp(2rem, 4vw, 2.75rem);
+	min-width: 0;
+}
+
+.construction-services-phase {
+	padding: 0;
+	background: transparent;
+}
+
+.construction-services-phase + .construction-services-phase {
+	padding-top: clamp(1.75rem, 3.5vw, 2.25rem);
+	border-top: 1px solid color-mix(in srgb, var(--bn-ink) 9%, transparent);
+}
+
+.construction-services-phase__head {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.5rem;
+	margin-bottom: 1rem;
+	max-width: 36rem;
+}
+
+.construction-services .construction-services-phase__label {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0.5rem 0.7rem;
+	margin: 0;
+	font-family: "Archivo", sans-serif;
+	font-size: clamp(1.25rem, 2.6vw, 1.55rem);
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	line-height: 1.2;
+	text-align: left;
+}
+
+.construction-services-phase__num {
+	display: inline-block;
+	margin: 0;
+	font-family: "Archivo", sans-serif;
+	font-size: 0.85em;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	line-height: 1;
+	color: var(--bn-timber);
+	flex: 0 0 auto;
+}
+
+.construction-services-phase__lead {
+	margin: 0;
+	color: var(--bn-steel);
+	font-size: 1rem;
+	line-height: 1.65;
+	max-width: 34rem;
+}
+
+.construction-services-phase__items {
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: 0;
+	margin: 0;
+	padding-top: 0.25rem;
+	border-top: 1px solid color-mix(in srgb, var(--bn-ink) 8%, transparent);
 }
 
 .construction-service-card {
 	display: block;
-	padding: 1rem 0;
-	border-bottom: 1px solid color-mix(in srgb, var(--bn-ink) 8%, transparent);
+	padding: 1rem 0 1.05rem;
+	border-bottom: 1px solid color-mix(in srgb, var(--bn-ink) 7%, transparent);
+}
+
+.construction-service-card.is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)),
+.construction-service-card > * {
+	max-width: none !important;
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+	padding-left: 0;
+	padding-right: 0;
+	text-indent: 0;
+}
+
+.construction-service-card.is-layout-flow > .construction-service-card__text,
+.construction-service-card.is-layout-constrained > .construction-service-card__text,
+.construction-service-card.is-layout-flow > p,
+.construction-service-card.is-layout-constrained > p {
+	margin-block-start: 0 !important;
+	margin-block-end: 0 !important;
+	margin-inline: 0 !important;
 }
 
 .construction-service-card:last-child {
 	border-bottom: 0;
+	padding-bottom: 0;
 }
 
+.construction-service-card__title,
 .construction-service-card h3 {
-	margin: 0 0 0.35rem;
+	margin: 0 0 0.3rem;
 	font-family: "Archivo", sans-serif;
-	font-size: 1.05rem;
+	font-size: clamp(1.02rem, 1.6vw, 1.1rem);
+	font-weight: 600;
+	line-height: 1.35;
+	letter-spacing: -0.01em;
 }
 
+.construction-service-card__text,
 .construction-service-card p {
 	margin: 0;
+	padding: 0;
 	color: var(--bn-steel);
-	font-size: 0.95rem;
-	line-height: 1.5;
+	font-size: 0.96rem;
+	line-height: 1.65;
+	max-width: none;
 }
 
 .construction-service-card__thumb {
@@ -1835,13 +1946,18 @@ body.has-project-modal {
 	.construction-service-card,
 	.construction-quality__card,
 	.construction-review-card {
-		transition: transform 0.25s ease;
+		transition: color 0.2s ease;
 	}
 
-	.construction-service-card:hover,
+	.construction-service-card:hover .construction-service-card__title,
+	.construction-service-card:hover h3 {
+		color: color-mix(in srgb, var(--bn-ink) 82%, var(--bn-timber));
+	}
+
 	.construction-quality__card:hover,
 	.construction-review-card:hover {
 		transform: translateY(-2px);
+		transition: transform 0.25s ease;
 	}
 }
 
@@ -1907,20 +2023,15 @@ body.has-project-modal {
 
 /* ——— ≥781px ——— */
 @media (min-width: 781px) {
-	.construction-services__grid {
-		grid-template-columns: 0.9fr 1.1fr;
-		gap: 2.5rem;
+	.construction-services__layout {
+		grid-template-columns: minmax(13rem, 0.85fr) minmax(0, 1.25fr);
+		column-gap: clamp(2.5rem, 5vw, 4.5rem);
 		align-items: start;
 	}
 
-	.construction-services__list {
-		grid-template-columns: 1fr 1fr;
-		column-gap: 1.5rem;
-		row-gap: 0;
-	}
-
-	.construction-service-card {
-		padding: 1rem 0;
+	.construction-services__intro {
+		position: sticky;
+		top: calc(var(--bn-header-h) + 1.25rem);
 	}
 
 	.construction-contact__grid {
