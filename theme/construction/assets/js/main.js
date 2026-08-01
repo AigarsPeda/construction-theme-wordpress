@@ -4,6 +4,8 @@
 (() => {
 	'use strict';
 
+	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 	document.querySelectorAll('a[href^="#"]').forEach((link) => {
 		link.addEventListener('click', (event) => {
 			const id = link.getAttribute('href');
@@ -89,25 +91,10 @@
 		});
 	})();
 
-	// Projekti page: open each project in an animated modal (grid stays put).
-	const projectsRoot = document.querySelector('.construction-projects');
-	if (projectsRoot && projectsRoot.querySelector('.construction-project-card')) {
-		const grid = projectsRoot.querySelector('.construction-projects__grid');
-		const cards = Array.from(projectsRoot.querySelectorAll('.construction-project-card'));
-		const legacyViewer = projectsRoot.querySelector('.construction-project-viewer');
-		if (legacyViewer) {
-			legacyViewer.hidden = true;
-			legacyViewer.innerHTML = '';
-		}
-
-		const labelClose = projectsRoot.getAttribute('data-label-close') || 'Close';
-		const labelPrev = projectsRoot.getAttribute('data-label-prev') || 'Previous';
-		const labelNext = projectsRoot.getAttribute('data-label-next') || 'Next';
-		const reduceMotionProjects = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		let activeIndex = -1;
-		let activeImageIndex = 0;
-		let lastFocus = null;
-
+	/**
+	 * Shared project modal (projects page + homepage teaser).
+	 */
+	const ensureProjectModal = () => {
 		let modal = document.querySelector('.construction-project-modal');
 		if (!modal) {
 			modal = document.createElement('div');
@@ -123,11 +110,32 @@
 			`;
 			document.body.appendChild(modal);
 		}
+		return modal;
+	};
+
+	const bindProjectModal = ({
+		getCards,
+		titleSelector,
+		textSelector,
+		getImageLinks,
+		labelClose,
+		labelPrev,
+		labelNext,
+		hashSync = false,
+		openPageUrl = '',
+		openPageLabel = '',
+		glass = false,
+	}) => {
+		const modal = ensureProjectModal();
 		const modalBody = modal.querySelector('.construction-project-modal__body');
 		const modalDialog = modal.querySelector('.construction-project-modal__dialog');
+		let activeIndex = -1;
+		let activeImageIndex = 0;
+		let lastFocus = null;
+		let ownsOpen = false;
 
 		const getCardImages = (card) => {
-			const links = Array.from(card.querySelectorAll('a.construction-lightbox[href]'));
+			const links = getImageLinks(card);
 			return links
 				.map((link) => {
 					const img = link.querySelector('img');
@@ -141,6 +149,9 @@
 		};
 
 		const setHash = (slug) => {
+			if (!hashSync) {
+				return;
+			}
 			const next = slug ? `#${slug}` : location.pathname + location.search;
 			if (history.replaceState) {
 				history.replaceState(null, '', next);
@@ -152,10 +163,14 @@
 		const setBodyLock = (locked) => {
 			document.documentElement.classList.toggle('has-project-modal', locked);
 			document.body.classList.toggle('has-project-modal', locked);
+			document.documentElement.classList.toggle('is-home-project-modal', locked && glass);
+			document.body.classList.toggle('is-home-project-modal', locked && glass);
+			modal.classList.toggle('is-glass', locked && glass);
 		};
 
 		const showImage = (imageIndex) => {
-			if (activeIndex < 0 || !modalBody) {
+			const cards = getCards();
+			if (activeIndex < 0 || !modalBody || !cards[activeIndex]) {
 				return;
 			}
 			const images = getCardImages(cards[activeIndex]);
@@ -174,7 +189,13 @@
 			});
 		};
 
-		const buildDetailMarkup = (images) => {
+		const escapeHtml = (value) =>
+			String(value)
+				.replace(/&/g, '&amp;')
+				.replace(/</g, '&lt;')
+				.replace(/"/g, '&quot;');
+
+		const buildDetailMarkup = (images, slug) => {
 			const thumbs = images
 				.map(
 					(item, i) => `<button type="button" class="construction-project-viewer__thumb" data-image-index="${i}" aria-label="${i + 1}">
@@ -182,6 +203,14 @@
 					</button>`
 				)
 				.join('');
+			const pageHref =
+				openPageUrl && slug
+					? `${openPageUrl.replace(/\/?$/, '/') }#${slug}`
+					: openPageUrl;
+			const openPage =
+				pageHref && openPageLabel
+					? `<p class="construction-project-viewer__open-page"><a href="${escapeHtml(pageHref)}">${escapeHtml(openPageLabel)} →</a></p>`
+					: '';
 			return `
 				<div class="construction-project-viewer__media">
 					<figure class="construction-project-viewer__stage">
@@ -191,12 +220,13 @@
 				</div>
 				<div class="construction-project-viewer__meta">
 					<div class="construction-project-viewer__controls">
-						<button type="button" class="construction-project-viewer__nav" data-nav="prev" aria-label="${labelPrev}">‹</button>
-						<button type="button" class="construction-project-viewer__nav" data-nav="next" aria-label="${labelNext}">›</button>
-						<button type="button" class="construction-project-viewer__close" data-nav="close" aria-label="${labelClose}">×</button>
+						<button type="button" class="construction-project-viewer__nav" data-nav="prev" aria-label="${escapeHtml(labelPrev)}">‹</button>
+						<button type="button" class="construction-project-viewer__nav" data-nav="next" aria-label="${escapeHtml(labelNext)}">›</button>
+						<button type="button" class="construction-project-viewer__close" data-nav="close" aria-label="${escapeHtml(labelClose)}">×</button>
 					</div>
 					<h2 class="construction-project-viewer__title" id="construction-project-modal-title"></h2>
 					<p class="construction-project-viewer__text"></p>
+					${openPage}
 				</div>
 			`;
 		};
@@ -206,9 +236,9 @@
 			modal.hidden = false;
 			modal.classList.add('is-open');
 			setBodyLock(true);
+			ownsOpen = true;
 
-			// Deep-link from homepage (or reduced motion): show instantly, no grow animation.
-			if (!animate || !gsap || reduceMotionProjects || !modalDialog) {
+			if (!animate || !gsap || reduceMotion || !modalDialog) {
 				if (gsap) {
 					gsap.killTweensOf([modal, modalDialog]);
 					gsap.set(modal, { clearProps: 'opacity,visibility' });
@@ -224,7 +254,6 @@
 			gsap.set(modal, { autoAlpha: 0 });
 			gsap.set(modalDialog, { scale: 0.92, y: 24, transformOrigin: '50% 50%' });
 
-			// Optional: nudge start toward the clicked card for a “grown from card” feel.
 			if (fromCard) {
 				const from = fromCard.getBoundingClientRect();
 				const dialogRect = modalDialog.getBoundingClientRect();
@@ -235,7 +264,7 @@
 				}
 			}
 
-			gsap.to(modal, { autoAlpha: 1, duration: 0.25, ease: 'power1.out' });
+			gsap.to(modal, { autoAlpha: 1, duration: 0.28, ease: 'power1.out' });
 			gsap.to(modalDialog, {
 				x: 0,
 				y: 0,
@@ -250,18 +279,19 @@
 		const animateClose = (onDone) => {
 			const gsap = window.gsap;
 			const finish = () => {
-				modal.classList.remove('is-open', 'is-visible');
+				modal.classList.remove('is-open', 'is-visible', 'is-glass');
 				modal.hidden = true;
 				if (modalBody) {
 					modalBody.innerHTML = '';
 				}
 				setBodyLock(false);
+				ownsOpen = false;
 				if (typeof onDone === 'function') {
 					onDone();
 				}
 			};
 
-			if (!gsap || reduceMotionProjects || !modalDialog) {
+			if (!gsap || reduceMotion || !modalDialog) {
 				finish();
 				return;
 			}
@@ -281,10 +311,13 @@
 		};
 
 		const closeProject = () => {
-			if (activeIndex < 0 && modal.hidden) {
+			if (!ownsOpen && activeIndex < 0 && modal.hidden) {
 				return;
 			}
-			cards.forEach((node) => node.classList.remove('is-active'));
+			if (!ownsOpen) {
+				return;
+			}
+			getCards().forEach((node) => node.classList.remove('is-active'));
 			activeIndex = -1;
 			activeImageIndex = 0;
 			setHash('');
@@ -296,6 +329,7 @@
 		};
 
 		const openProject = (index, fromCard, { animate = true } = {}) => {
+			const cards = getCards();
 			const card = cards[index];
 			if (!card || !modalBody) {
 				return;
@@ -304,14 +338,14 @@
 			if (images.length === 0) {
 				return;
 			}
-			if (activeIndex === index && modal.classList.contains('is-open')) {
+			if (ownsOpen && activeIndex === index && modal.classList.contains('is-open')) {
 				return;
 			}
 
 			lastFocus = document.activeElement;
 			activeIndex = index;
-			const titleEl = card.querySelector('.construction-project-card__title');
-			const textEl = card.querySelector('.construction-project-card__text');
+			const titleEl = card.querySelector(titleSelector);
+			const textEl = card.querySelector(textSelector);
 			const title = titleEl ? titleEl.textContent.trim() : '';
 			const text = textEl ? textEl.textContent.trim() : '';
 			const slug = card.id || card.getAttribute('data-project-slug') || '';
@@ -320,7 +354,7 @@
 				node.classList.toggle('is-active', i === index);
 			});
 
-			modalBody.innerHTML = buildDetailMarkup(images);
+			modalBody.innerHTML = buildDetailMarkup(images, slug);
 			modal.setAttribute('aria-labelledby', 'construction-project-modal-title');
 			const titleNode = modalBody.querySelector('.construction-project-viewer__title');
 			const textNode = modalBody.querySelector('.construction-project-viewer__text');
@@ -340,20 +374,35 @@
 			}
 		};
 
+		const openBySlug = (slug, fromCard, options) => {
+			const cards = getCards();
+			const index = cards.findIndex(
+				(card) => card.id === slug || card.getAttribute('data-project-slug') === slug
+			);
+			if (index < 0) {
+				return false;
+			}
+			openProject(index, fromCard, options);
+			return true;
+		};
+
 		modal.addEventListener('click', (event) => {
+			if (!ownsOpen || !modal.classList.contains('is-open')) {
+				return;
+			}
 			if (event.target.closest('[data-modal-close], [data-nav="close"]')) {
 				event.preventDefault();
 				closeProject();
 				return;
 			}
 			const thumb = event.target.closest('[data-image-index]');
-			if (thumb) {
+			if (thumb && modal.contains(thumb)) {
 				event.preventDefault();
 				showImage(Number(thumb.getAttribute('data-image-index')));
 				return;
 			}
 			const nav = event.target.closest('[data-nav]');
-			if (!nav) {
+			if (!nav || !modal.contains(nav)) {
 				return;
 			}
 			const action = nav.getAttribute('data-nav');
@@ -365,7 +414,7 @@
 		});
 
 		document.addEventListener('keydown', (event) => {
-			if (!modal.classList.contains('is-open')) {
+			if (!ownsOpen || !modal.classList.contains('is-open')) {
 				return;
 			}
 			if (event.key === 'Escape') {
@@ -380,6 +429,48 @@
 			}
 		});
 
+		return {
+			openProject,
+			openBySlug,
+			closeProject,
+			syncFromHash: ({ animate = false } = {}) => {
+				if (!hashSync) {
+					return;
+				}
+				const slug = (location.hash || '').replace(/^#/, '');
+				if (!slug) {
+					if (ownsOpen && modal.classList.contains('is-open')) {
+						closeProject();
+					}
+					return;
+				}
+				openBySlug(slug, null, { animate });
+			},
+		};
+	};
+
+	// Projekti page modal.
+	const projectsRoot = document.querySelector('.construction-projects');
+	if (projectsRoot && projectsRoot.querySelector('.construction-project-card')) {
+		const grid = projectsRoot.querySelector('.construction-projects__grid');
+		const legacyViewer = projectsRoot.querySelector('.construction-project-viewer');
+		if (legacyViewer) {
+			legacyViewer.hidden = true;
+			legacyViewer.innerHTML = '';
+		}
+
+		const projectsModal = bindProjectModal({
+			getCards: () => Array.from(projectsRoot.querySelectorAll('.construction-project-card')),
+			titleSelector: '.construction-project-card__title',
+			textSelector: '.construction-project-card__text',
+			getImageLinks: (card) => Array.from(card.querySelectorAll('a.construction-lightbox[href]')),
+			labelClose: projectsRoot.getAttribute('data-label-close') || 'Close',
+			labelPrev: projectsRoot.getAttribute('data-label-prev') || 'Previous',
+			labelNext: projectsRoot.getAttribute('data-label-next') || 'Next',
+			hashSync: true,
+			glass: true,
+		});
+
 		if (grid) {
 			grid.addEventListener('click', (event) => {
 				const card = event.target.closest('.construction-project-card');
@@ -390,36 +481,18 @@
 				if (link) {
 					event.preventDefault();
 				}
+				const cards = Array.from(projectsRoot.querySelectorAll('.construction-project-card'));
 				const index = cards.indexOf(card);
 				if (index >= 0) {
-					openProject(index, card);
+					projectsModal.openProject(index, card);
 				}
 			});
 		}
 
-		const syncFromHash = ({ animate = false } = {}) => {
-			const slug = (location.hash || '').replace(/^#/, '');
-			if (!slug) {
-				if (modal.classList.contains('is-open')) {
-					closeProject();
-				}
-				return;
-			}
-			const index = cards.findIndex((card) => card.id === slug || card.getAttribute('data-project-slug') === slug);
-			if (index < 0) {
-				return;
-			}
-			if (activeIndex === index && modal.classList.contains('is-open')) {
-				return;
-			}
-			// From homepage / deep link: open instantly. Grid clicks still animate.
-			openProject(index, null, { animate });
-		};
-
 		if (location.hash) {
-			syncFromHash({ animate: false });
+			projectsModal.syncFromHash({ animate: false });
 		}
-		window.addEventListener('hashchange', () => syncFromHash({ animate: false }));
+		window.addEventListener('hashchange', () => projectsModal.syncFromHash({ animate: false }));
 	} else if (typeof window.GLightbox === 'function' && document.querySelector('.construction-projects__grid .construction-lightbox')) {
 		// Legacy flat gallery fallback.
 		const triggers = Array.from(document.querySelectorAll('.construction-projects__grid .construction-lightbox'));
@@ -481,7 +554,58 @@
 		}
 	}
 
-	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	// Homepage: open the same project modal over glass (stay on index).
+	const homeProjects = document.querySelector('[data-home-projects]');
+	if (homeProjects) {
+		const getHomeCards = () => {
+			const liveSet = homeProjects.querySelector(
+				'.construction-home-projects__set:not([aria-hidden="true"])'
+			);
+			if (liveSet) {
+				return Array.from(liveSet.querySelectorAll('.construction-home-projects__card'));
+			}
+			return Array.from(homeProjects.querySelectorAll('.construction-home-projects__card')).filter(
+				(card) => !card.closest('[aria-hidden="true"]')
+			);
+		};
+
+		const homeModal = bindProjectModal({
+			getCards: getHomeCards,
+			titleSelector: '.construction-home-projects__name',
+			textSelector: '.construction-home-projects__blurb',
+			getImageLinks: (card) => {
+				const gallery = card.querySelector('.construction-home-projects__gallery');
+				return gallery
+					? Array.from(gallery.querySelectorAll('a.construction-lightbox[href]'))
+					: [];
+			},
+			labelClose: homeProjects.getAttribute('data-label-close') || 'Close',
+			labelPrev: homeProjects.getAttribute('data-label-prev') || 'Previous',
+			labelNext: homeProjects.getAttribute('data-label-next') || 'Next',
+			hashSync: false,
+			openPageUrl: homeProjects.getAttribute('data-projects-url') || '',
+			openPageLabel: homeProjects.getAttribute('data-label-open-page') || '',
+			glass: true,
+		});
+
+		// Bubble phase so marquee drag can suppress the synthetic click first.
+		document.addEventListener('click', (event) => {
+			const link = event.target.closest('[data-project-open]');
+			if (!link || !homeProjects.contains(link) || event.defaultPrevented) {
+				return;
+			}
+			if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
+				return;
+			}
+			const slug = link.getAttribute('data-project-open');
+			if (!slug) {
+				return;
+			}
+			event.preventDefault();
+			const card = link.closest('.construction-home-projects__card');
+			homeModal.openBySlug(slug, card, { animate: true });
+		});
+	}
 
 	// Homepage Realizētie projekti: slow infinite marquee + drag/scrub.
 	(() => {

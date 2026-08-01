@@ -284,6 +284,11 @@ function construction_strings(): array {
 			'en' => 'All projects',
 			'ru' => 'Все проекты',
 		),
+		'projects.open_page'   => array(
+			'lv' => 'Atvērt projektu lapu',
+			'en' => 'Open projects page',
+			'ru' => 'Открыть страницу проектов',
+		),
 		'projects.home_title'  => array(
 			'lv' => 'Realizētie projekti',
 			'en' => 'Completed projects',

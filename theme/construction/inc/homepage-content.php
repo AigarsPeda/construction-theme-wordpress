@@ -173,17 +173,42 @@ function construction_homepage_content_for_lang( string $lang ): string {
 			'construction-projects',
 			''
 		);
+
+		$images  = isset( $entry['images'] ) && is_array( $entry['images'] ) ? $entry['images'] : array( $cover );
+		$gallery = '';
+		foreach ( $images as $img_key ) {
+			$img_key = (string) $img_key;
+			$img_alt = $title;
+			$img_meta = construction_media_catalog()[ $img_key ] ?? null;
+			if ( is_array( $img_meta ) && ! empty( $img_meta['alt_key'] ) ) {
+				$img_alt = construction_string( (string) $img_meta['alt_key'], $lang );
+			}
+			$gallery .= construction_media_image_block(
+				$img_key,
+				'construction-home-projects__gallery-item',
+				$img_alt,
+				'medium_large',
+				true,
+				false,
+				'home-project-' . $slug
+			);
+		}
+
 		$home_project_cards .= <<<CARD
 			<!-- wp:group {"className":"construction-home-projects__card","layout":{"type":"default"}} -->
-			<div class="wp-block-group construction-home-projects__card">
+			<div class="wp-block-group construction-home-projects__card" data-project-slug="{$slug}">
 {$cover_block}				<!-- wp:heading {"level":3,"className":"construction-home-projects__name"} -->
 				<h3 class="wp-block-heading construction-home-projects__name">{$title}</h3>
 				<!-- /wp:heading -->
 				<!-- wp:paragraph {"className":"construction-home-projects__blurb"} -->
 				<p class="construction-home-projects__blurb">{$text}</p>
 				<!-- /wp:paragraph -->
+				<!-- wp:group {"className":"construction-home-projects__gallery","layout":{"type":"default"}} -->
+				<div class="wp-block-group construction-home-projects__gallery" hidden>
+{$gallery}				</div>
+				<!-- /wp:group -->
 				<!-- wp:paragraph {"className":"construction-home-projects__card-hit"} -->
-				<p class="construction-home-projects__card-hit"><a href="{$href}" aria-label="{$label}">{$title}</a></p>
+				<p class="construction-home-projects__card-hit"><a href="{$href}" data-project-open="{$slug}" aria-label="{$label}">{$title}</a></p>
 				<!-- /wp:paragraph -->
 			</div>
 			<!-- /wp:group -->
@@ -194,6 +219,10 @@ CARD;
 	$view_all     = $t( 'projects.view_all' );
 	$home_title   = $t( 'projects.home_title' );
 	$projects_all_url = esc_url( construction_projects_url_for_lang( $lang ) );
+	$label_close  = esc_attr( construction_string( 'projects.close', $lang ) );
+	$label_prev   = esc_attr( construction_string( 'projects.prev', $lang ) );
+	$label_next   = esc_attr( construction_string( 'projects.next', $lang ) );
+	$label_open   = esc_attr( construction_string( 'projects.open_page', $lang ) );
 
 	$mail_href = esc_url( construction_contact_mail_href( $lang ) );
 	$email     = esc_html( construction_contact( 'email' ) );
@@ -260,7 +289,7 @@ ITEM;
 {$services_section}
 
 <!-- wp:group {"align":"full","className":"construction-home-projects","layout":{"type":"default"},"anchor":"realized-projects"} -->
-<div class="wp-block-group alignfull construction-home-projects" id="realized-projects">
+<div class="wp-block-group alignfull construction-home-projects" id="realized-projects" data-home-projects data-label-close="{$label_close}" data-label-prev="{$label_prev}" data-label-next="{$label_next}" data-label-open-page="{$label_open}" data-projects-url="{$projects_all_url}">
 	<!-- wp:group {"className":"construction-home-projects__inner","layout":{"type":"default"}} -->
 	<div class="wp-block-group construction-home-projects__inner">
 		<!-- wp:group {"className":"construction-home-projects__head","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"end"}} -->
