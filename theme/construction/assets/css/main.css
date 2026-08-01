@@ -80,8 +80,9 @@ body {
 }
 
 /*
- * Content sections: same left/right inset as the header column (1200px + gutters).
- * This keeps the editor canvas and the live page aligned.
+ * Content sections: align with header text / hero copy.
+ * Header is max 1200px centered with --bn-pad inside; hero copy uses the same
+ * left inset: (100% - 1200) / 2 + --bn-pad.
  */
 .construction-services,
 .construction-services.alignfull,
@@ -97,8 +98,8 @@ body {
 .construction-credits.alignfull {
 	padding-top: var(--bn-section-y);
 	padding-bottom: var(--bn-section-y);
-	padding-left: max(var(--bn-pad), calc((100% - var(--bn-max)) / 2));
-	padding-right: max(var(--bn-pad), calc((100% - var(--bn-max)) / 2));
+	padding-left: max(var(--bn-pad), calc((100% - var(--bn-max)) / 2 + var(--bn-pad)));
+	padding-right: max(var(--bn-pad), calc((100% - var(--bn-max)) / 2 + var(--bn-pad)));
 }
 
 /* If a heading was moved outside the inner wrap, keep it on the same column */
@@ -1361,8 +1362,8 @@ p.construction-lang a[aria-current="true"] {
 .construction-projects {
 	padding-top: clamp(1.25rem, 3vw, 2rem);
 	padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
-	padding-left: max(var(--bn-pad), calc((100% - var(--bn-max)) / 2));
-	padding-right: max(var(--bn-pad), calc((100% - var(--bn-max)) / 2));
+	padding-left: max(var(--bn-pad), calc((100% - var(--bn-max)) / 2 + var(--bn-pad)));
+	padding-right: max(var(--bn-pad), calc((100% - var(--bn-max)) / 2 + var(--bn-pad)));
 }
 
 .construction-projects__inner {
@@ -1838,8 +1839,8 @@ body.has-project-modal {
 	margin: 0;
 	padding-top: clamp(1.25rem, 3vw, 2rem);
 	padding-bottom: clamp(1.5rem, 4vw, 2.5rem);
-	padding-left: max(var(--bn-pad), calc((100% - var(--bn-max)) / 2));
-	padding-right: max(var(--bn-pad), calc((100% - var(--bn-max)) / 2));
+	padding-left: max(var(--bn-pad), calc((100% - var(--bn-max)) / 2 + var(--bn-pad)));
+	padding-right: max(var(--bn-pad), calc((100% - var(--bn-max)) / 2 + var(--bn-pad)));
 }
 
 .construction-contacts-page__inner {
@@ -2078,8 +2079,8 @@ body.has-project-modal {
 /* ——— ≥781px ——— */
 @media (min-width: 781px) {
 	.construction-services__layout {
-		grid-template-columns: minmax(13rem, 0.85fr) minmax(0, 1.25fr);
-		column-gap: clamp(2.5rem, 5vw, 4.5rem);
+		grid-template-columns: minmax(12rem, 0.9fr) minmax(0, 1.1fr);
+		column-gap: clamp(2rem, 4vw, 3rem);
 		align-items: start;
 	}
 
@@ -2096,6 +2097,14 @@ body.has-project-modal {
 	.construction-process__grid {
 		grid-template-columns: repeat(2, 1fr);
 		gap: 0 1.75rem;
+	}
+}
+
+/* ——— ≥900px: match hero 48/52 column split ——— */
+@media (min-width: 900px) {
+	.construction-services__layout {
+		grid-template-columns: minmax(0, 48%) minmax(0, 52%);
+		column-gap: clamp(1.5rem, 3vw, 2.5rem);
 	}
 }
 
