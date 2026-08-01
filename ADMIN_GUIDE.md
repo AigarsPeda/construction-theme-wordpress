@@ -105,7 +105,8 @@ Forced reseed: add `&force=1` (overwrites DB content from theme seed).
 
 | Field | Where |
 |---|---|
-| Titles & descriptions (LV / EN / RU) | **Languages** box — switch tabs |
+| Titles (LV / EN / RU) | **Project text** box — language tabs |
+| Description (rich text) | **Main content editor** — same blocks as pages (headings, images, lists). Switch description language in the sidebar (**Description language**) |
 | Cover image | Featured image (Cover image) |
 | Gallery photos | **Project gallery** box — Add images, drag to reorder (shared for all languages) |
 | Shareable slug | Permalink under the title (e.g. `salaspils`) |
@@ -119,7 +120,7 @@ That link opens the project modal on the projects page. The slug must be unique 
 
 ### Languages
 
-Do **not** create separate Polylang translations for Projects. Edit LV / EN / RU fields on the single project. (Pages and menus still use Polylang as usual.)
+Do **not** create separate Polylang translations for Projects. Edit LV / EN / RU titles in **Project text**, and descriptions in the **block editor** (sidebar → Description language). Pages and menus still use Polylang as usual.
 
 ### Automatic homepage + projects page
 

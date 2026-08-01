@@ -1674,6 +1674,56 @@ html.is-home-project-modal .wp-site-blocks {
 	line-height: 1.55;
 }
 
+.construction-project-viewer__text > *:first-child {
+	margin-top: 0;
+}
+
+.construction-project-viewer__text > *:last-child {
+	margin-bottom: 0;
+}
+
+.construction-project-viewer__text p {
+	margin: 0 0 0.75em;
+}
+
+.construction-project-viewer__text h1,
+.construction-project-viewer__text h2,
+.construction-project-viewer__text h3,
+.construction-project-viewer__text h4 {
+	margin: 0.85em 0 0.4em;
+	font-family: "Archivo", sans-serif;
+	font-weight: 700;
+	line-height: 1.25;
+	letter-spacing: -0.02em;
+	color: var(--bn-ink);
+	text-transform: none;
+}
+
+.construction-project-viewer__text h1 {
+	font-size: 1.35rem;
+}
+
+.construction-project-viewer__text h2 {
+	font-size: 1.2rem;
+}
+
+.construction-project-viewer__text h3,
+.construction-project-viewer__text h4 {
+	font-size: 1.05rem;
+}
+
+.construction-project-viewer__text ul,
+.construction-project-viewer__text ol {
+	margin: 0 0 0.75em;
+	padding-left: 1.25em;
+}
+
+.construction-project-viewer__text img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 6px;
+}
+
 .construction-project-viewer__open-page {
 	margin: 0.35rem 0 0 !important;
 	padding-top: 0.85rem;

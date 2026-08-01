@@ -11,9 +11,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const CONSTRUCTION_PROJECT_POST_TYPE   = 'construction_project';
-const CONSTRUCTION_PROJECT_GALLERY_META = '_construction_project_gallery';
-const CONSTRUCTION_PROJECT_I18N_META    = '_construction_project_i18n';
+const CONSTRUCTION_PROJECT_POST_TYPE     = 'construction_project';
+const CONSTRUCTION_PROJECT_GALLERY_META   = '_construction_project_gallery';
+const CONSTRUCTION_PROJECT_I18N_META      = '_construction_project_i18n';
+const CONSTRUCTION_PROJECT_EDIT_LANG_META = '_construction_project_editing_lang';
 
 /**
  * Register Project CPT (not Polylang-translated — languages live in meta).
@@ -50,7 +51,7 @@ function construction_register_project_cpt(): void {
 			'menu_icon'           => 'dashicons-portfolio',
 			'capability_type'     => 'post',
 			'hierarchical'        => false,
-			'supports'            => array( 'title', 'thumbnail', 'revisions', 'page-attributes' ),
+			'supports'            => array( 'title', 'editor', 'thumbnail', 'revisions', 'page-attributes' ),
 			'has_archive'         => false,
 			'rewrite'             => false,
 			'query_var'           => false,
@@ -90,6 +91,36 @@ function construction_project_i18n_defaults(): array {
 }
 
 /**
+ * Allow block markup / headings in project descriptions.
+ */
+function construction_sanitize_project_content( string $html ): string {
+	return trim( wp_kses_post( $html ) );
+}
+
+/**
+ * Plain-text summary (cards, SEO excerpt).
+ */
+function construction_project_plain_text( string $html ): string {
+	$text = wp_strip_all_tags( $html );
+	$text = preg_replace( '/\s+/u', ' ', $text );
+	return is_string( $text ) ? trim( $text ) : '';
+}
+
+/**
+ * Render description HTML for the front (blocks + legacy plain text).
+ */
+function construction_project_content_html( string $html ): string {
+	$html = trim( $html );
+	if ( $html === '' ) {
+		return '';
+	}
+	if ( $html === wp_strip_all_tags( $html ) ) {
+		return '<p>' . esc_html( $html ) . '</p>';
+	}
+	return do_blocks( $html );
+}
+
+/**
  * Sanitized i18n map for a project.
  *
  * @return array<string, array{title: string, excerpt: string}>
@@ -100,8 +131,9 @@ function construction_get_project_i18n( int $post_id ): array {
 	if ( ! is_array( $raw ) ) {
 		$post = get_post( $post_id );
 		if ( $post instanceof WP_Post ) {
-			$i18n['lv']['title']   = $post->post_title;
-			$i18n['lv']['excerpt'] = $post->post_excerpt;
+			$i18n['lv']['title'] = $post->post_title;
+			$fallback             = $post->post_content !== '' ? $post->post_content : $post->post_excerpt;
+			$i18n['lv']['excerpt'] = construction_sanitize_project_content( $fallback );
 		}
 		return $i18n;
 	}
@@ -110,7 +142,7 @@ function construction_get_project_i18n( int $post_id ): array {
 			continue;
 		}
 		$i18n[ $lang ]['title']   = isset( $raw[ $lang ]['title'] ) ? sanitize_text_field( (string) $raw[ $lang ]['title'] ) : '';
-		$i18n[ $lang ]['excerpt'] = isset( $raw[ $lang ]['excerpt'] ) ? sanitize_textarea_field( (string) $raw[ $lang ]['excerpt'] ) : '';
+		$i18n[ $lang ]['excerpt'] = isset( $raw[ $lang ]['excerpt'] ) ? construction_sanitize_project_content( (string) $raw[ $lang ]['excerpt'] ) : '';
 	}
 	return $i18n;
 }
@@ -129,20 +161,20 @@ function construction_sanitize_project_i18n( $value ): array {
 			continue;
 		}
 		$i18n[ $lang ]['title']   = isset( $value[ $lang ]['title'] ) ? sanitize_text_field( (string) $value[ $lang ]['title'] ) : '';
-		$i18n[ $lang ]['excerpt'] = isset( $value[ $lang ]['excerpt'] ) ? sanitize_textarea_field( (string) $value[ $lang ]['excerpt'] ) : '';
+		$i18n[ $lang ]['excerpt'] = isset( $value[ $lang ]['excerpt'] ) ? construction_sanitize_project_content( (string) $value[ $lang ]['excerpt'] ) : '';
 	}
 	return $i18n;
 }
 
 /**
- * Title + excerpt for a language (falls back to LV, then post fields).
+ * Title + rich description for a language (falls back to LV, then post fields).
  *
  * @return array{title: string, excerpt: string}
  */
 function construction_project_localized( int $post_id, ?string $lang = null ): array {
-	$lang = $lang ? $lang : construction_current_lang();
-	$i18n = construction_get_project_i18n( $post_id );
-	$title = $i18n[ $lang ]['title'] ?? '';
+	$lang    = $lang ? $lang : construction_current_lang();
+	$i18n    = construction_get_project_i18n( $post_id );
+	$title   = $i18n[ $lang ]['title'] ?? '';
 	$excerpt = $i18n[ $lang ]['excerpt'] ?? '';
 	if ( $title === '' && $lang !== 'lv' ) {
 		$title = $i18n['lv']['title'] ?? '';
@@ -157,7 +189,7 @@ function construction_project_localized( int $post_id, ?string $lang = null ): a
 				$title = $post->post_title;
 			}
 			if ( $excerpt === '' ) {
-				$excerpt = $post->post_excerpt;
+				$excerpt = $post->post_content !== '' ? $post->post_content : $post->post_excerpt;
 			}
 		}
 	}
@@ -291,6 +323,24 @@ function construction_register_project_meta(): void {
 			'sanitize_callback' => 'construction_sanitize_project_i18n',
 		)
 	);
+
+	register_post_meta(
+		CONSTRUCTION_PROJECT_POST_TYPE,
+		CONSTRUCTION_PROJECT_EDIT_LANG_META,
+		array(
+			'type'              => 'string',
+			'single'            => true,
+			'default'           => 'lv',
+			'show_in_rest'      => true,
+			'auth_callback'     => static function (): bool {
+				return current_user_can( 'edit_posts' );
+			},
+			'sanitize_callback' => static function ( $value ): string {
+				$value = sanitize_key( (string) $value );
+				return in_array( $value, construction_languages(), true ) ? $value : 'lv';
+			},
+		)
+	);
 }
 add_action( 'init', 'construction_register_project_meta', 6 );
 
@@ -341,7 +391,7 @@ function construction_register_project_rest_fields(): void {
 					array(
 						'ID'           => (int) $post->ID,
 						'post_title'   => $lv_title !== '' ? $lv_title : $post->post_title,
-						'post_excerpt' => $i18n['lv']['excerpt'],
+						'post_excerpt' => construction_project_plain_text( $i18n['lv']['excerpt'] ),
 					)
 				);
 				return true;
@@ -387,7 +437,7 @@ function construction_project_add_meta_boxes(): void {
 add_action( 'add_meta_boxes', 'construction_project_add_meta_boxes' );
 
 /**
- * Language titles + descriptions.
+ * Language titles (descriptions use the block editor below).
  */
 function construction_project_render_i18n_meta_box( WP_Post $post ): void {
 	wp_nonce_field( 'construction_project_i18n_save', 'construction_project_i18n_nonce' );
@@ -398,7 +448,7 @@ function construction_project_render_i18n_meta_box( WP_Post $post ): void {
 		'ru' => 'Русский',
 	);
 	?>
-	<p class="description"><?php esc_html_e( 'One project for every language. Switch tabs to edit each translation. Photos below are shared.', 'construction' ); ?></p>
+	<p class="description"><?php esc_html_e( 'Titles for each language. Description uses the same block editor as pages (headings, images, lists, …) — switch language with the buttons above the content.', 'construction' ); ?></p>
 	<div class="construction-project-i18n-tabs" style="margin:12px 0 8px;display:flex;gap:6px;flex-wrap:wrap;">
 		<?php foreach ( construction_languages() as $i => $lang ) : ?>
 			<button type="button" class="button construction-project-i18n-tab<?php echo 0 === $i ? ' button-primary' : ''; ?>" data-lang="<?php echo esc_attr( $lang ); ?>">
@@ -411,10 +461,6 @@ function construction_project_render_i18n_meta_box( WP_Post $post ): void {
 			<p>
 				<label for="construction-i18n-title-<?php echo esc_attr( $lang ); ?>"><strong><?php esc_html_e( 'Title', 'construction' ); ?></strong></label>
 				<input class="widefat" type="text" id="construction-i18n-title-<?php echo esc_attr( $lang ); ?>" name="construction_project_i18n[<?php echo esc_attr( $lang ); ?>][title]" value="<?php echo esc_attr( $i18n[ $lang ]['title'] ); ?>" />
-			</p>
-			<p>
-				<label for="construction-i18n-excerpt-<?php echo esc_attr( $lang ); ?>"><strong><?php esc_html_e( 'Description', 'construction' ); ?></strong></label>
-				<textarea class="widefat" rows="4" id="construction-i18n-excerpt-<?php echo esc_attr( $lang ); ?>" name="construction_project_i18n[<?php echo esc_attr( $lang ); ?>][excerpt]"><?php echo esc_textarea( $i18n[ $lang ]['excerpt'] ); ?></textarea>
 			</p>
 		</div>
 	<?php endforeach; ?>
@@ -492,7 +538,7 @@ function construction_project_render_gallery_meta_box( WP_Post $post ): void {
 }
 
 /**
- * Save i18n + gallery.
+ * Save i18n titles + gallery; sync rich descriptions from the block editor.
  */
 function construction_project_save_meta( int $post_id ): void {
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
@@ -505,24 +551,41 @@ function construction_project_save_meta( int $post_id ): void {
 		return;
 	}
 
+	$i18n = construction_get_project_i18n( $post_id );
+
 	if ( isset( $_POST['construction_project_i18n_nonce'] )
 		&& wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST['construction_project_i18n_nonce'] ) ), 'construction_project_i18n_save' )
 		&& isset( $_POST['construction_project_i18n'] )
 		&& is_array( $_POST['construction_project_i18n'] )
 	) {
-		$i18n = construction_sanitize_project_i18n( wp_unslash( $_POST['construction_project_i18n'] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		update_post_meta( $post_id, CONSTRUCTION_PROJECT_I18N_META, $i18n );
-		$lv_title = $i18n['lv']['title'] !== '' ? $i18n['lv']['title'] : get_the_title( $post_id );
-		remove_action( 'save_post_' . CONSTRUCTION_PROJECT_POST_TYPE, 'construction_project_save_meta' );
-		wp_update_post(
-			array(
-				'ID'           => $post_id,
-				'post_title'   => $lv_title,
-				'post_excerpt' => $i18n['lv']['excerpt'],
-			)
-		);
-		add_action( 'save_post_' . CONSTRUCTION_PROJECT_POST_TYPE, 'construction_project_save_meta' );
+		$incoming = wp_unslash( $_POST['construction_project_i18n'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		foreach ( construction_languages() as $lang ) {
+			if ( isset( $incoming[ $lang ]['title'] ) ) {
+				$i18n[ $lang ]['title'] = sanitize_text_field( (string) $incoming[ $lang ]['title'] );
+			}
+		}
 	}
+
+	// Block editor content belongs to the active description language.
+	$edit_lang = get_post_meta( $post_id, CONSTRUCTION_PROJECT_EDIT_LANG_META, true );
+	if ( ! is_string( $edit_lang ) || ! in_array( $edit_lang, construction_languages(), true ) ) {
+		$edit_lang = 'lv';
+	}
+	$content = (string) get_post_field( 'post_content', $post_id );
+	$i18n[ $edit_lang ]['excerpt'] = construction_sanitize_project_content( $content );
+
+	update_post_meta( $post_id, CONSTRUCTION_PROJECT_I18N_META, $i18n );
+
+	$lv_title = $i18n['lv']['title'] !== '' ? $i18n['lv']['title'] : get_the_title( $post_id );
+	remove_action( 'save_post_' . CONSTRUCTION_PROJECT_POST_TYPE, 'construction_project_save_meta' );
+	wp_update_post(
+		array(
+			'ID'           => $post_id,
+			'post_title'   => $lv_title,
+			'post_excerpt' => construction_project_plain_text( $i18n['lv']['excerpt'] ),
+		)
+	);
+	add_action( 'save_post_' . CONSTRUCTION_PROJECT_POST_TYPE, 'construction_project_save_meta' );
 
 	if ( isset( $_POST['construction_project_gallery_nonce'] )
 		&& wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST['construction_project_gallery_nonce'] ) ), 'construction_project_gallery_save' )
@@ -608,7 +671,7 @@ function construction_project_slug_admin_notice(): void {
 add_action( 'admin_notices', 'construction_project_slug_admin_notice' );
 
 /**
- * Gallery admin script.
+ * Gallery admin script + block editor language switcher.
  *
  * @param string $hook_suffix Hook.
  */
@@ -639,6 +702,66 @@ function construction_project_admin_assets( string $hook_suffix ): void {
 	);
 }
 add_action( 'admin_enqueue_scripts', 'construction_project_admin_assets' );
+
+/**
+ * Block editor: language switcher for project descriptions.
+ */
+function construction_project_block_editor_assets(): void {
+	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+	if ( ! $screen || $screen->post_type !== CONSTRUCTION_PROJECT_POST_TYPE ) {
+		return;
+	}
+	wp_enqueue_script(
+		'construction-projects-editor',
+		get_template_directory_uri() . '/assets/js/projects-editor.js',
+		array(
+			'wp-element',
+			'wp-components',
+			'wp-data',
+			'wp-blocks',
+			'wp-block-editor',
+			'wp-edit-post',
+			'wp-plugins',
+			'wp-i18n',
+		),
+		CONSTRUCTION_VERSION,
+		true
+	);
+	wp_localize_script(
+		'construction-projects-editor',
+		'constructionProjectsEditor',
+		array(
+			'languages' => array_map(
+				static function ( string $code ): array {
+					$names = array(
+						'lv' => 'Latviešu',
+						'en' => 'English',
+						'ru' => 'Русский',
+					);
+					return array(
+						'slug' => $code,
+						'name' => $names[ $code ] ?? strtoupper( $code ),
+					);
+				},
+				construction_languages()
+			),
+			'metaI18n'  => CONSTRUCTION_PROJECT_I18N_META,
+			'metaLang'  => CONSTRUCTION_PROJECT_EDIT_LANG_META,
+			'strings'   => array(
+				'panel'       => __( 'Description language', 'construction' ),
+				'help'        => __( 'The content editor below is the project description — same blocks as pages (headings, images, lists). Switch language here; titles stay in the “Project text” box.', 'construction' ),
+				'editing'     => __( 'Editing description:', 'construction' ),
+			),
+		)
+	);
+	wp_add_inline_style(
+		'wp-edit-post',
+		'.construction-project-desc-lang{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px}'
+		. '.edit-post-visual-editor .construction-project-desc-banner{padding:12px 16px;border-bottom:1px solid #ddd;background:#f6f7f7}'
+		. '.edit-post-visual-editor .construction-project-desc-banner p{margin:0 0 8px;color:#50575e;font-size:12px}'
+	);
+}
+add_action( 'enqueue_block_editor_assets', 'construction_project_block_editor_assets' );
 
 /**
  * Published projects (language-agnostic list).
@@ -752,13 +875,16 @@ function construction_render_project_grid_card( WP_Post $post, ?string $lang = n
 		}
 		$more .= construction_attachment_figure_html( $img_id, 'construction-project-card__extra', $alt, 'medium_large', true, $gallery_key );
 	}
-	$title_e = esc_html( $title );
-	$text_e  = esc_html( $text );
-	$slug_e  = esc_attr( $slug );
+	$title_e   = esc_html( $title );
+	$plain     = construction_project_plain_text( $text );
+	$plain_e   = esc_html( $plain );
+	$body_html = construction_project_content_html( $text );
+	$slug_e    = esc_attr( $slug );
 	return <<<HTML
 <div class="construction-project-card" id="{$slug_e}" data-project-slug="{$slug_e}">
 {$cover_html}<h2 class="construction-project-card__title">{$title_e}</h2>
-<p class="construction-project-card__text">{$text_e}</p>
+<p class="construction-project-card__text">{$plain_e}</p>
+<div class="construction-project-card__body" hidden>{$body_html}</div>
 <div class="construction-project-card__more">
 {$more}</div>
 </div>
@@ -792,14 +918,16 @@ function construction_render_home_project_card( WP_Post $post, string $lang ): s
 		}
 		$gallery .= construction_attachment_figure_html( $img_id, 'construction-home-projects__gallery-item', $alt, 'medium_large', true, 'home-project-' . $slug );
 	}
-	$title_e = esc_html( $title );
-	$label_e = esc_attr( $title );
-	$text_e  = esc_html( $text );
-	$slug_e  = esc_attr( $slug );
+	$title_e   = esc_html( $title );
+	$label_e   = esc_attr( $title );
+	$plain_e   = esc_html( construction_project_plain_text( $text ) );
+	$body_html = construction_project_content_html( $text );
+	$slug_e    = esc_attr( $slug );
 	return <<<HTML
 <div class="construction-home-projects__card" data-project-slug="{$slug_e}">
 {$cover_html}<h3 class="construction-home-projects__name">{$title_e}</h3>
-<p class="construction-home-projects__blurb">{$text_e}</p>
+<p class="construction-home-projects__blurb">{$plain_e}</p>
+<div class="construction-home-projects__body" hidden>{$body_html}</div>
 <div class="construction-home-projects__gallery" hidden>
 {$gallery}</div>
 <p class="construction-home-projects__card-hit"><a href="{$href}" data-project-open="{$slug_e}" aria-label="{$label_e}">{$title_e}</a></p>

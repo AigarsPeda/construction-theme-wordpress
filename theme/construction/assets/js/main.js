@@ -225,7 +225,7 @@
 						<button type="button" class="construction-project-viewer__close" data-nav="close" aria-label="${escapeHtml(labelClose)}">×</button>
 					</div>
 					<h2 class="construction-project-viewer__title" id="construction-project-modal-title"></h2>
-					<p class="construction-project-viewer__text"></p>
+					<div class="construction-project-viewer__text"></div>
 					${openPage}
 				</div>
 			`;
@@ -346,8 +346,12 @@
 			activeIndex = index;
 			const titleEl = card.querySelector(titleSelector);
 			const textEl = card.querySelector(textSelector);
+			const bodyEl =
+				card.querySelector('.construction-project-card__body') ||
+				card.querySelector('.construction-home-projects__body');
 			const title = titleEl ? titleEl.textContent.trim() : '';
 			const text = textEl ? textEl.textContent.trim() : '';
+			const bodyHtml = bodyEl ? bodyEl.innerHTML.trim() : '';
 			const slug = card.id || card.getAttribute('data-project-slug') || '';
 
 			cards.forEach((node, i) => {
@@ -362,7 +366,11 @@
 				titleNode.textContent = title;
 			}
 			if (textNode) {
-				textNode.textContent = text;
+				if (bodyHtml) {
+					textNode.innerHTML = bodyHtml;
+				} else {
+					textNode.textContent = text;
+				}
 			}
 			showImage(0);
 			setHash(slug);

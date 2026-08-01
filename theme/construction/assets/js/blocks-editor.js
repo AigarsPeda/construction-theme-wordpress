@@ -68,6 +68,19 @@
 		return map;
 	}
 
+	function stripHtml(value) {
+		var s = plain(value);
+		if (!s) {
+			return '';
+		}
+		if (typeof document !== 'undefined') {
+			var d = document.createElement('div');
+			d.innerHTML = s;
+			return (d.textContent || d.innerText || '').replace(/\s+/g, ' ').trim();
+		}
+		return s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+	}
+
 	function displayTitle(project) {
 		var i18n = normalizeI18n(project && project.i18n);
 		if (i18n.lv && i18n.lv.title) {
@@ -85,9 +98,9 @@
 	function displayExcerpt(project) {
 		var i18n = normalizeI18n(project && project.i18n);
 		if (i18n.lv && i18n.lv.excerpt) {
-			return i18n.lv.excerpt;
+			return stripHtml(i18n.lv.excerpt);
 		}
-		return plain(project && project.excerpt);
+		return stripHtml(project && project.excerpt);
 	}
 
 	function coverUrl(project) {
@@ -241,6 +254,9 @@
 		var _i18n = useState(emptyI18n());
 		var i18n = _i18n[0];
 		var setI18n = _i18n[1];
+		var _origI18n = useState(emptyI18n());
+		var origI18n = _origI18n[0];
+		var setOrigI18n = _origI18n[1];
 		var _s = useState('');
 		var slug = _s[0];
 		var setSlug = _s[1];
@@ -288,6 +304,12 @@
 						if (!nextI18n.lv.excerpt && plain(data.excerpt)) {
 							nextI18n.lv.excerpt = plain(data.excerpt);
 						}
+						LANGUAGES.forEach(function (lang) {
+							if (nextI18n[lang.slug] && nextI18n[lang.slug].excerpt) {
+								nextI18n[lang.slug].excerpt = stripHtml(nextI18n[lang.slug].excerpt);
+							}
+						});
+						setOrigI18n(normalizeI18n(data.i18n));
 						setI18n(nextI18n);
 						setSlug(data.slug || '');
 						setCoverId(data.featured_media || 0);
@@ -394,6 +416,19 @@
 			function () {
 				setSaving(true);
 				setNotice(null);
+				var payloadI18n = normalizeI18n(origI18n);
+				LANGUAGES.forEach(function (lang) {
+					var slugLang = lang.slug;
+					payloadI18n[slugLang] = Object.assign({}, payloadI18n[slugLang], {
+						title: (i18n[slugLang] && i18n[slugLang].title) || '',
+					});
+					var origEx = (origI18n[slugLang] && origI18n[slugLang].excerpt) || '';
+					var editedEx = (i18n[slugLang] && i18n[slugLang].excerpt) || '';
+					// Keep rich HTML from full editor; only replace when original was plain text.
+					if (!origEx || origEx === stripHtml(origEx)) {
+						payloadI18n[slugLang].excerpt = editedEx;
+					}
+				});
 				apiFetch({
 					path: '/wp/v2/construction-projects/' + projectId,
 					method: 'POST',
@@ -401,11 +436,18 @@
 						slug: slug,
 						featured_media: coverId || 0,
 						gallery: galleryIds,
-						i18n: i18n,
+						i18n: payloadI18n,
 					},
 				})
 					.then(function (data) {
-						setI18n(normalizeI18n(data.i18n));
+						setOrigI18n(normalizeI18n(data.i18n));
+						var next = normalizeI18n(data.i18n);
+						LANGUAGES.forEach(function (lang) {
+							if (next[lang.slug] && next[lang.slug].excerpt) {
+								next[lang.slug].excerpt = stripHtml(next[lang.slug].excerpt);
+							}
+						});
+						setI18n(next);
 						setSlug(data.slug || slug);
 						setNotice({ status: 'success', message: S.saved || 'Saved.' });
 						if (typeof onSaved === 'function') {
@@ -426,7 +468,7 @@
 						setSaving(false);
 					});
 			},
-			[projectId, slug, coverId, galleryIds, i18n, onSaved]
+			[projectId, slug, coverId, galleryIds, i18n, origI18n, onSaved]
 		);
 
 		var fullEdit =
