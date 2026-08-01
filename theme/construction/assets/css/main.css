@@ -758,8 +758,8 @@ body.construction-menu-open {
 }
 
 .construction-services-phase + .construction-services-phase {
-	padding-top: clamp(1.75rem, 3.5vw, 2.25rem);
-	border-top: 1px solid color-mix(in srgb, var(--bn-ink) 9%, transparent);
+	padding-top: clamp(1.75rem, 3.5vw, 2.5rem);
+	border-top: 1px solid color-mix(in srgb, var(--bn-ink) 10%, transparent);
 }
 
 .construction-services-phase__head {
@@ -767,7 +767,7 @@ body.construction-menu-open {
 	flex-direction: column;
 	align-items: flex-start;
 	gap: 0.5rem;
-	margin-bottom: 1rem;
+	margin-bottom: 0.85rem;
 	max-width: 36rem;
 }
 
@@ -808,16 +808,16 @@ body.construction-menu-open {
 .construction-services-phase__items {
 	display: grid;
 	grid-template-columns: 1fr;
-	gap: 0;
+	gap: 0.95rem;
 	margin: 0;
-	padding-top: 0.25rem;
-	border-top: 1px solid color-mix(in srgb, var(--bn-ink) 8%, transparent);
+	padding-top: 0;
+	border-top: 0;
 }
 
 .construction-service-card {
 	display: block;
-	padding: 1rem 0 1.05rem;
-	border-bottom: 1px solid color-mix(in srgb, var(--bn-ink) 7%, transparent);
+	padding: 0;
+	border-bottom: 0;
 }
 
 .construction-service-card.is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)),
@@ -837,11 +837,6 @@ body.construction-menu-open {
 	margin-block-start: 0 !important;
 	margin-block-end: 0 !important;
 	margin-inline: 0 !important;
-}
-
-.construction-service-card:last-child {
-	border-bottom: 0;
-	padding-bottom: 0;
 }
 
 .construction-service-card__title,
