@@ -173,7 +173,7 @@ function construction_homepage_content_for_lang( string $lang ): string {
 			$href
 		);
 		$home_project_cards .= <<<CARD
-			<!-- wp:group {"className":"construction-home-projects__card","layout":{"type":"constrained"}} -->
+			<!-- wp:group {"className":"construction-home-projects__card","layout":{"type":"default"}} -->
 			<div class="wp-block-group construction-home-projects__card">
 {$cover_block}				<!-- wp:heading {"level":3,"className":"construction-home-projects__name"} -->
 				<h3 class="wp-block-heading construction-home-projects__name"><a href="{$href}">{$title}</a></h3>
@@ -269,9 +269,13 @@ ITEM;
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
+	</div>
+	<!-- /wp:group -->
 
-		<!-- wp:group {"className":"construction-home-projects__grid","layout":{"type":"default"}} -->
-		<div class="wp-block-group construction-home-projects__grid">
+	<!-- wp:group {"className":"construction-home-projects__marquee","layout":{"type":"default"}} -->
+	<div class="wp-block-group construction-home-projects__marquee" data-home-projects-marquee>
+		<!-- wp:group {"className":"construction-home-projects__track","layout":{"type":"default"}} -->
+		<div class="wp-block-group construction-home-projects__track" data-home-projects-track>
 {$home_project_cards}		</div>
 		<!-- /wp:group -->
 	</div>

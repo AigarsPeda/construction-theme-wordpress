@@ -482,6 +482,58 @@
 	}
 
 	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	// Homepage Realizētie projekti: slow infinite horizontal marquee.
+	(() => {
+		const marquee = document.querySelector('[data-home-projects-marquee]');
+		const track = document.querySelector('[data-home-projects-track]');
+		if (!marquee || !track || track.dataset.marqueeReady === '1') {
+			return;
+		}
+
+		const cards = Array.from(track.children).filter((node) =>
+			node.classList.contains('construction-home-projects__card')
+		);
+		if (cards.length === 0) {
+			return;
+		}
+
+		const set = document.createElement('div');
+		set.className = 'construction-home-projects__set';
+		cards.forEach((card) => set.appendChild(card));
+		track.appendChild(set);
+		track.dataset.marqueeReady = '1';
+
+		if (reduceMotion) {
+			return;
+		}
+
+		const clone = set.cloneNode(true);
+		clone.setAttribute('aria-hidden', 'true');
+		clone.querySelectorAll('a').forEach((anchor) => {
+			anchor.setAttribute('tabindex', '-1');
+		});
+		track.appendChild(clone);
+
+		const measure = () => {
+			const styles = window.getComputedStyle(track);
+			const gap = Number.parseFloat(styles.columnGap || styles.gap) || 18;
+			const distance = set.getBoundingClientRect().width + gap;
+			const duration = Math.max(45, distance / 32);
+			track.style.setProperty('--bn-marquee-distance', `${distance}px`);
+			track.style.setProperty('--bn-marquee-duration', `${duration}s`);
+			track.classList.add('is-marquee-animated');
+		};
+
+		const runMeasure = () => window.requestAnimationFrame(measure);
+		if (document.fonts && document.fonts.ready) {
+			document.fonts.ready.then(runMeasure).catch(runMeasure);
+		} else {
+			runMeasure();
+		}
+		window.addEventListener('resize', runMeasure);
+	})();
+
 	const gsap = window.gsap;
 
 	/**
