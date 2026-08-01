@@ -105,8 +105,7 @@ Forced reseed: add `&force=1` (overwrites DB content from theme seed).
 
 | Field | Where |
 |---|---|
-| Titles (LV / EN / RU) | **Project text** box — language tabs |
-| Description (rich text) | **Main content editor** — same blocks as pages (headings, images, lists). Switch description language in the sidebar (**Description language**) |
+| Title + description (LV / EN / RU) | Main editor title + content — switch language in the sidebar (**Language**) |
 | Cover image | Featured image (Cover image) |
 | Gallery photos | **Project gallery** box — Add images, drag to reorder (shared for all languages) |
 | Shareable slug | Permalink under the title (e.g. `salaspils`) |
@@ -120,7 +119,7 @@ That link opens the project modal on the projects page. The slug must be unique 
 
 ### Languages
 
-Do **not** create separate Polylang translations for Projects. Edit LV / EN / RU titles in **Project text**, and descriptions in the **block editor** (sidebar → Description language). Pages and menus still use Polylang as usual.
+Do **not** create separate Polylang translations for Projects. Use the sidebar **Language** switcher to edit LV / EN / RU in the same title + block editor. Pages and menus still use Polylang as usual.
 
 ### Automatic homepage + projects page
 
@@ -129,7 +128,12 @@ Do **not** create separate Polylang translations for Projects. Edit LV / EN / RU
 
 You do **not** need to add cards manually on those pages. Publish a project → it appears in both places (correct language text on each site language).
 
-**Edit from the page editor:** open the Projects (or Home) page → select the projects block → click a project card. A panel opens with language tabs, plus slug, cover, and gallery. Save there, or use **Open full editor** for the complete Projects screen.
+**Edit from the page editor:** open the Projects (or Home) page → select the projects block → manage cards there:
+
+- **Add project** — creates a disabled draft and opens quick edit  
+- **Edit** — titles, slug, cover, gallery (or **Open full editor** for rich description)  
+- **Disable / Enable** — disabled projects stay in admin but are hidden on the site  
+- **Remove** — permanently deletes the project (asks for confirmation)
 
 Pages: **projekti** (LV) / **projects** (EN) / **proekty** (RU). Clicking a card opens the modal (gallery, title, description). Close with ×, backdrop, or Escape.
 

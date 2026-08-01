@@ -12,6 +12,8 @@
 	var useCallback = wp.element.useCallback;
 	var registerBlockType = wp.blocks.registerBlockType;
 	var useBlockProps = wp.blockEditor.useBlockProps;
+	var MediaUpload = wp.blockEditor.MediaUpload;
+	var MediaUploadCheck = wp.blockEditor.MediaUploadCheck;
 	var apiFetch = wp.apiFetch;
 	var addQueryArgs = wp.url.addQueryArgs;
 	var components = wp.components;
@@ -189,11 +191,11 @@
 			return '';
 		}
 		if (item.sizes) {
-			if (item.sizes.thumbnail && item.sizes.thumbnail.url) {
-				return item.sizes.thumbnail.url;
+			if (item.sizes.thumbnail) {
+				return item.sizes.thumbnail.url || item.sizes.thumbnail.source_url || '';
 			}
-			if (item.sizes.medium && item.sizes.medium.url) {
-				return item.sizes.medium.url;
+			if (item.sizes.medium) {
+				return item.sizes.medium.url || item.sizes.medium.source_url || '';
 			}
 		}
 		if (item.media_details && item.media_details.sizes) {
@@ -208,39 +210,17 @@
 		return item.source_url || item.url || '';
 	}
 
-	function openMediaFrame(opts) {
-		return new Promise(function (resolve) {
-			if (!wp.media) {
-				resolve([]);
-				return;
-			}
-			var settled = false;
-			var done = function (list) {
-				if (settled) {
-					return;
-				}
-				settled = true;
-				resolve(list || []);
-			};
-			var frame = wp.media({
-				title: opts.title || S.addImages || 'Select images',
-				button: { text: opts.button || S.addImages || 'Add' },
-				library: { type: 'image' },
-				multiple: !!opts.multiple,
-			});
-			frame.on('select', function () {
-				var selection = frame.state().get('selection');
-				var list = [];
-				selection.each(function (model) {
-					list.push(model.toJSON());
-				});
-				done(list);
-			});
-			frame.on('close', function () {
-				done([]);
-			});
-			frame.open();
-		});
+	function normalizeAttachment(att) {
+		if (!att || !att.id) {
+			return null;
+		}
+		return {
+			id: parseInt(att.id, 10),
+			url: att.url || att.source_url || '',
+			source_url: att.source_url || att.url || '',
+			sizes: att.sizes || null,
+			media_details: att.media_details || null,
+		};
 	}
 
 	function ProjectEditModal(props) {
@@ -341,73 +321,68 @@
 			[projectId]
 		);
 
-		var setField = useCallback(function (field, value) {
-			setI18n(function (prev) {
-				var next = Object.assign({}, prev);
-				var row = Object.assign({}, next[activeLang] || { title: '', excerpt: '' });
-				row[field] = value;
-				next[activeLang] = row;
-				return next;
-			});
-		}, [activeLang]);
-
-		var setCover = useCallback(function () {
-			openMediaFrame({
-				title: S.setCover || 'Set cover',
-				button: S.setCover || 'Use image',
-				multiple: false,
-			}).then(function (list) {
-				if (!list.length) {
-					return;
-				}
-				var att = list[0];
-				setCoverId(att.id);
-				setCoverPreview(mediaThumb(att) || att.url);
-			});
-		}, []);
-
-		var addGallery = useCallback(function () {
-			openMediaFrame({
-				title: S.addImages || 'Add images',
-				button: S.addImages || 'Add',
-				multiple: true,
-			}).then(function (list) {
-				if (!list.length) {
-					return;
-				}
-				setGalleryIds(function (prev) {
-					var next = prev.slice();
-					list.forEach(function (att) {
-						if (next.indexOf(att.id) === -1) {
-							next.push(att.id);
-						}
-					});
+		var setField = useCallback(
+			function (field, value) {
+				setI18n(function (prev) {
+					var next = Object.assign({}, prev);
+					var row = Object.assign({}, next[activeLang] || { title: '', excerpt: '' });
+					row[field] = value;
+					next[activeLang] = row;
 					return next;
 				});
-				setGalleryItems(function (prev) {
-					var map = {};
-					prev.forEach(function (item) {
-						map[item.id] = item;
-					});
-					list.forEach(function (att) {
-						map[att.id] = att;
-					});
-					return Object.keys(map).map(function (k) {
-						return map[k];
-					});
+			},
+			[activeLang]
+		);
+
+		var onSelectCover = useCallback(function (media) {
+			var att = normalizeAttachment(media);
+			if (!att) {
+				return;
+			}
+			setCoverId(att.id);
+			setCoverPreview(mediaThumb(att) || att.url);
+		}, []);
+
+		var onSelectGallery = useCallback(function (media) {
+			var list = (Array.isArray(media) ? media : [media])
+				.map(normalizeAttachment)
+				.filter(Boolean);
+			if (!list.length) {
+				return;
+			}
+			setGalleryIds(function (prev) {
+				var next = prev.slice();
+				list.forEach(function (att) {
+					if (next.indexOf(att.id) === -1) {
+						next.push(att.id);
+					}
+				});
+				return next;
+			});
+			setGalleryItems(function (prev) {
+				var map = {};
+				prev.forEach(function (item) {
+					map[Number(item.id)] = item;
+				});
+				list.forEach(function (att) {
+					map[att.id] = att;
+				});
+				return Object.keys(map).map(function (k) {
+					return map[k];
 				});
 			});
 		}, []);
 
 		var removeGallery = useCallback(function (id) {
+			var nid = Number(id);
 			setGalleryIds(function (prev) {
 				return prev.filter(function (x) {
-					return x !== id;
+					return Number(x) !== nid;
 				});
 			});
 			setGalleryItems(function (prev) {
 				return prev.filter(function (item) {
-					return item.id !== id;
+					return Number(item.id) !== nid;
 				});
 			});
 		}, []);
@@ -419,39 +394,48 @@
 				var payloadI18n = normalizeI18n(origI18n);
 				LANGUAGES.forEach(function (lang) {
 					var slugLang = lang.slug;
+					var origEx = (origI18n[slugLang] && origI18n[slugLang].excerpt) || '';
+					var editedEx = (i18n[slugLang] && i18n[slugLang].excerpt) || '';
+					var origPlain = stripHtml(origEx);
 					payloadI18n[slugLang] = Object.assign({}, payloadI18n[slugLang], {
 						title: (i18n[slugLang] && i18n[slugLang].title) || '',
 					});
-					var origEx = (origI18n[slugLang] && origI18n[slugLang].excerpt) || '';
-					var editedEx = (i18n[slugLang] && i18n[slugLang].excerpt) || '';
-					// Keep rich HTML from full editor; only replace when original was plain text.
-					if (!origEx || origEx === stripHtml(origEx)) {
+					// Preserve rich HTML from the full editor when the quick field
+					// still matches the plain-text version of that HTML.
+					if (origEx && origEx !== origPlain && editedEx === origPlain) {
+						payloadI18n[slugLang].excerpt = origEx;
+					} else {
 						payloadI18n[slugLang].excerpt = editedEx;
 					}
 				});
+				var galleryPayload = galleryIds
+					.map(function (id) {
+						return parseInt(id, 10);
+					})
+					.filter(function (id) {
+						return id > 0;
+					});
+				var featured = coverId || 0;
+				if (!featured && galleryPayload.length) {
+					featured = galleryPayload[0];
+				}
 				apiFetch({
 					path: '/wp/v2/construction-projects/' + projectId,
 					method: 'POST',
 					data: {
 						slug: slug,
-						featured_media: coverId || 0,
-						gallery: galleryIds,
+						featured_media: featured,
+						gallery: galleryPayload,
 						i18n: payloadI18n,
 					},
 				})
 					.then(function (data) {
 						setOrigI18n(normalizeI18n(data.i18n));
-						var next = normalizeI18n(data.i18n);
-						LANGUAGES.forEach(function (lang) {
-							if (next[lang.slug] && next[lang.slug].excerpt) {
-								next[lang.slug].excerpt = stripHtml(next[lang.slug].excerpt);
-							}
-						});
-						setI18n(next);
-						setSlug(data.slug || slug);
-						setNotice({ status: 'success', message: S.saved || 'Saved.' });
 						if (typeof onSaved === 'function') {
 							onSaved(data);
+						}
+						if (typeof onClose === 'function') {
+							onClose();
 						}
 					})
 					.catch(function (err) {
@@ -463,12 +447,10 @@
 							msg = S.slugTaken || msg;
 						}
 						setNotice({ status: 'error', message: msg });
-					})
-					.finally(function () {
 						setSaving(false);
 					});
 			},
-			[projectId, slug, coverId, galleryIds, i18n, origI18n, onSaved]
+			[projectId, slug, coverId, galleryIds, i18n, origI18n, onSaved, onClose]
 		);
 
 		var fullEdit =
@@ -565,23 +547,38 @@
 								  })
 								: null,
 							el(
-								'div',
-								{ style: { display: 'flex', gap: '0.5rem', flexWrap: 'wrap' } },
-								el(Button, { variant: 'secondary', onClick: setCover }, S.setCover || 'Set cover'),
-								coverId
-									? el(
-											Button,
-											{
-												variant: 'tertiary',
-												isDestructive: true,
-												onClick: function () {
-													setCoverId(0);
-													setCoverPreview('');
+								MediaUploadCheck,
+								null,
+								el(
+									'div',
+									{ style: { display: 'flex', gap: '0.5rem', flexWrap: 'wrap' } },
+									el(MediaUpload, {
+										onSelect: onSelectCover,
+										allowedTypes: ['image'],
+										value: coverId || undefined,
+										render: function (obj) {
+											return el(
+												Button,
+												{ variant: 'secondary', onClick: obj.open },
+												S.setCover || 'Set cover'
+											);
+										},
+									}),
+									coverId
+										? el(
+												Button,
+												{
+													variant: 'tertiary',
+													isDestructive: true,
+													onClick: function () {
+														setCoverId(0);
+														setCoverPreview('');
+													},
 												},
-											},
-											S.removeCover || 'Remove cover'
-									  )
-									: null
+												S.removeCover || 'Remove cover'
+										  )
+										: null
+								)
 							)
 						),
 						el(
@@ -605,14 +602,15 @@
 									},
 								},
 								galleryIds.map(function (id) {
+									var nid = Number(id);
 									var item = galleryItems.find(function (g) {
-										return g.id === id;
+										return Number(g.id) === nid;
 									});
 									var src = mediaThumb(item);
 									return el(
 										'li',
 										{
-											key: id,
+											key: nid,
 											style: {
 												position: 'relative',
 												width: '88px',
@@ -629,7 +627,7 @@
 													alt: '',
 													style: { width: '100%', height: '100%', objectFit: 'cover' },
 											  })
-											: el('span', { style: { fontSize: '11px', padding: '4px' } }, '#' + id),
+											: el('span', { style: { fontSize: '11px', padding: '4px' } }, '#' + nid),
 										el(
 											Button,
 											{
@@ -645,7 +643,7 @@
 													padding: 0,
 												},
 												onClick: function () {
-													removeGallery(id);
+													removeGallery(nid);
 												},
 												label: S.remove || 'Remove',
 											},
@@ -654,7 +652,20 @@
 									);
 								})
 							),
-							el(Button, { variant: 'secondary', onClick: addGallery }, S.addImages || 'Add images')
+							el(MediaUploadCheck, null, el(MediaUpload, {
+								onSelect: onSelectGallery,
+								allowedTypes: ['image'],
+								multiple: true,
+								gallery: true,
+								value: galleryIds,
+								render: function (obj) {
+									return el(
+										Button,
+										{ variant: 'secondary', onClick: obj.open },
+										S.addImages || 'Add images'
+									);
+								},
+							}))
 						),
 						el(
 							'div',
@@ -714,6 +725,12 @@
 		var _tick = useState(0);
 		var tick = _tick[0];
 		var setTick = _tick[1];
+		var _busyId = useState(0);
+		var busyId = _busyId[0];
+		var setBusyId = _busyId[1];
+		var _adding = useState(false);
+		var adding = _adding[0];
+		var setAdding = _adding[1];
 
 		var reload = useCallback(function () {
 			setLoading(true);
@@ -738,24 +755,155 @@
 			[reload, tick]
 		);
 
-		return el(
+		var bump = useCallback(function () {
+			setTick(function (n) {
+				return n + 1;
+			});
+		}, []);
+
+		var addProject = useCallback(
+			function () {
+				if (adding) {
+					return;
+				}
+				setAdding(true);
+				setError('');
+				var titleLv = S.newTitleLv || 'Jauns projekts';
+				var titleEn = S.newTitleEn || 'New project';
+				var titleRu = S.newTitleRu || 'Новый проект';
+				apiFetch({
+					path: '/wp/v2/construction-projects',
+					method: 'POST',
+					data: {
+						title: titleLv,
+						status: 'publish',
+						i18n: {
+							lv: { title: titleLv, excerpt: '' },
+							en: { title: titleEn, excerpt: '' },
+							ru: { title: titleRu, excerpt: '' },
+						},
+					},
+				})
+					.then(function (created) {
+						bump();
+						if (created && created.id) {
+							setEditId(created.id);
+						}
+					})
+					.catch(function () {
+						setError(S.saveError || 'Could not save project.');
+					})
+					.finally(function () {
+						setAdding(false);
+					});
+			},
+			[adding, bump]
+		);
+
+		var setProjectStatus = useCallback(
+			function (project, nextStatus) {
+				if (!project || !project.id || busyId) {
+					return;
+				}
+				setBusyId(project.id);
+				apiFetch({
+					path: '/wp/v2/construction-projects/' + project.id,
+					method: 'POST',
+					data: { status: nextStatus },
+				})
+					.then(function () {
+						bump();
+					})
+					.catch(function () {
+						setError(S.statusError || 'Could not update project status.');
+					})
+					.finally(function () {
+						setBusyId(0);
+					});
+			},
+			[busyId, bump]
+		);
+
+		var removeProject = useCallback(
+			function (project) {
+				if (!project || !project.id || busyId) {
+					return;
+				}
+				var name = displayTitle(project) || '#' + project.id;
+				var msg = (S.removeConfirm || 'Remove this project permanently?').replace('%s', name);
+				if (!window.confirm(msg)) {
+					return;
+				}
+				setBusyId(project.id);
+				apiFetch({
+					path: addQueryArgs('/wp/v2/construction-projects/' + project.id, { force: true }),
+					method: 'DELETE',
+				})
+					.then(function () {
+						if (editId === project.id) {
+							setEditId(0);
+						}
+						bump();
+					})
+					.catch(function () {
+						setError(S.removeError || 'Could not remove project.');
+					})
+					.finally(function () {
+						setBusyId(0);
+					});
+			},
+			[busyId, bump, editId]
+		);
+
+		var toolbar = el(
 			'div',
-			blockProps,
+			{
+				style: {
+					display: 'flex',
+					flexWrap: 'wrap',
+					alignItems: 'center',
+					justifyContent: 'space-between',
+					gap: '0.75rem',
+					marginBottom: '1rem',
+				},
+			},
 			el(
 				'p',
 				{
 					className: 'construction-projects-editor__hint',
-					style: { margin: '0 0 1rem', color: '#646970', fontSize: '13px' },
+					style: { margin: 0, color: '#646970', fontSize: '13px', flex: '1 1 220px' },
 				},
-				S.clickToEdit || 'One card = one project (all languages). Click to edit.'
+				S.clickToEdit || 'Manage projects here.'
 			),
+			el(
+				Button,
+				{
+					variant: 'primary',
+					onClick: addProject,
+					isBusy: adding,
+					disabled: adding || loading,
+				},
+				adding ? S.adding || 'Adding…' : S.addProject || 'Add project'
+			)
+		);
+
+		return el(
+			'div',
+			blockProps,
+			toolbar,
 			loading ? el('div', { style: { padding: '2rem', textAlign: 'center' } }, el(Spinner)) : null,
 			error ? el(Notice, { status: 'error', isDismissible: false }, error) : null,
 			!loading && !error && projects.length === 0
-				? el(Placeholder, {
-						label: label,
-						instructions: S.empty || 'No projects yet.',
-				  })
+				? el(
+						'div',
+						{ style: { padding: '1.5rem', border: '1px dashed #c3c4c7', borderRadius: '8px', textAlign: 'center' } },
+						el('p', { style: { margin: '0 0 1rem', color: '#646970' } }, S.empty || 'No projects yet.'),
+						el(
+							Button,
+							{ variant: 'primary', onClick: addProject, isBusy: adding, disabled: adding },
+							adding ? S.adding || 'Adding…' : S.addProject || 'Add project'
+						)
+				  )
 				: null,
 			!loading && projects.length
 				? el(
@@ -764,7 +912,7 @@
 							className: 'construction-projects-editor__grid',
 							style: {
 								display: 'grid',
-								gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+								gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
 								gap: '1rem',
 							},
 						},
@@ -772,87 +920,163 @@
 							var src = coverUrl(project);
 							var title = displayTitle(project);
 							var text = displayExcerpt(project);
+							var status = project.status || 'publish';
+							var isDisabled = status !== 'publish';
+							var isBusy = busyId === project.id;
 							return el(
-								'button',
+								'div',
 								{
-									type: 'button',
 									key: project.id,
-									className: 'construction-projects-editor__card',
-									onClick: function () {
-										setEditId(project.id);
-									},
+									className:
+										'construction-projects-editor__card' +
+										(isDisabled ? ' is-disabled' : ''),
 									style: {
-										display: 'block',
+										display: 'flex',
+										flexDirection: 'column',
 										width: '100%',
-										textAlign: 'left',
-										padding: 0,
 										border: '1px solid #dcdcde',
 										borderRadius: '12px',
 										overflow: 'hidden',
-										background: '#fff',
-										cursor: 'pointer',
+										background: isDisabled ? '#f6f7f7' : '#fff',
+										opacity: isDisabled ? 0.78 : 1,
 										boxShadow: 'none',
 									},
 								},
-								src
-									? el('img', {
-											src: src,
-											alt: '',
-											style: {
-												display: 'block',
-												width: '100%',
-												aspectRatio: '4 / 3',
-												objectFit: 'cover',
+								el(
+									'button',
+									{
+										type: 'button',
+										onClick: function () {
+											setEditId(project.id);
+										},
+										disabled: isBusy,
+										style: {
+											display: 'block',
+											width: '100%',
+											textAlign: 'left',
+											padding: 0,
+											border: 0,
+											background: 'transparent',
+											cursor: isBusy ? 'wait' : 'pointer',
+										},
+									},
+									src
+										? el('img', {
+												src: src,
+												alt: '',
+												style: {
+													display: 'block',
+													width: '100%',
+													aspectRatio: '4 / 3',
+													objectFit: 'cover',
+													filter: isDisabled ? 'grayscale(0.35)' : 'none',
+												},
+										  })
+										: el('div', {
+												style: {
+													width: '100%',
+													aspectRatio: '4 / 3',
+													background: '#f0f0f1',
+												},
+										  }),
+									el(
+										'div',
+										{ style: { padding: '0.75rem 0.85rem 0.5rem' } },
+										isDisabled
+											? el(
+													'span',
+													{
+														style: {
+															display: 'inline-block',
+															marginBottom: '0.35rem',
+															padding: '0.1rem 0.4rem',
+															borderRadius: '3px',
+															background: '#dba617',
+															color: '#1d2327',
+															fontSize: '11px',
+															fontWeight: 600,
+															lineHeight: 1.4,
+														},
+													},
+													S.disabled || 'Disabled'
+											  )
+											: null,
+										el(
+											'strong',
+											{
+												style: {
+													display: 'block',
+													fontSize: '14px',
+													lineHeight: 1.3,
+													marginBottom: '0.25rem',
+												},
 											},
-									  })
-									: el('div', {
-											style: {
-												width: '100%',
-												aspectRatio: '4 / 3',
-												background: '#f0f0f1',
-											},
-									  }),
+											title || '#' + project.id
+										),
+										text
+											? el(
+													'span',
+													{
+														style: {
+															display: 'block',
+															fontSize: '12px',
+															color: '#646970',
+															lineHeight: 1.4,
+														},
+													},
+													text.length > 90 ? text.slice(0, 90) + '…' : text
+											  )
+											: null
+									)
+								),
 								el(
 									'div',
-									{ style: { padding: '0.75rem 0.85rem 1rem' } },
+									{
+										style: {
+											display: 'flex',
+											flexWrap: 'wrap',
+											gap: '0.35rem',
+											padding: '0 0.75rem 0.75rem',
+											marginTop: 'auto',
+										},
+									},
 									el(
-										'strong',
+										Button,
 										{
-											style: {
-												display: 'block',
-												fontSize: '14px',
-												lineHeight: 1.3,
-												marginBottom: '0.25rem',
+											variant: 'secondary',
+											size: 'small',
+											disabled: isBusy,
+											onClick: function () {
+												setEditId(project.id);
 											},
 										},
-										title || '#' + project.id
+										S.editProject || 'Edit'
 									),
-									text
-										? el(
-												'span',
-												{
-													style: {
-														display: 'block',
-														fontSize: '12px',
-														color: '#646970',
-														lineHeight: 1.4,
-													},
-												},
-												text.length > 90 ? text.slice(0, 90) + '…' : text
-										  )
-										: null,
 									el(
-										'span',
+										Button,
 										{
-											style: {
-												display: 'inline-block',
-												marginTop: '0.5rem',
-												fontSize: '12px',
-												fontWeight: 600,
-												color: '#2271b1',
+											variant: 'secondary',
+											size: 'small',
+											disabled: isBusy,
+											isBusy: isBusy,
+											onClick: function () {
+												setProjectStatus(project, isDisabled ? 'publish' : 'draft');
 											},
 										},
-										S.editProject || 'Edit project'
+										isDisabled ? S.enable || 'Enable' : S.disable || 'Disable'
+									),
+									el(
+										Button,
+										{
+											variant: 'tertiary',
+											size: 'small',
+											isDestructive: true,
+											disabled: isBusy,
+											onClick: function () {
+												removeProject(project);
+											},
+										},
+										S.remove || 'Remove'
 									)
 								)
 							);
@@ -865,11 +1089,7 @@
 						onClose: function () {
 							setEditId(0);
 						},
-						onSaved: function () {
-							setTick(function (n) {
-								return n + 1;
-							});
-						},
+						onSaved: bump,
 				  })
 				: null
 		);

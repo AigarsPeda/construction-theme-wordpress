@@ -57,29 +57,40 @@ function construction_register_blocks(): void {
 				construction_languages()
 			),
 			'strings'     => array(
-				'projectsGrid' => __( 'Projects grid', 'construction' ),
-				'homeProjects' => __( 'Home projects', 'construction' ),
-				'empty'        => __( 'No projects yet. Add one under Projects in the admin.', 'construction' ),
-				'editProject'  => __( 'Edit project', 'construction' ),
-				'clickToEdit'  => __( 'One card = one project. Click for a quick edit, or open the full editor for headings and blocks in the description.', 'construction' ),
-				'languages'    => __( 'Languages', 'construction' ),
-				'title'        => __( 'Title', 'construction' ),
-				'description'  => __( 'Description (plain text quick edit — use Projects for headings/blocks)', 'construction' ),
-				'slug'         => __( 'Slug (share link)', 'construction' ),
-				'cover'        => __( 'Cover image', 'construction' ),
-				'gallery'      => __( 'Gallery (all languages)', 'construction' ),
-				'setCover'     => __( 'Set cover', 'construction' ),
-				'removeCover'  => __( 'Remove cover', 'construction' ),
-				'addImages'    => __( 'Add images', 'construction' ),
-				'remove'       => __( 'Remove', 'construction' ),
-				'save'         => __( 'Save project', 'construction' ),
-				'saving'       => __( 'Saving…', 'construction' ),
-				'saved'        => __( 'Saved.', 'construction' ),
-				'close'        => __( 'Close', 'construction' ),
-				'openFull'     => __( 'Open full editor (rich description)', 'construction' ),
-				'loadError'    => __( 'Could not load projects.', 'construction' ),
-				'saveError'    => __( 'Could not save project.', 'construction' ),
-				'slugTaken'    => __( 'That slug is already used by another project.', 'construction' ),
+				'projectsGrid'   => __( 'Projects grid', 'construction' ),
+				'homeProjects'   => __( 'Home projects', 'construction' ),
+				'empty'          => __( 'No projects yet.', 'construction' ),
+				'editProject'    => __( 'Edit', 'construction' ),
+				'clickToEdit'    => __( 'Manage projects here: add, edit, disable (hide from the site), or remove. Open the full editor for rich descriptions.', 'construction' ),
+				'languages'      => __( 'Languages', 'construction' ),
+				'title'          => __( 'Title', 'construction' ),
+				'description'    => __( 'Description (plain text quick edit — use Projects for headings/blocks)', 'construction' ),
+				'slug'           => __( 'Slug (share link)', 'construction' ),
+				'cover'          => __( 'Cover image', 'construction' ),
+				'gallery'        => __( 'Gallery (all languages)', 'construction' ),
+				'setCover'       => __( 'Set cover', 'construction' ),
+				'removeCover'    => __( 'Remove cover', 'construction' ),
+				'addImages'      => __( 'Add images', 'construction' ),
+				'remove'         => __( 'Remove', 'construction' ),
+				'save'           => __( 'Save project', 'construction' ),
+				'saving'         => __( 'Saving…', 'construction' ),
+				'saved'          => __( 'Saved.', 'construction' ),
+				'close'          => __( 'Close', 'construction' ),
+				'openFull'       => __( 'Open full editor (rich description)', 'construction' ),
+				'loadError'      => __( 'Could not load projects.', 'construction' ),
+				'saveError'      => __( 'Could not save project.', 'construction' ),
+				'slugTaken'      => __( 'That slug is already used by another project.', 'construction' ),
+				'addProject'     => __( 'Add project', 'construction' ),
+				'adding'         => __( 'Adding…', 'construction' ),
+				'disable'        => __( 'Disable', 'construction' ),
+				'enable'         => __( 'Enable', 'construction' ),
+				'disabled'       => __( 'Disabled', 'construction' ),
+				'removeConfirm'  => __( 'Remove this project permanently? This cannot be undone.', 'construction' ),
+				'removeError'    => __( 'Could not remove project.', 'construction' ),
+				'statusError'    => __( 'Could not update project status.', 'construction' ),
+				'newTitleLv'     => __( 'Jauns projekts', 'construction' ),
+				'newTitleEn'     => __( 'New project', 'construction' ),
+				'newTitleRu'     => __( 'Новый проект', 'construction' ),
 			),
 		)
 	);
@@ -109,13 +120,6 @@ add_action( 'init', 'construction_register_blocks', 20 );
  * Ensure Media Library frame works inside the block editor for project image picking.
  */
 function construction_block_editor_media(): void {
-	if ( ! function_exists( 'get_current_screen' ) ) {
-		return;
-	}
-	$screen = get_current_screen();
-	if ( ! $screen || $screen->base !== 'post' ) {
-		return;
-	}
 	wp_enqueue_media();
 }
 add_action( 'enqueue_block_editor_assets', 'construction_block_editor_media' );

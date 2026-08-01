@@ -1451,6 +1451,24 @@ p.construction-lang a[aria-current="true"] {
 	line-height: 0;
 }
 
+.construction-project-card__placeholder-wrap,
+.construction-home-projects__media.construction-project-card__placeholder-wrap {
+	margin: 0 !important;
+	aspect-ratio: 4 / 3;
+	overflow: hidden;
+	background: color-mix(in srgb, var(--bn-ink) 6%, var(--bn-mist));
+}
+
+.construction-project-card__placeholder {
+	display: block;
+	width: 100%;
+	height: 100%;
+	min-height: 160px;
+	background:
+		linear-gradient(135deg, color-mix(in srgb, var(--bn-ink) 8%, transparent) 0%, transparent 55%),
+		color-mix(in srgb, var(--bn-timber) 12%, var(--bn-mist));
+}
+
 .construction-project-card__cover a.construction-lightbox {
 	display: block;
 	cursor: pointer;
@@ -1583,17 +1601,26 @@ html.is-home-project-modal .wp-site-blocks {
 
 .construction-project-viewer__stage {
 	margin: 0;
+	position: relative;
 	overflow: hidden;
 	border-radius: 12px;
 	background: #111;
 	line-height: 0;
 }
 
-.construction-project-viewer__stage img {
+.construction-project-viewer__stage img,
+.construction-project-viewer__stage-img {
 	display: block;
 	width: 100%;
 	aspect-ratio: 3 / 2;
 	object-fit: cover;
+}
+
+.construction-project-viewer__stage-img--incoming {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
 }
 
 .construction-project-viewer__thumbs {

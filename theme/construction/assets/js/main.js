@@ -168,7 +168,10 @@
 			modal.classList.toggle('is-glass', locked && glass);
 		};
 
-		const showImage = (imageIndex) => {
+		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		let imageTween = null;
+
+		const showImage = (imageIndex, { direction = null } = {}) => {
 			const cards = getCards();
 			if (activeIndex < 0 || !modalBody || !cards[activeIndex]) {
 				return;
@@ -177,16 +180,93 @@
 			if (images.length === 0) {
 				return;
 			}
-			activeImageIndex = ((imageIndex % images.length) + images.length) % images.length;
-			const current = images[activeImageIndex];
-			const stageImg = modalBody.querySelector('.construction-project-viewer__stage img');
-			if (stageImg) {
-				stageImg.src = current.full;
-				stageImg.alt = current.alt;
+			const prevIndex = activeImageIndex;
+			const nextIndex = ((imageIndex % images.length) + images.length) % images.length;
+			const current = images[nextIndex];
+			const stage = modalBody.querySelector('.construction-project-viewer__stage');
+			const stageImg = stage ? stage.querySelector('img.construction-project-viewer__stage-img') : null;
+			if (!stage || !stageImg) {
+				return;
 			}
+
+			activeImageIndex = nextIndex;
 			modalBody.querySelectorAll('.construction-project-viewer__thumb').forEach((btn, i) => {
 				btn.classList.toggle('is-active', i === activeImageIndex);
 			});
+
+			if (prevIndex === nextIndex && stageImg.getAttribute('src') === current.full) {
+				return;
+			}
+
+			let slideDir = direction;
+			if (!slideDir && images.length > 1 && stageImg.getAttribute('src')) {
+				const forward = (nextIndex - prevIndex + images.length) % images.length;
+				const backward = (prevIndex - nextIndex + images.length) % images.length;
+				slideDir = forward <= backward ? 'next' : 'prev';
+			}
+
+			const gsap = window.gsap;
+			const canSlide =
+				gsap && !reduceMotion && slideDir && stageImg.getAttribute('src') && stageImg.getAttribute('src') !== current.full;
+
+			stage.querySelectorAll('.construction-project-viewer__stage-img--incoming').forEach((node) => {
+				node.remove();
+			});
+			if (gsap) {
+				gsap.killTweensOf(stageImg);
+			}
+			imageTween = null;
+
+			if (!canSlide) {
+				if (gsap) {
+					gsap.set(stageImg, { clearProps: 'transform' });
+				}
+				stageImg.src = current.full;
+				stageImg.alt = current.alt;
+				return;
+			}
+
+			// Next: outgoing → left, incoming from right. Prev: opposite.
+			const outX = slideDir === 'next' ? '-100%' : '100%';
+			const inFromX = slideDir === 'next' ? '100%' : '-100%';
+
+			const incoming = stageImg.cloneNode(false);
+			incoming.classList.add('construction-project-viewer__stage-img--incoming');
+			incoming.src = current.full;
+			incoming.alt = current.alt;
+			stage.appendChild(incoming);
+
+			gsap.set(stageImg, { x: 0 });
+			gsap.set(incoming, { x: inFromX });
+
+			imageTween = gsap
+				.timeline({
+					onComplete: () => {
+						stageImg.src = current.full;
+						stageImg.alt = current.alt;
+						gsap.set(stageImg, { clearProps: 'transform' });
+						incoming.remove();
+						imageTween = null;
+					},
+				})
+				.to(
+					stageImg,
+					{
+						x: outX,
+						duration: 0.38,
+						ease: 'power2.inOut',
+					},
+					0
+				)
+				.to(
+					incoming,
+					{
+						x: 0,
+						duration: 0.38,
+						ease: 'power2.inOut',
+					},
+					0
+				);
 		};
 
 		const escapeHtml = (value) =>
@@ -214,7 +294,7 @@
 			return `
 				<div class="construction-project-viewer__media">
 					<figure class="construction-project-viewer__stage">
-						<img src="" alt="">
+						<img class="construction-project-viewer__stage-img" src="" alt="">
 					</figure>
 					<div class="construction-project-viewer__thumbs">${thumbs}</div>
 				</div>
@@ -415,9 +495,9 @@
 			}
 			const action = nav.getAttribute('data-nav');
 			if (action === 'prev') {
-				showImage(activeImageIndex - 1);
+				showImage(activeImageIndex - 1, { direction: 'prev' });
 			} else if (action === 'next') {
-				showImage(activeImageIndex + 1);
+				showImage(activeImageIndex + 1, { direction: 'next' });
 			}
 		});
 
@@ -430,10 +510,10 @@
 				closeProject();
 			} else if (event.key === 'ArrowLeft') {
 				event.preventDefault();
-				showImage(activeImageIndex - 1);
+				showImage(activeImageIndex - 1, { direction: 'prev' });
 			} else if (event.key === 'ArrowRight') {
 				event.preventDefault();
-				showImage(activeImageIndex + 1);
+				showImage(activeImageIndex + 1, { direction: 'next' });
 			}
 		});
 
