@@ -156,8 +156,8 @@
 				per_page: 100,
 				status: 'publish,draft,pending,future,private',
 				_embed: 1,
-				orderby: 'menu_order',
-				order: 'asc',
+				orderby: 'date',
+				order: 'desc',
 				context: 'edit',
 			}),
 		});

@@ -118,6 +118,7 @@ PHASE;
 			<!-- wp:paragraph -->
 			<p>{$t( 'services.intro' )}</p>
 			<!-- /wp:paragraph -->
+
 		</div>
 		<!-- /wp:group -->
 

@@ -415,9 +415,9 @@ function construction_strings(): array {
 			'ru' => 'Весь процесс, одна команда',
 		),
 		'services.intro'       => array(
-			'lv' => 'No idejas līdz nodošanai trīs skaidros posmos. Katrā zināt, kas notiek un ko jūs iegūstat.',
-			'en' => 'From idea to handover in three clear stages. At each one, you know what happens and what you get.',
-			'ru' => 'От идеи до сдачи в трёх ясных этапах. На каждом понятно, что происходит и что вы получаете.',
+			'lv' => 'No idejas līdz nodošanai — trīs skaidri soļi. Katrā solī zināsiet, kas notiek un ko iegūstat.',
+			'en' => 'From idea to handover in three clear steps. At each step, you know what’s happening and what you get.',
+			'ru' => 'От идеи до сдачи — три ясных шага. На каждом вы понимаете, что происходит и что получаете.',
 		),
 		'services.phase.before.num' => array(
 			'lv' => '01',

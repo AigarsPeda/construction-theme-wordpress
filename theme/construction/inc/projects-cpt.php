@@ -815,8 +815,8 @@ function construction_query_projects( ?string $lang = null ): array { // phpcs:i
 			'post_status'            => 'publish',
 			'posts_per_page'         => -1,
 			'orderby'                => array(
-				'menu_order' => 'ASC',
-				'title'      => 'ASC',
+				'date' => 'DESC',
+				'ID'   => 'DESC',
 			),
 			'no_found_rows'          => true,
 			'update_post_term_cache' => false,
