@@ -275,7 +275,7 @@
 				.replace(/</g, '&lt;')
 				.replace(/"/g, '&quot;');
 
-		const buildDetailMarkup = (images, slug) => {
+		const buildDetailMarkup = (images) => {
 			const thumbs = images
 				.map(
 					(item, i) => `<button type="button" class="construction-project-viewer__thumb" data-image-index="${i}" aria-label="${i + 1}">
@@ -283,10 +283,7 @@
 					</button>`
 				)
 				.join('');
-			const pageHref =
-				openPageUrl && slug
-					? `${openPageUrl.replace(/\/?$/, '/') }#${slug}`
-					: openPageUrl;
+			const pageHref = openPageUrl;
 			const openPage =
 				pageHref && openPageLabel
 					? `<p class="construction-project-viewer__open-page"><a href="${escapeHtml(pageHref)}">${escapeHtml(openPageLabel)} →</a></p>`
@@ -438,7 +435,7 @@
 				node.classList.toggle('is-active', i === index);
 			});
 
-			modalBody.innerHTML = buildDetailMarkup(images, slug);
+			modalBody.innerHTML = buildDetailMarkup(images);
 			modal.setAttribute('aria-labelledby', 'construction-project-modal-title');
 			const titleNode = modalBody.querySelector('.construction-project-viewer__title');
 			const textNode = modalBody.querySelector('.construction-project-viewer__text');
