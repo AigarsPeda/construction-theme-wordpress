@@ -12,6 +12,7 @@
 	var useCallback = wp.element.useCallback;
 	var registerBlockType = wp.blocks.registerBlockType;
 	var useBlockProps = wp.blockEditor.useBlockProps;
+	var RichText = wp.blockEditor.RichText;
 	var MediaUpload = wp.blockEditor.MediaUpload;
 	var MediaUploadCheck = wp.blockEditor.MediaUploadCheck;
 	var apiFetch = wp.apiFetch;
@@ -890,6 +891,7 @@
 		return el(
 			'div',
 			blockProps,
+			props.headingControl || null,
 			toolbar,
 			loading ? el('div', { style: { padding: '2rem', textAlign: 'center' } }, el(Spinner)) : null,
 			error ? el(Notice, { status: 'error', isDismissible: false }, error) : null,
@@ -1105,8 +1107,20 @@
 	});
 
 	registerBlockType('construction/home-projects', {
-		edit: function () {
-			return el(ProjectsEditableGrid, { label: S.homeProjects || 'Home projects' });
+		edit: function (props) {
+			return el(ProjectsEditableGrid, {
+				label: S.homeProjects || 'Home projects',
+				headingControl: el(RichText, {
+					tagName: 'h2',
+					className: 'construction-home-projects__title',
+					value: props.attributes.title || '',
+					placeholder: S.sectionHeading || 'Section heading',
+					allowedFormats: [],
+					onChange: function (title) {
+						props.setAttributes({ title: title });
+					},
+				}),
+			});
 		},
 		save: function () {
 			return null;

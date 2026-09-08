@@ -6,6 +6,12 @@
 	"icon": "images-alt2",
 	"description": "Homepage completed-projects marquee. Updates automatically when you publish a project.",
 	"textdomain": "construction",
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": ""
+		}
+	},
 	"supports": {
 		"html": false,
 		"align": ["full"],

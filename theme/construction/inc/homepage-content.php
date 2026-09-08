@@ -153,6 +153,10 @@ function construction_homepage_content_for_lang( string $lang ): string {
 	$phone     = esc_html( construction_contact( 'phone' ) );
 	$phone_href = esc_url( construction_contact_phone_href() );
 	$address   = esc_html( construction_contact_address( $lang ) );
+	$home_projects_title = wp_json_encode(
+		construction_string( 'projects.home_title', $lang ),
+		JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+	);
 
 	$credits_blocks = '';
 	foreach ( construction_image_credits() as $credit ) {
@@ -212,7 +216,7 @@ ITEM;
 
 {$services_section}
 
-<!-- wp:construction/home-projects {"align":"full"} /-->
+<!-- wp:construction/home-projects {"align":"full","title":{$home_projects_title}} /-->
 
 <!-- wp:group {"align":"full","className":"construction-faq","layout":{"type":"default"},"anchor":"faq"} -->
 <div class="wp-block-group alignfull construction-faq" id="faq">
@@ -538,7 +542,7 @@ function construction_find_home_page_candidate_ids(): array {
 }
 
 /**
- * Create Primary menus per language with Projects page link.
+ * Create or repair Primary menus without replacing editor-managed items.
  *
  * @param array{lv?:int,en?:int,ru?:int} $page_ids Unused; kept for call-site compatibility.
  */
@@ -575,12 +579,6 @@ function construction_rebuild_language_menus( array $page_ids = array() ): void 
 		$existing = wp_get_nav_menu_object( $name );
 		if ( $existing ) {
 			$menu_id = (int) $existing->term_id;
-			$items   = wp_get_nav_menu_items( $menu_id );
-			if ( is_array( $items ) ) {
-				foreach ( $items as $item ) {
-					wp_delete_post( (int) $item->ID, true );
-				}
-			}
 		} else {
 			$created = wp_create_nav_menu( $name );
 			if ( is_wp_error( $created ) ) {
@@ -589,7 +587,17 @@ function construction_rebuild_language_menus( array $page_ids = array() ): void 
 			$menu_id = (int) $created;
 		}
 
-		if ( ! empty( $project_ids[ $lang ] ) ) {
+		$existing_page_ids = array();
+		$items             = wp_get_nav_menu_items( $menu_id );
+		if ( is_array( $items ) ) {
+			foreach ( $items as $item ) {
+				if ( 'post_type' === $item->type && 'page' === $item->object ) {
+					$existing_page_ids[] = (int) $item->object_id;
+				}
+			}
+		}
+
+		if ( ! empty( $project_ids[ $lang ] ) && ! in_array( (int) $project_ids[ $lang ], $existing_page_ids, true ) ) {
 			wp_update_nav_menu_item(
 				$menu_id,
 				0,
@@ -603,7 +611,7 @@ function construction_rebuild_language_menus( array $page_ids = array() ): void 
 			);
 		}
 
-		if ( ! empty( $contact_ids[ $lang ] ) ) {
+		if ( ! empty( $contact_ids[ $lang ] ) && ! in_array( (int) $contact_ids[ $lang ], $existing_page_ids, true ) ) {
 			wp_update_nav_menu_item(
 				$menu_id,
 				0,

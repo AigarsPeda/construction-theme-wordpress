@@ -59,6 +59,7 @@ function construction_register_blocks(): void {
 			'strings'     => array(
 				'projectsGrid'   => __( 'Projects grid', 'construction' ),
 				'homeProjects'   => __( 'Home projects', 'construction' ),
+				'sectionHeading' => __( 'Section heading', 'construction' ),
 				'empty'          => __( 'No projects yet.', 'construction' ),
 				'editProject'    => __( 'Edit', 'construction' ),
 				'clickToEdit'    => __( 'Manage projects here: add, edit, disable (hide from the site), or remove. Open the full editor for rich descriptions.', 'construction' ),
@@ -178,7 +179,14 @@ function construction_render_home_projects_block( array $attributes = array(), s
 	};
 
 	$view_all         = $t( 'projects.view_all' );
-	$home_title       = $t( 'projects.home_title' );
+	$title_attribute  = isset( $attributes['title'] ) && is_string( $attributes['title'] )
+		? trim( $attributes['title'] )
+		: '';
+	$home_title       = esc_html(
+		$title_attribute !== ''
+			? wp_strip_all_tags( $title_attribute )
+			: construction_string( 'projects.home_title', $lang )
+	);
 	$projects_all_url = esc_url( construction_projects_url_for_lang( $lang ) );
 	$label_close      = esc_attr( construction_string( 'projects.close', $lang ) );
 	$label_prev       = esc_attr( construction_string( 'projects.prev', $lang ) );

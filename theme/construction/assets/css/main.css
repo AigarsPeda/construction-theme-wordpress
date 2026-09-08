@@ -530,7 +530,7 @@ body.construction-menu-open {
 	overflow: hidden;
 }
 
-@media (max-width: 899px) {
+@media (max-width: 1023px) {
 	.construction-header__inner {
 		grid-template-columns: 1fr auto;
 	}
@@ -553,7 +553,7 @@ body.construction-menu-open {
 	}
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
 	.construction-drawer-root,
 	.construction-menu-toggle {
 		display: none !important;
@@ -2019,6 +2019,385 @@ html.is-home-project-modal .wp-site-blocks {
 		mask-image: none;
 	}
 }
+/* Audience pages */
+.construction-audience-page.alignfull {
+	width: 100%;
+	max-width: none;
+	margin: 0;
+}
+
+.construction-audience-page__hero {
+	margin: 0 !important;
+	background: var(--bn-mist);
+	min-height: clamp(32rem, 68svh, 42rem);
+}
+
+.construction-audience-page__hero-copy {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	padding: clamp(3rem, 8vw, 6.5rem) var(--bn-pad);
+	padding-left: max(var(--bn-pad), calc((100vw - var(--bn-max)) / 2 + var(--bn-pad)));
+}
+
+.construction-audience-page__title {
+	margin: 0 0 1rem !important;
+	font-size: clamp(2.5rem, 6.2vw, 5.25rem);
+	line-height: 0.98;
+	letter-spacing: -0.04em;
+	max-width: 9ch;
+	text-wrap: balance;
+}
+
+.construction-audience-page__lead {
+	margin: 0 0 1.75rem !important;
+	max-width: 34rem;
+	font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+	line-height: 1.55;
+	color: var(--bn-steel);
+}
+
+.construction-audience-page__actions {
+	margin: 0;
+}
+
+.construction-audience-page__actions .wp-block-button__link {
+	min-height: 48px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.85rem 1.25rem;
+}
+
+.construction-audience-page__hero-media,
+.construction-audience-page__scope-media {
+	line-height: 0;
+	overflow: hidden;
+}
+
+.construction-audience-page__image,
+.construction-audience-page__hero-media > .wp-block-image,
+.construction-audience-page__scope-media > .wp-block-image {
+	width: 100%;
+	height: 100%;
+	margin: 0 !important;
+}
+
+.construction-audience-page__image img,
+.construction-audience-page__hero-media > .wp-block-image img,
+.construction-audience-page__scope-media > .wp-block-image img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.construction-audience-page__image--hero img,
+.construction-audience-page__hero-media > .wp-block-image img {
+	min-height: clamp(24rem, 68svh, 42rem);
+}
+
+/* Developer pages: precise, high-contrast and architectural. */
+.construction-audience-page--developers .construction-audience-page__hero {
+	background: var(--bn-ink);
+	color: #fff;
+}
+
+.construction-audience-page--developers .construction-audience-page__title {
+	position: relative;
+	max-width: 8.5ch;
+	font-size: clamp(2.75rem, 5.6vw, 5.5rem);
+	font-weight: 760;
+	letter-spacing: -0.04em;
+}
+
+.construction-audience-page--developers .construction-audience-page__title::before {
+	content: "";
+	display: block;
+	width: clamp(3.5rem, 7vw, 6rem);
+	height: 1px;
+	margin-bottom: clamp(1.25rem, 3vw, 2rem);
+	background: var(--bn-timber);
+}
+
+.construction-audience-page--developers .construction-audience-page__lead {
+	max-width: 31rem;
+	color: color-mix(in srgb, #fff 68%, var(--bn-timber));
+}
+
+.construction-audience-page--developers .construction-audience-page__actions .wp-block-button__link {
+	background: var(--bn-timber);
+	color: var(--bn-ink);
+}
+
+.construction-audience-page--developers .construction-audience-page__hero-media img {
+	filter: grayscale(1) contrast(1.08);
+}
+
+/* Private-home pages: warmer type, softer geometry and a reversed split. */
+.construction-audience-page--homebuilders .construction-audience-page__hero {
+	background: color-mix(in srgb, var(--bn-mist) 82%, var(--bn-timber));
+}
+
+.construction-audience-page--homebuilders .construction-audience-page__title {
+	max-width: 7.5ch;
+	font-family: var(--wp--preset--font-family--body);
+	font-size: clamp(3rem, 5.7vw, 5.6rem);
+	font-weight: 680;
+	line-height: 0.92;
+	letter-spacing: -0.035em;
+}
+
+.construction-audience-page--homebuilders .construction-audience-page__title::after {
+	content: "";
+	display: block;
+	width: clamp(2.75rem, 5vw, 4.5rem);
+	height: 0.28rem;
+	margin-top: clamp(1.25rem, 3vw, 2rem);
+	background: var(--bn-timber);
+}
+
+.construction-audience-page--homebuilders .construction-audience-page__lead {
+	max-width: 30rem;
+	color: color-mix(in srgb, var(--bn-ink) 68%, var(--bn-steel));
+}
+
+.construction-audience-page--homebuilders .construction-audience-page__hero-media img {
+	filter: saturate(0.82) contrast(0.96);
+}
+
+@media (min-width: 782px) {
+	.construction-audience-page--developers .construction-audience-page__hero-copy {
+		flex-basis: 44% !important;
+	}
+
+	.construction-audience-page--developers .construction-audience-page__hero-media {
+		flex-basis: 56% !important;
+	}
+
+	.construction-audience-page--homebuilders .construction-audience-page__hero-copy {
+		order: 2;
+		flex-basis: 46% !important;
+		padding-right: max(var(--bn-pad), calc((100vw - var(--bn-max)) / 2 + var(--bn-pad)));
+		padding-left: clamp(2.5rem, 6vw, 5.5rem);
+	}
+
+	.construction-audience-page--homebuilders .construction-audience-page__hero-media {
+		order: 1;
+		flex-basis: 54% !important;
+	}
+
+	.construction-audience-page--homebuilders .construction-audience-page__hero-media img {
+		border-radius: 0 clamp(1.25rem, 2.5vw, 2.25rem) clamp(1.25rem, 2.5vw, 2.25rem) 0;
+	}
+}
+
+.construction-audience-page__intro,
+.construction-audience-page__section-inner,
+.construction-audience-page__scope,
+.construction-audience-page__cta {
+	width: min(calc(100% - (2 * var(--bn-pad))), var(--bn-max));
+	margin-inline: auto !important;
+}
+
+.construction-audience-page__intro {
+	display: grid;
+	grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+	gap: clamp(1.5rem, 5vw, 5rem);
+	align-items: start;
+	padding-block: var(--bn-section-y);
+}
+
+.construction-audience-page__intro h2,
+.construction-audience-page__section-title,
+.construction-audience-page__scope-copy h2,
+.construction-audience-page__cta h2 {
+	margin: 0 !important;
+	font-size: var(--bn-h2);
+	line-height: 1.08;
+	letter-spacing: -0.03em;
+	text-wrap: balance;
+}
+
+.construction-audience-page__intro p {
+	margin: 0 !important;
+	max-width: 40rem;
+	font-size: clamp(1.15rem, 2vw, 1.45rem);
+	line-height: 1.5;
+	color: var(--bn-steel);
+}
+
+.construction-audience-page__process {
+	max-width: none !important;
+	margin: 0 !important;
+	padding-block: var(--bn-section-y);
+	background: var(--bn-mist);
+}
+
+.construction-audience-page__section-title {
+	margin-bottom: clamp(2rem, 5vw, 4rem) !important;
+	max-width: 18ch;
+}
+
+.construction-audience-page__steps {
+	border-top: 1px solid color-mix(in srgb, var(--bn-ink) 18%, transparent);
+}
+
+.construction-audience-page__step {
+	display: grid;
+	grid-template-columns: 4rem minmax(12rem, 0.7fr) minmax(0, 1fr);
+	gap: clamp(1rem, 3vw, 2rem);
+	align-items: start;
+	padding: 1.5rem 0;
+	border-bottom: 1px solid color-mix(in srgb, var(--bn-ink) 18%, transparent);
+}
+
+.construction-audience-page__step-number,
+.construction-audience-page__step-title,
+.construction-audience-page__step-text {
+	margin: 0 !important;
+}
+
+.construction-audience-page__step-number {
+	font-family: "Archivo", sans-serif;
+	font-size: 0.8rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	color: var(--bn-steel);
+}
+
+.construction-audience-page__step-title {
+	font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+	line-height: 1.25;
+}
+
+.construction-audience-page__step-text {
+	max-width: 40rem;
+	color: var(--bn-steel);
+	line-height: 1.55;
+}
+
+.construction-audience-page__scope {
+	margin-block: var(--bn-section-y) !important;
+	gap: 0 !important;
+	background: var(--bn-mist);
+	min-height: 34rem;
+}
+
+.construction-audience-page__scope-copy {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: clamp(2rem, 6vw, 5rem);
+}
+
+.construction-audience-page__scope-list {
+	list-style: none;
+	margin: clamp(1.5rem, 4vw, 2.5rem) 0 0 !important;
+	padding: 0;
+}
+
+.construction-audience-page__scope-list li {
+	position: relative;
+	margin: 0;
+	padding: 0.85rem 0 0.85rem 1.5rem;
+	border-bottom: 1px solid color-mix(in srgb, var(--bn-ink) 14%, transparent);
+	line-height: 1.45;
+}
+
+.construction-audience-page__scope-list li::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 1.3rem;
+	width: 0.45rem;
+	height: 0.45rem;
+	border-radius: 50%;
+	background: var(--bn-timber);
+}
+
+.construction-audience-page__cta {
+	margin-bottom: var(--bn-section-y) !important;
+	padding: clamp(1.5rem, 4vw, 2.75rem);
+	gap: 1.5rem 3rem !important;
+	background: var(--bn-ink);
+	color: #fff;
+	border-radius: var(--bn-radius);
+}
+
+.construction-audience-page__cta-copy {
+	max-width: 42rem;
+}
+
+.construction-audience-page__cta p {
+	margin: 0.65rem 0 0 !important;
+	color: color-mix(in srgb, #fff 72%, transparent);
+	line-height: 1.5;
+}
+
+.construction-audience-page__cta .wp-block-button__link:hover,
+.construction-audience-page__cta .wp-block-button__link:focus-visible {
+	background: var(--bn-timber) !important;
+	color: var(--bn-ink) !important;
+}
+
+@media (max-width: 781px) {
+	.construction-audience-page__hero,
+	.construction-audience-page__scope {
+		flex-direction: column !important;
+	}
+
+	.construction-audience-page__hero-copy,
+	.construction-audience-page__hero-media,
+	.construction-audience-page__scope-copy,
+	.construction-audience-page__scope-media {
+		flex-basis: 100% !important;
+	}
+
+	.construction-audience-page__hero-copy {
+		min-height: 30rem;
+		padding: clamp(2.75rem, 12vw, 5rem) var(--bn-pad);
+	}
+
+	.construction-audience-page__title {
+		max-width: 11ch;
+	}
+
+	.construction-audience-page__image--hero img,
+	.construction-audience-page__hero-media > .wp-block-image img {
+		min-height: clamp(22rem, 85vw, 34rem);
+	}
+
+	.construction-audience-page__intro {
+		grid-template-columns: 1fr;
+	}
+
+	.construction-audience-page__step {
+		grid-template-columns: 2.5rem 1fr;
+		gap: 0.5rem 1rem;
+	}
+
+	.construction-audience-page__step-text {
+		grid-column: 2;
+	}
+
+	.construction-audience-page__scope {
+		min-height: 0;
+	}
+
+	.construction-audience-page__image--detail img,
+	.construction-audience-page__scope-media > .wp-block-image img {
+		min-height: 22rem;
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.construction-audience-page__hero-media img {
+		animation: bn-fade 1s ease both;
+	}
+}
+
 /* Contacts page */
 .construction-contacts-page.alignfull {
 	width: 100%;

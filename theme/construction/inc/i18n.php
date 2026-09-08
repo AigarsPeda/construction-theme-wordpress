@@ -290,9 +290,9 @@ function construction_strings(): array {
 			'ru' => 'Открыть страницу проектов',
 		),
 		'projects.home_title'  => array(
-			'lv' => 'Realizētie projekti',
-			'en' => 'Completed projects',
-			'ru' => 'Реализованные проекты',
+			'lv' => 'Mūsu speciālistu realizētie projekti',
+			'en' => 'Projects delivered by our specialists',
+			'ru' => 'Проекты, реализованные нашими специалистами',
 		),
 		'projects.item.sloka.title' => array(
 			'lv' => 'Aprūpes centra pārbūve',
