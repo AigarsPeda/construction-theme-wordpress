@@ -2102,52 +2102,113 @@ html.is-home-project-modal .wp-site-blocks {
 	min-height: clamp(24rem, 68svh, 42rem);
 }
 
-/* Same visual system, with a quieter compositional cue for each audience. */
-.construction-audience-page--developers .construction-audience-page__title {
+/* Developer hero: one editable image with centered overlay content. */
+.wp-site-blocks .construction-audience-page--developers .construction-audience-page__hero {
 	position: relative;
+	isolation: isolate;
+	display: grid;
+	min-height: clamp(34rem, 76svh, 48rem);
+	background: var(--bn-ink);
 }
 
-.construction-audience-page--developers .construction-audience-page__title::before {
+.wp-site-blocks .construction-audience-page--developers .construction-audience-page__hero-media {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.wp-site-blocks .construction-audience-page--developers .construction-audience-page__hero-media::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	pointer-events: none;
+	background: color-mix(in srgb, var(--bn-ink) 58%, transparent);
+}
+
+.wp-site-blocks .construction-audience-page--developers .construction-audience-page__hero-media img {
+	min-height: 0;
+}
+
+.wp-site-blocks .construction-audience-page--developers .construction-audience-page__hero-copy {
+	z-index: 2;
+	width: min(calc(100% - (2 * var(--bn-pad))), 58rem);
+	max-width: none;
+	min-height: inherit;
+	margin-inline: auto;
+	padding: clamp(4rem, 10vw, 7rem) var(--bn-pad);
+	align-items: center;
+	text-align: center;
+	color: #fff;
+}
+
+.wp-site-blocks .construction-audience-page--developers .construction-audience-page__title {
+	max-width: 13ch;
+}
+
+.wp-site-blocks .construction-audience-page--developers .construction-audience-page__title::before,
+.wp-site-blocks .construction-audience-page--homebuilders .construction-audience-page__title::after {
 	content: "";
 	display: block;
 	width: clamp(3.5rem, 7vw, 6rem);
 	height: 2px;
-	margin-bottom: clamp(1.25rem, 3vw, 2rem);
 	background: var(--bn-timber);
 }
 
-.construction-audience-page--homebuilders .construction-audience-page__title {
+.wp-site-blocks .construction-audience-page--developers .construction-audience-page__title::before {
+	margin: 0 auto clamp(1.25rem, 3vw, 2rem);
+}
+
+.wp-site-blocks .construction-audience-page--developers .construction-audience-page__lead {
+	max-width: 42rem;
+	color: color-mix(in srgb, #fff 78%, var(--bn-timber));
+}
+
+.wp-site-blocks .construction-audience-page--developers .construction-audience-page__actions .wp-block-button__link {
+	background: var(--bn-timber);
+	color: var(--bn-ink);
+}
+
+/* Private-home hero: three native Image blocks in a composed grid. */
+.wp-site-blocks .construction-audience-page--homebuilders .construction-audience-page__title {
 	position: relative;
 }
 
-.construction-audience-page--homebuilders .construction-audience-page__title::after {
-	content: "";
-	display: block;
-	width: clamp(3.5rem, 7vw, 6rem);
-	height: 2px;
+.wp-site-blocks .construction-audience-page--homebuilders .construction-audience-page__title::after {
 	margin-top: clamp(1.25rem, 3vw, 2rem);
-	background: var(--bn-timber);
+}
+
+.wp-site-blocks .construction-audience-page--homebuilders .construction-audience-page__hero-media {
+	display: grid;
+	grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+	grid-template-rows: repeat(2, minmax(0, 1fr));
+	gap: clamp(0.5rem, 1vw, 0.9rem);
+	padding: 0;
+	background: #fff;
+}
+
+.wp-site-blocks .construction-audience-page--homebuilders .construction-audience-page__hero-media > .wp-block-image {
+	min-width: 0;
+	min-height: 0;
+}
+
+.wp-site-blocks .construction-audience-page--homebuilders .construction-audience-page__hero-media > .wp-block-image:first-child {
+	grid-row: 1 / 3;
+}
+
+.wp-site-blocks .construction-audience-page--homebuilders .construction-audience-page__hero-media img {
+	min-height: 0;
 }
 
 @media (min-width: 782px) {
-	.construction-audience-page--developers .construction-audience-page__hero-copy {
+	.wp-site-blocks .construction-audience-page--homebuilders .construction-audience-page__hero-copy {
 		flex-basis: 48% !important;
 	}
 
-	.construction-audience-page--developers .construction-audience-page__hero-media {
+	.wp-site-blocks .construction-audience-page--homebuilders .construction-audience-page__hero-media {
 		flex-basis: 52% !important;
-	}
-
-	.construction-audience-page--homebuilders .construction-audience-page__hero-copy {
-		order: 2;
-		flex-basis: 52% !important;
-		padding-right: max(var(--bn-pad), calc((100vw - var(--bn-max)) / 2 + var(--bn-pad)));
-		padding-left: clamp(2.5rem, 6vw, 5.5rem);
-	}
-
-	.construction-audience-page--homebuilders .construction-audience-page__hero-media {
-		order: 1;
-		flex-basis: 48% !important;
 	}
 }
 
@@ -2319,7 +2380,7 @@ html.is-home-project-modal .wp-site-blocks {
 	}
 
 	.construction-audience-page__title {
-		max-width: 11ch;
+		max-width: none;
 	}
 
 	.construction-audience-page__image--hero img,
@@ -2347,6 +2408,11 @@ html.is-home-project-modal .wp-site-blocks {
 	.construction-audience-page__image--detail img,
 	.construction-audience-page__scope-media > .wp-block-image img {
 		min-height: 22rem;
+	}
+
+	.wp-site-blocks .construction-audience-page--homebuilders .construction-audience-page__hero-media {
+		height: clamp(27rem, 108vw, 36rem);
+		min-height: clamp(27rem, 108vw, 36rem);
 	}
 }
 

@@ -104,6 +104,7 @@ function construction_audience_page_definitions(): array {
 		),
 		'homebuilders' => array(
 			'primary_image'   => 'service_2',
+			'hero_images'     => array( 'service_2', 'service_1', 'hero' ),
 			'secondary_image' => 'service_3',
 			'lv'              => array(
 				'title'       => 'Privātmāju būvētājiem',
@@ -210,12 +211,18 @@ function construction_audience_page_content( string $audience, string $lang ): s
 	$image_alt  = (string) $copy['image_alt'];
 	$contact_url = esc_url( construction_contacts_url_for_lang( $lang ) );
 
-	$primary_image = construction_media_image_block(
-		(string) $definition['primary_image'],
-		'construction-audience-page__image construction-audience-page__image--hero',
-		$image_alt,
-		'large'
-	);
+	$hero_image_keys = ! empty( $definition['hero_images'] ) && is_array( $definition['hero_images'] )
+		? $definition['hero_images']
+		: array( $definition['primary_image'] );
+	$primary_image   = '';
+	foreach ( $hero_image_keys as $hero_image_key ) {
+		$primary_image .= construction_media_image_block(
+			(string) $hero_image_key,
+			'construction-audience-page__image construction-audience-page__image--hero',
+			$image_alt,
+			'large'
+		);
+	}
 	$secondary_image = construction_media_image_block(
 		(string) $definition['secondary_image'],
 		'construction-audience-page__image construction-audience-page__image--detail',
