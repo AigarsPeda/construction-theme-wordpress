@@ -164,6 +164,11 @@ function construction_strings(): array {
 			'en' => 'Projects',
 			'ru' => 'Проекты',
 		),
+		'nav.home'            => array(
+			'lv' => 'Sākums',
+			'en' => 'Home',
+			'ru' => 'Главная',
+		),
 		'nav.photos'           => array(
 			'lv' => 'Foto',
 			'en' => 'Photos',

@@ -19,6 +19,7 @@ $mark_class   = $custom_logo ? 'construction-logo-mark construction-logo-mark--w
 $menu_label   = esc_attr( construction_t( 'nav.menu' ) );
 $close_label  = esc_attr( construction_t( 'nav.close' ) );
 $lang_label   = esc_html( construction_t( 'nav.language' ) );
+$home_label   = esc_html( construction_t( 'nav.home' ) );
 $phone        = esc_html( construction_contact( 'phone' ) );
 $phone_href   = esc_url( construction_contact_phone_href() );
 $email        = esc_html( construction_contact( 'email' ) );
@@ -46,6 +47,17 @@ $drawer_nav_html = wp_nav_menu(
 		'depth'          => 1,
 	)
 );
+$home_item_class = is_front_page() ? 'menu-item menu-item-home current-menu-item' : 'menu-item menu-item-home';
+$home_item       = sprintf(
+	'<li class="%1$s"><a href="%2$s"%3$s>%4$s</a></li>',
+	esc_attr( $home_item_class ),
+	$home_url,
+	is_front_page() ? ' aria-current="page"' : '',
+	$home_label
+);
+if ( is_string( $drawer_nav_html ) ) {
+	$drawer_nav_html = preg_replace( '/(<ul[^>]*>)/', '$1' . $home_item, $drawer_nav_html, 1 );
+}
 ?>
 <!-- wp:group {"align":"full","className":"construction-header","layout":{"type":"default"}} -->
 <div class="wp-block-group alignfull construction-header">
