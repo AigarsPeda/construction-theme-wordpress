@@ -190,6 +190,14 @@ video {
 	background: var(--bn-mist);
 }
 
+.construction-logo-mark--wordmark img {
+	width: clamp(8.5rem, 12vw, 10.75rem);
+	height: auto;
+	max-height: 3.25rem;
+	border-radius: 0;
+	background: transparent;
+}
+
 .construction-logo {
 	margin: 0;
 	min-width: 0;

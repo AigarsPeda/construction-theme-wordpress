@@ -92,6 +92,47 @@ function construction_logo_alt(): string {
 }
 
 /**
+ * Use the dark leaf on light browser chrome and the light leaf in dark mode.
+ *
+ * WordPress still manages the default Site Icon and its generated sizes. The
+ * second attachment ID is stored separately because core supports one icon.
+ *
+ * @param string[] $meta_tags Site icon link tags.
+ * @return string[]
+ */
+function construction_theme_aware_site_icon_tags( array $meta_tags ): array {
+	$dark_mode_icon_id = (int) get_option( 'construction_dark_mode_site_icon_id', 0 );
+	if ( $dark_mode_icon_id < 1 || ! wp_attachment_is_image( $dark_mode_icon_id ) ) {
+		return $meta_tags;
+	}
+
+	foreach ( $meta_tags as &$tag ) {
+		if ( str_contains( $tag, 'rel="icon"' ) && ! str_contains( $tag, 'media=' ) ) {
+			$tag = str_replace( ' />', ' media="(prefers-color-scheme: light)" />', $tag );
+		}
+	}
+	unset( $tag );
+
+	$small_url = wp_get_attachment_image_url( $dark_mode_icon_id, 'thumbnail' );
+	$large_url = wp_get_attachment_image_url( $dark_mode_icon_id, 'medium' );
+	if ( is_string( $small_url ) && $small_url !== '' ) {
+		$meta_tags[] = sprintf(
+			'<link rel="icon" href="%s" sizes="32x32" media="(prefers-color-scheme: dark)" />',
+			esc_url( $small_url )
+		);
+	}
+	if ( is_string( $large_url ) && $large_url !== '' ) {
+		$meta_tags[] = sprintf(
+			'<link rel="icon" href="%s" sizes="192x192" media="(prefers-color-scheme: dark)" />',
+			esc_url( $large_url )
+		);
+	}
+
+	return $meta_tags;
+}
+add_filter( 'site_icon_meta_tags', 'construction_theme_aware_site_icon_tags' );
+
+/**
  * One contact field.
  */
 function construction_contact( string $key ): string {

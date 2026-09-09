@@ -13,6 +13,9 @@ $lang         = construction_current_lang();
 $home_url     = esc_url( construction_home_url() );
 $logo_src     = esc_url( construction_logo_url() );
 $logo_alt     = esc_attr( construction_logo_alt() );
+$custom_logo  = construction_logo_id() > 0;
+$brand_class  = $custom_logo ? 'construction-brand construction-brand--wordmark' : 'construction-brand';
+$mark_class   = $custom_logo ? 'construction-logo-mark construction-logo-mark--wordmark' : 'construction-logo-mark';
 $menu_label   = esc_attr( construction_t( 'nav.menu' ) );
 $close_label  = esc_attr( construction_t( 'nav.close' ) );
 $lang_label   = esc_html( construction_t( 'nav.language' ) );
@@ -48,9 +51,9 @@ $drawer_nav_html = wp_nav_menu(
 <div class="wp-block-group alignfull construction-header">
 	<!-- wp:html -->
 	<div class="construction-header__inner">
-		<div class="construction-brand">
-			<figure class="construction-logo-mark"><a href="<?php echo $home_url; ?>"><img src="<?php echo $logo_src; ?>" alt="<?php echo $logo_alt; ?>" width="40" height="40"/></a></figure>
-			<p class="construction-logo"><a href="<?php echo $home_url; ?>" rel="home"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></a></p>
+		<div class="<?php echo esc_attr( $brand_class ); ?>">
+			<figure class="<?php echo esc_attr( $mark_class ); ?>"><a href="<?php echo $home_url; ?>"><img src="<?php echo $logo_src; ?>" alt="<?php echo $logo_alt; ?>" width="<?php echo $custom_logo ? '172' : '40'; ?>" height="<?php echo $custom_logo ? '39' : '40'; ?>"/></a></figure>
+			<p class="construction-logo<?php echo $custom_logo ? ' screen-reader-text' : ''; ?>"><a href="<?php echo $home_url; ?>" rel="home"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></a></p>
 		</div>
 
 		<nav class="construction-nav construction-nav--desktop" aria-label="<?php echo esc_attr( construction_t( 'nav.projects' ) ); ?>">

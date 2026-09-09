@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CONSTRUCTION_VERSION', '0.9.28' );
+define( 'CONSTRUCTION_VERSION', '0.9.32' );
 
 require get_template_directory() . '/inc/i18n.php';
 require get_template_directory() . '/inc/settings.php';
@@ -38,8 +38,8 @@ function construction_setup(): void {
 	add_theme_support(
 		'custom-logo',
 		array(
-			'height'      => 80,
-			'width'       => 80,
+			'height'      => 219,
+			'width'       => 972,
 			'flex-height' => true,
 			'flex-width'  => true,
 		)
