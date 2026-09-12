@@ -69,6 +69,30 @@ zip -r construction.zip construction
 
 Then: **Appearance → Themes → Add New → Upload Theme → construction.zip**.
 
+## Deployment scripts
+
+The repository includes three scripts for the current Local and DigitalOcean setup:
+
+```bash
+# Preview theme-file changes without uploading anything.
+./scripts/sync-code-to-droplet.sh --dry-run
+
+# Upload the local theme and make the remote theme directory match it.
+./scripts/sync-code-to-droplet.sh
+
+# Replace Local's database with the droplet database.
+./scripts/pull-db-from-droplet.sh
+
+# Replace the droplet database with Local's database.
+./scripts/push-db-to-droplet.sh
+```
+
+The database scripts ask for an explicit confirmation. Pass `--yes` only when a deliberate non-interactive run is required. Both scripts perform serialized-safe URL replacement. Pulls retain the latest three compressed local rollback backups in `Desktop/construction-backups`. Pushes retain the latest three compressed production rollback backups in `/var/backups/construction`.
+
+Database synchronization does not copy media files. Any files referenced from `wp-content/uploads` must already exist on both Local and the droplet.
+
+The scripts use the current SSH key, server address, Local paths, and WordPress paths as defaults. Override settings through the environment when needed. Run any script with `--help` to see the available variables.
+
 ## After activate
 
 1. **Appearance → Construction** — upload logo; set phone, email, addresses.

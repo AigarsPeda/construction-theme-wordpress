@@ -160,9 +160,9 @@ function construction_strings(): array {
 			'ru' => 'Стройплощадка — управление и надзор',
 		),
 		'nav.projects'         => array(
-			'lv' => 'Projekti',
-			'en' => 'Projects',
-			'ru' => 'Проекты',
+			'lv' => 'Realizētie projekti',
+			'en' => 'Completed projects',
+			'ru' => 'Реализованные проекты',
 		),
 		'nav.home'            => array(
 			'lv' => 'Sākums',

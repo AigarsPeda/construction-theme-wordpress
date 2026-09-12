@@ -149,17 +149,17 @@ function construction_rebuild_polylang_projects( bool $force = false ) {
 
 	$defs = array(
 		'lv' => array(
-			'title'   => 'Projekti',
+			'title'   => 'Realizētie projekti',
 			'slug'    => 'projekti',
 			'content' => construction_projects_page_content_for_lang( 'lv' ),
 		),
 		'en' => array(
-			'title'   => 'Projects',
+			'title'   => 'Completed projects',
 			'slug'    => 'projects',
 			'content' => construction_projects_page_content_for_lang( 'en' ),
 		),
 		'ru' => array(
-			'title'   => 'Проекты',
+			'title'   => 'Реализованные проекты',
 			'slug'    => 'proekty',
 			'content' => construction_projects_page_content_for_lang( 'ru' ),
 		),
@@ -267,7 +267,7 @@ function construction_find_projects_page_candidate_ids(): array {
 	);
 	foreach ( $title_query->posts as $pid ) {
 		$title = get_the_title( (int) $pid );
-		if ( in_array( $title, array( 'Projekti', 'Projects', 'Проекты' ), true ) ) {
+		if ( in_array( $title, array( 'Projekti', 'Projects', 'Проекты', 'Realizētie projekti', 'Completed projects', 'Реализованные проекты' ), true ) ) {
 			$old_ids[] = (int) $pid;
 		}
 	}
