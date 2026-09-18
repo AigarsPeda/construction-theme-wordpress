@@ -119,6 +119,17 @@ function construction_contacts_page_content_for_lang( string $lang ): string {
 			</div>
 			<!-- /wp:columns -->
 
+			<!-- wp:group {"className":"construction-contacts-page__legal","layout":{"type":"default"}} -->
+			<div class="wp-block-group construction-contacts-page__legal">
+				<!-- wp:heading {"level":2,"className":"construction-contacts-page__legal-title"} -->
+				<h2 class="wp-block-heading construction-contacts-page__legal-title">{$t( 'contacts.legal_title' )}</h2>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"className":"construction-contacts-page__legal-value"} -->
+				<p class="construction-contacts-page__legal-value">SIA OAKS Build</p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+
 			<!-- wp:group {"className":"construction-lead-form construction-lead-form--visual construction-contacts-page__cta","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"center"}} -->
 			<div class="wp-block-group construction-lead-form construction-lead-form--visual construction-contacts-page__cta">
 				<!-- wp:paragraph {"className":"construction-lead-form__hint"} -->
@@ -261,6 +272,56 @@ function construction_get_contacts_page_ids(): array {
 
 	return $ids;
 }
+
+/**
+ * Add the editable company-details section to existing Contact pages once.
+ * Existing page content is preserved exactly; only the missing block group is inserted.
+ */
+function construction_add_contacts_legal_section(): void {
+	$version = '1';
+
+	if ( $version === get_option( 'construction_contacts_legal_section_version' ) ) {
+		return;
+	}
+
+	$pages = construction_get_contacts_page_ids();
+	if ( count( $pages ) !== 3 ) {
+		return;
+	}
+
+	$completed = true;
+	foreach ( $pages as $lang => $page_id ) {
+		$content = (string) get_post_field( 'post_content', $page_id );
+		if ( str_contains( $content, 'construction-contacts-page__legal' ) ) {
+			continue;
+		}
+
+		$title = esc_html( construction_string( 'contacts.legal_title', $lang ) );
+		$section = <<<HTML
+			<!-- wp:group {"className":"construction-contacts-page__legal","layout":{"type":"default"}} -->
+			<div class="wp-block-group construction-contacts-page__legal">
+				<!-- wp:heading {"level":2,"className":"construction-contacts-page__legal-title"} -->
+				<h2 class="wp-block-heading construction-contacts-page__legal-title">{$title}</h2>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"className":"construction-contacts-page__legal-value"} -->
+				<p class="construction-contacts-page__legal-value">SIA OAKS Build</p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+HTML;
+		$marker  = '/<!-- wp:group \{"className":"construction-lead-form construction-lead-form(?:--|\\\\u002d\\\\u002d)visual construction-contacts-page__cta"[^>]*-->/' ;
+		$updated = preg_replace( $marker, $section . "\n\n" . '$0', $content, 1, $count );
+
+		if ( 1 !== $count || ! is_string( $updated ) || is_wp_error( wp_update_post( array( 'ID' => $page_id, 'post_content' => $updated ), true ) ) ) {
+			$completed = false;
+		}
+	}
+
+	if ( $completed ) {
+		update_option( 'construction_contacts_legal_section_version', $version );
+	}
+}
+add_action( 'init', 'construction_add_contacts_legal_section', 25 );
 
 /**
  * @return list<int>

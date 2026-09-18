@@ -249,6 +249,11 @@ function construction_strings(): array {
 			'en' => 'Phone',
 			'ru' => 'Телефон',
 		),
+		'contacts.legal_title' => array(
+			'lv' => 'Rekvizīti',
+			'en' => 'Company details',
+			'ru' => 'Реквизиты',
+		),
 		'projects.eyebrow'     => array(
 			'lv' => 'Projekti',
 			'en' => 'Projects',
