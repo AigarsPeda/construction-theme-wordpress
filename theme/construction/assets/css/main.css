@@ -2320,7 +2320,8 @@ html.is-home-project-modal .wp-site-blocks {
 
 .construction-audience-page__section-title {
 	margin-bottom: clamp(2rem, 5vw, 4rem) !important;
-	max-width: 18ch;
+	max-width: none;
+	text-wrap: pretty;
 }
 
 .construction-audience-page__steps {
