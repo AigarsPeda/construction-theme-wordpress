@@ -57,9 +57,10 @@ function construction_register_blocks(): void {
 				construction_languages()
 			),
 			'strings'     => array(
-				'projectsGrid'   => __( 'Projects grid', 'construction' ),
-				'homeProjects'   => __( 'Home projects', 'construction' ),
-				'sectionHeading' => __( 'Section heading', 'construction' ),
+			'projectsGrid'   => __( 'Projects grid', 'construction' ),
+			'homeProjects'   => __( 'Home projects', 'construction' ),
+			'sectionHeading' => __( 'Section heading', 'construction' ),
+			'sectionDescription' => __( 'Introduction text', 'construction' ),
 				'empty'          => __( 'No projects yet.', 'construction' ),
 				'editProject'    => __( 'Edit', 'construction' ),
 				'clickToEdit'    => __( 'Manage projects here: add, edit, disable (hide from the site), or remove. Open the full editor for rich descriptions.', 'construction' ),
@@ -135,6 +136,14 @@ function construction_render_projects_grid_block( array $attributes = array(), s
 	$t    = static function ( string $key ) use ( $lang ): string {
 		return esc_html( construction_string( $key, $lang ) );
 	};
+	$intro_attribute = isset( $attributes['intro'] ) && is_string( $attributes['intro'] )
+		? trim( $attributes['intro'] )
+		: '';
+	$intro = esc_html(
+		$intro_attribute !== ''
+			? wp_strip_all_tags( $intro_attribute )
+			: construction_string( 'projects.intro', $lang )
+	);
 
 	$contact_cta  = $t( 'projects.cta' );
 	$contact_href = esc_url( construction_contacts_url_for_lang( $lang ) );
@@ -158,7 +167,7 @@ function construction_render_projects_grid_block( array $attributes = array(), s
 			<h1 class="construction-projects__title">{$t( 'projects.title' )}</h1>
 			<p class="construction-projects__cta-inline"><a href="{$contact_href}">{$contact_cta} →</a></p>
 		</div>
-		<p class="construction-projects__intro">{$t( 'projects.intro' )}</p>
+		<p class="construction-projects__intro">{$intro}</p>
 		<div class="construction-project-viewer" hidden aria-live="polite"></div>
 		<div class="construction-projects__grid">
 {$cards}		</div>

@@ -12,6 +12,8 @@ REMOTE_WP_PATH="${REMOTE_WP_PATH:-/var/www/construction}"
 REMOTE_URL="${REMOTE_URL:-http://201.79.12.67}"
 LOCAL_URL="${LOCAL_URL:-http://construction.local}"
 LOCAL_WP_PATH="${LOCAL_WP_PATH:-/Users/aigarspeda/Local Sites/construction/app/public}"
+LOCAL_UPLOADS_PATH="${LOCAL_UPLOADS_PATH:-$LOCAL_WP_PATH/wp-content/uploads}"
+REMOTE_UPLOADS_PATH="${REMOTE_UPLOADS_PATH:-$REMOTE_WP_PATH/wp-content/uploads}"
 LOCAL_PHP_BIN="${LOCAL_PHP_BIN:-/Users/aigarspeda/Library/Application Support/Local/lightning-services/php-8.2.29+0/bin/darwin-arm64/bin/php}"
 LOCAL_PHP_INI="${LOCAL_PHP_INI:-/Users/aigarspeda/Library/Application Support/Local/run/NuVAbV1Y1/conf/php/php.ini}"
 LOCAL_WP_CLI="${LOCAL_WP_CLI:-/Applications/Local.app/Contents/Resources/extraResources/bin/wp-cli/wp-cli.phar}"
@@ -32,15 +34,17 @@ Replace the local WordPress database with the droplet database. The script:
   2. streams a fresh database export from the droplet;
   3. imports it into Local;
   4. replaces the live URL with http://construction.local;
-  5. flushes caches and rewrite rules.
+  5. synchronizes uploads from the droplet into Local;
+  6. flushes caches and rewrite rules.
 
 This replaces local pages, menus, settings, users, and plugin data.
-It does not copy files from wp-content/uploads.
+Uploads are copied from the droplet without deleting Local-only files.
 Without --yes, type PULL when prompted.
 
 Environment overrides:
   SSH_KEY, REMOTE_HOST, REMOTE_WP_PATH, REMOTE_URL, LOCAL_URL
-  LOCAL_WP_PATH, LOCAL_PHP_BIN, LOCAL_PHP_INI, LOCAL_WP_CLI
+  LOCAL_WP_PATH, LOCAL_UPLOADS_PATH, REMOTE_UPLOADS_PATH
+  LOCAL_PHP_BIN, LOCAL_PHP_INI, LOCAL_WP_CLI
   LOCAL_MYSQL_BIN_DIR, LOCAL_MYSQL_SOCKET, BACKUP_DIR, BACKUP_KEEP
 EOF
 }
@@ -89,6 +93,7 @@ for arg in "$@"; do
 done
 
 command -v ssh >/dev/null 2>&1 || die "ssh is not installed."
+command -v rsync >/dev/null 2>&1 || die "rsync is not installed."
 command -v gzip >/dev/null 2>&1 || die "gzip is not installed."
 command -v grep >/dev/null 2>&1 || die "grep is not installed."
 
@@ -114,6 +119,10 @@ local_wp --skip-plugins --skip-themes db check >/dev/null \
 ssh "${SSH_ARGS[@]}" "$REMOTE_HOST" \
 	"wp --allow-root --path='$REMOTE_WP_PATH' --skip-plugins --skip-themes db check >/dev/null" \
 	|| die "Droplet database is unavailable."
+ssh "${SSH_ARGS[@]}" "$REMOTE_HOST" "test -d '$REMOTE_UPLOADS_PATH'" \
+	|| die "Droplet uploads path is unavailable: $REMOTE_UPLOADS_PATH"
+ssh "${SSH_ARGS[@]}" "$REMOTE_HOST" "command -v rsync >/dev/null" \
+	|| die "rsync is not installed on the droplet."
 
 if [ "$ASSUME_YES" -ne 1 ]; then
 	printf 'This will replace the LOCAL database with the database from %s.\n' "$REMOTE_HOST"
@@ -148,6 +157,13 @@ local_wp search-replace \
 	--all-tables-with-prefix --precise --skip-columns=guid --report-changed-only
 local_wp --skip-plugins --skip-themes option update home "$LOCAL_URL"
 local_wp --skip-plugins --skip-themes option update siteurl "$LOCAL_URL"
+
+printf 'Synchronizing uploads from the droplet...\n'
+mkdir -p "$LOCAL_UPLOADS_PATH"
+rsync -a --human-readable --info=progress2 \
+	-e "ssh -i $SSH_KEY -o BatchMode=yes -o ConnectTimeout=10" \
+	"$REMOTE_HOST:$REMOTE_UPLOADS_PATH/" "$LOCAL_UPLOADS_PATH/"
+
 local_wp cache flush
 local_wp rewrite flush
 

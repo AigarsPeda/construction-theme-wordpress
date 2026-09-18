@@ -1067,9 +1067,9 @@ body.construction-menu-open {
 	align-items: center;
 	justify-content: space-between;
 	gap: 1rem;
-	padding: 1.15rem 0;
+	padding: 1.3rem 0;
 	font-family: "Archivo", sans-serif;
-	font-size: clamp(1.02rem, 2.2vw, 1.2rem);
+	font-size: clamp(1.04rem, 2.2vw, 1.22rem);
 	font-weight: 600;
 	line-height: 1.3;
 	color: var(--bn-ink);
@@ -1097,6 +1097,11 @@ body.construction-menu-open {
 	transform: rotate(225deg);
 }
 
+.construction-faq-item.is-open > summary,
+.construction-faq-item[open].is-open > summary {
+	color: var(--bn-timber);
+}
+
 .construction-faq-item__panel {
 	overflow: hidden !important;
 	height: 0;
@@ -1108,11 +1113,23 @@ body.construction-menu-open {
 .construction-faq-item__panel .wp-block-paragraph,
 .construction-faq-item__panel p {
 	margin: 0;
-	padding-bottom: 1.2rem;
-	max-width: 42rem;
+	padding: 0 2.25rem 1.55rem 0;
+	max-width: 48rem;
 	color: var(--bn-steel);
-	font-size: 1rem;
-	line-height: 1.6;
+	font-size: clamp(1rem, 1.7vw, 1.08rem);
+	line-height: 1.65;
+}
+
+@media (max-width: 640px) {
+	.construction-faq-item > summary {
+		padding: 1.1rem 0;
+	}
+
+	.construction-faq-item__panel .wp-block-paragraph,
+	.construction-faq-item__panel p {
+		padding-right: 0.5rem;
+		padding-bottom: 1.25rem;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1123,6 +1140,18 @@ body.construction-menu-open {
 	.construction-faq-item[open] > .construction-faq-item__panel {
 		height: auto;
 	}
+}
+
+/* Gutenberg does not run the front-end accordion script. Keep every answer
+ * visible in the editor so authors can select and edit it normally. */
+.editor-styles-wrapper .construction-faq-item__panel {
+	height: auto !important;
+	overflow: visible !important;
+}
+
+.editor-styles-wrapper .construction-faq-item__panel .wp-block-paragraph,
+.editor-styles-wrapper .construction-faq-item__panel p {
+	display: block;
 }
 
 /* ——— Contact ——— */
@@ -2034,6 +2063,11 @@ html.is-home-project-modal .wp-site-blocks {
 	margin: 0;
 }
 
+/* WordPress centers flex children by default; audience sections must span the page. */
+.construction-audience-page.alignfull.is-layout-flex {
+	align-items: stretch;
+}
+
 .construction-audience-page__hero {
 	margin: 0 !important;
 	background: var(--bn-mist);
@@ -2096,12 +2130,29 @@ html.is-home-project-modal .wp-site-blocks {
 	margin: 0 !important;
 }
 
+/* Also support an editable Image block wrapped in WordPress Columns. */
+.construction-audience-page__scope-media > .wp-block-columns,
+.construction-audience-page__scope-media > .wp-block-columns > .wp-block-column,
+.construction-audience-page__scope-media .wp-block-image {
+	width: 100% !important;
+	height: 100%;
+	min-height: 100%;
+	margin: 0 !important;
+}
+
 .construction-audience-page__image img,
 .construction-audience-page__hero-media > .wp-block-image img,
 .construction-audience-page__scope-media > .wp-block-image img {
 	display: block;
 	width: 100%;
 	height: 100%;
+	object-fit: cover;
+}
+
+.construction-audience-page__scope-media .wp-block-image img {
+	width: 100% !important;
+	height: 100% !important;
+	min-height: 100%;
 	object-fit: cover;
 }
 
@@ -2204,6 +2255,11 @@ html.is-home-project-modal .wp-site-blocks {
 
 .wp-site-blocks .construction-audience-page--homebuilders .construction-audience-page__hero-media > .wp-block-image:first-child {
 	grid-row: 1 / 3;
+}
+
+/* A single editable hero image should fill the full media column. */
+.wp-site-blocks .construction-audience-page--homebuilders .construction-audience-page__hero-media > .wp-block-image:only-child {
+	grid-column: 1 / -1;
 }
 
 .wp-site-blocks .construction-audience-page--homebuilders .construction-audience-page__hero-media img {

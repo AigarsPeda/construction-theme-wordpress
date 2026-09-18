@@ -107,10 +107,16 @@ function construction_front_url_for_lang( string $lang ): string {
 /**
  * Block markup for the Projects page in one language (dynamic projects grid).
  */
-function construction_projects_page_content_for_lang( string $lang ): string { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-	return <<<HTML
-<!-- wp:construction/projects-grid {"align":"full"} /-->
-HTML;
+function construction_projects_page_content_for_lang( string $lang ): string {
+	$attributes = wp_json_encode(
+		array(
+			'align' => 'full',
+			'intro' => construction_string( 'projects.intro', $lang ),
+		),
+		JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+	);
+
+	return "<!-- wp:construction/projects-grid {$attributes} /-->";
 }
 
 /**
