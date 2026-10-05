@@ -87,11 +87,19 @@ The repository includes three scripts for the current Local and DigitalOcean set
 ./scripts/push-db-to-droplet.sh
 ```
 
-The database scripts ask for an explicit confirmation. Pass `--yes` only when a deliberate non-interactive run is required. Both scripts perform serialized-safe URL replacement. Pulls retain the latest three compressed local rollback backups in `Desktop/construction-backups`. Pushes retain the latest three compressed production rollback backups in `/var/backups/construction`.
+The database scripts ask for an explicit confirmation. Pass `--yes` only when a deliberate non-interactive run is required. Both scripts perform serialized-safe URL replacement. Pulls retain the latest three compressed local rollback backups in `Desktop/construction-backups`. Pushes retain the latest three compressed production rollback backups in `/var/backups/construction`. Theme deployments also save a private rollback archive there before uploading files.
 
-Database synchronization does not copy media files. Any files referenced from `wp-content/uploads` must already exist on both Local and the droplet.
+Pulls also copy the droplet's uploads into Local without deleting Local-only files. Database pushes do not upload media files.
 
 The scripts use the current SSH key, server address, Local paths, and WordPress paths as defaults. Override settings through the environment when needed. Run any script with `--help` to see the available variables.
+
+Project-save regression checks run through Local's WP-CLI environment:
+
+```bash
+wp --path="/Users/aigarspeda/Local Sites/construction/app/public" eval-file /Users/aigarspeda/Desktop/construction/scripts/tests/project-rest.php
+```
+
+Use Local's site shell so PHP and the database socket are configured. This check refuses to run outside `construction.local`, creates temporary projects, checks REST saves and rendered cards, and removes the fixtures afterwards.
 
 ## After activate
 

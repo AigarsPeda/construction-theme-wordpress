@@ -131,9 +131,11 @@ You do **not** need to add cards manually on those pages. Publish a project → 
 **Edit from the page editor:** open the Projects (or Home) page → select the projects block → manage cards there:
 
 - **Add project** — creates a disabled draft and opens quick edit  
-- **Edit** — titles, slug, cover, gallery (or **Open full editor** for rich description)  
+- **Edit** — titles, plain-text descriptions, slug, cover, gallery (or **Open full editor** for rich description)
 - **Disable / Enable** — disabled projects stay in admin but are hidden on the site  
 - **Remove** — permanently deletes the project (asks for confirmation)
+
+**Save project** applies the changes to the site immediately. Saving the surrounding page is unnecessary. An empty or already-used slug shows an error and leaves the project unchanged.
 
 Pages: **projekti** (LV) / **projects** (EN) / **proekty** (RU). Clicking a card opens the modal (gallery, title, description). Close with ×, backdrop, or Escape.
 

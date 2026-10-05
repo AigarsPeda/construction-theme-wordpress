@@ -51,7 +51,7 @@ function construction_register_project_cpt(): void {
 			'menu_icon'           => 'dashicons-portfolio',
 			'capability_type'     => 'post',
 			'hierarchical'        => false,
-			'supports'            => array( 'title', 'editor', 'thumbnail', 'revisions', 'page-attributes' ),
+			'supports'            => array( 'title', 'editor', 'thumbnail', 'revisions', 'page-attributes', 'custom-fields' ),
 			'has_archive'         => false,
 			'rewrite'             => false,
 			'query_var'           => false,
@@ -386,14 +386,6 @@ function construction_register_project_rest_fields(): void {
 			'update_callback' => static function ( $value, WP_Post $post ): bool {
 				$i18n = construction_sanitize_project_i18n( $value );
 				update_post_meta( (int) $post->ID, CONSTRUCTION_PROJECT_I18N_META, $i18n );
-				$lv_title = $i18n['lv']['title'] !== '' ? $i18n['lv']['title'] : ( $i18n['en']['title'] ?? '' );
-				wp_update_post(
-					array(
-						'ID'           => (int) $post->ID,
-						'post_title'   => $lv_title !== '' ? $lv_title : $post->post_title,
-						'post_excerpt' => construction_project_plain_text( $i18n['lv']['excerpt'] ),
-					)
-				);
 				return true;
 			},
 			'schema'          => array(
@@ -404,6 +396,62 @@ function construction_register_project_rest_fields(): void {
 	);
 }
 add_action( 'rest_api_init', 'construction_register_project_rest_fields' );
+
+/**
+ * Sync REST edits after WordPress has saved both registered meta and custom fields.
+ */
+function construction_project_rest_save( WP_Post $post, WP_REST_Request $request ): void {
+	$i18n = construction_get_project_i18n( (int) $post->ID );
+	if ( ! $request->has_param( 'i18n' ) ) {
+		// The full editor sends title/content for the language selected in its meta.
+		$lang = get_post_meta( (int) $post->ID, CONSTRUCTION_PROJECT_EDIT_LANG_META, true );
+		if ( ! is_string( $lang ) || ! in_array( $lang, construction_languages(), true ) ) {
+			$lang = 'lv';
+		}
+		if ( $request->has_param( 'title' ) ) {
+			$i18n[ $lang ]['title'] = sanitize_text_field( $post->post_title );
+		}
+		if ( $request->has_param( 'content' ) ) {
+			$i18n[ $lang ]['excerpt'] = construction_sanitize_project_content( $post->post_content );
+		}
+		update_post_meta( (int) $post->ID, CONSTRUCTION_PROJECT_I18N_META, $i18n );
+	}
+
+	// Quick edits supply i18n directly. Never copy the old body over that input.
+	remove_action( 'save_post_' . CONSTRUCTION_PROJECT_POST_TYPE, 'construction_project_save_meta' );
+	wp_update_post(
+		wp_slash(
+			array(
+				'ID'           => (int) $post->ID,
+				'post_title'   => $i18n['lv']['title'] !== '' ? $i18n['lv']['title'] : $post->post_title,
+				'post_content' => $i18n['lv']['excerpt'],
+				'post_excerpt' => construction_project_plain_text( $i18n['lv']['excerpt'] ),
+			)
+		)
+	);
+	add_action( 'save_post_' . CONSTRUCTION_PROJECT_POST_TYPE, 'construction_project_save_meta' );
+}
+add_action( 'rest_after_insert_' . CONSTRUCTION_PROJECT_POST_TYPE, 'construction_project_rest_save', 10, 2 );
+
+/**
+ * Reject invalid share-link slugs before any REST fields are changed.
+ *
+ * @return stdClass|WP_Error
+ */
+function construction_project_rest_validate_slug( stdClass $post, WP_REST_Request $request ) {
+	if ( ! $request->has_param( 'slug' ) ) {
+		return $post;
+	}
+	$slug = sanitize_title( (string) $request->get_param( 'slug' ) );
+	if ( $slug === '' ) {
+		return new WP_Error( 'rest_invalid_param', __( 'Project slug cannot be empty.', 'construction' ), array( 'status' => 400 ) );
+	}
+	if ( construction_project_slug_is_taken( $slug, (int) $request->get_param( 'id' ) ) ) {
+		return new WP_Error( 'rest_invalid_param', __( 'That slug is already used by another project.', 'construction' ), array( 'status' => 400 ) );
+	}
+	return $post;
+}
+add_filter( 'rest_pre_insert_' . CONSTRUCTION_PROJECT_POST_TYPE, 'construction_project_rest_validate_slug', 10, 2 );
 
 /**
  * Meta boxes.
@@ -485,6 +533,10 @@ function construction_project_render_gallery_meta_box( WP_Post $post ): void {
  * Sync title + rich description from the block editor; save gallery.
  */
 function construction_project_save_meta( int $post_id ): void {
+	// REST saves run before meta/custom fields are persisted. Sync them afterwards.
+	if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+		return;
+	}
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 		return;
 	}

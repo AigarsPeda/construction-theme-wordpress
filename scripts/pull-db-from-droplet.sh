@@ -14,7 +14,7 @@ LOCAL_URL="${LOCAL_URL:-http://construction.local}"
 LOCAL_WP_PATH="${LOCAL_WP_PATH:-/Users/aigarspeda/Local Sites/construction/app/public}"
 LOCAL_UPLOADS_PATH="${LOCAL_UPLOADS_PATH:-$LOCAL_WP_PATH/wp-content/uploads}"
 REMOTE_UPLOADS_PATH="${REMOTE_UPLOADS_PATH:-$REMOTE_WP_PATH/wp-content/uploads}"
-LOCAL_PHP_BIN="${LOCAL_PHP_BIN:-/Users/aigarspeda/Library/Application Support/Local/lightning-services/php-8.2.29+0/bin/darwin-arm64/bin/php}"
+LOCAL_PHP_BIN="${LOCAL_PHP_BIN:-/Users/aigarspeda/Library/Application Support/Local/lightning-services/php-8.2.30+1/bin/darwin-arm64/bin/php}"
 LOCAL_PHP_INI="${LOCAL_PHP_INI:-/Users/aigarspeda/Library/Application Support/Local/run/NuVAbV1Y1/conf/php/php.ini}"
 LOCAL_WP_CLI="${LOCAL_WP_CLI:-/Applications/Local.app/Contents/Resources/extraResources/bin/wp-cli/wp-cli.phar}"
 LOCAL_MYSQL_BIN_DIR="${LOCAL_MYSQL_BIN_DIR:-/Users/aigarspeda/Library/Application Support/Local/lightning-services/mysql-8.4.0/bin/darwin-arm64/bin}"
@@ -160,7 +160,7 @@ local_wp --skip-plugins --skip-themes option update siteurl "$LOCAL_URL"
 
 printf 'Synchronizing uploads from the droplet...\n'
 mkdir -p "$LOCAL_UPLOADS_PATH"
-rsync -a --human-readable --info=progress2 \
+rsync -a --human-readable --progress \
 	-e "ssh -i $SSH_KEY -o BatchMode=yes -o ConnectTimeout=10" \
 	"$REMOTE_HOST:$REMOTE_UPLOADS_PATH/" "$LOCAL_UPLOADS_PATH/"
 

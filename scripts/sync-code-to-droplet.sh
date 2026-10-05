@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
+umask 077
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
@@ -8,6 +9,7 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 SSH_KEY="${SSH_KEY:-/Users/aigarspeda/.ssh/digitalocean_construction}"
 REMOTE_HOST="${REMOTE_HOST:-root@201.79.12.67}"
 REMOTE_WP_PATH="${REMOTE_WP_PATH:-/var/www/construction}"
+REMOTE_BACKUP_DIR="${REMOTE_BACKUP_DIR:-/var/backups/construction}"
 REMOTE_URL="${REMOTE_URL:-http://201.79.12.67}"
 LOCAL_THEME_PATH="${LOCAL_THEME_PATH:-$PROJECT_ROOT/theme/construction}"
 REMOTE_THEME_PATH="$REMOTE_WP_PATH/wp-content/themes/construction"
@@ -20,9 +22,10 @@ Usage: ./scripts/sync-code-to-droplet.sh [--dry-run]
 
 Synchronize the local Construction theme with the DigitalOcean droplet.
 The remote theme directory becomes an exact copy of the local theme directory.
+Apply runs save a private archive of the live theme before changing files.
 
 Environment overrides:
-  SSH_KEY, REMOTE_HOST, REMOTE_WP_PATH, REMOTE_URL, LOCAL_THEME_PATH
+  SSH_KEY, REMOTE_HOST, REMOTE_WP_PATH, REMOTE_BACKUP_DIR, REMOTE_URL, LOCAL_THEME_PATH
 EOF
 }
 
@@ -62,6 +65,9 @@ case "$REMOTE_THEME_PATH" in
 		die "Refusing to synchronize unexpected remote path: $REMOTE_THEME_PATH"
 		;;
 esac
+case "$REMOTE_BACKUP_DIR/" in
+	"$REMOTE_WP_PATH/"*) die "Backups must be outside the public WordPress directory." ;;
+esac
 
 SSH_ARGS=(-i "$SSH_KEY" -o BatchMode=yes -o ConnectTimeout=10)
 RSYNC_SSH="ssh -i $SSH_KEY -o BatchMode=yes -o ConnectTimeout=10"
@@ -84,6 +90,12 @@ RSYNC_ARGS=(
 if [ "$DRY_RUN" -eq 1 ]; then
 	RSYNC_ARGS+=(--dry-run)
 	printf 'Dry run. No remote files will change.\n'
+else
+	REMOTE_BACKUP="$(ssh "${SSH_ARGS[@]}" "$REMOTE_HOST" \
+		"umask 077; mkdir -p '$REMOTE_BACKUP_DIR' && mktemp -d '$REMOTE_BACKUP_DIR/theme-$(date +%Y%m%d-%H%M%S).XXXXXXXX'")"
+	ssh "${SSH_ARGS[@]}" "$REMOTE_HOST" \
+		"umask 077; tar -czf '$REMOTE_BACKUP/theme.tar.gz' -C '$(dirname "$REMOTE_THEME_PATH")' construction"
+	printf 'Private theme rollback archive: %s/theme.tar.gz\n' "$REMOTE_BACKUP"
 fi
 
 rsync "${RSYNC_ARGS[@]}" -e "$RSYNC_SSH" \
