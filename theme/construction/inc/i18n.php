@@ -300,7 +300,7 @@ function construction_strings(): array {
 			'ru' => 'Открыть страницу проектов',
 		),
 		'projects.home_title'  => array(
-			'lv' => 'Mūsu speciālistu realizētie projekti',
+			'lv' => 'Projekti',
 			'en' => 'Projects delivered by our specialists',
 			'ru' => 'Проекты, реализованные нашими специалистами',
 		),

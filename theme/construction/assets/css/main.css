@@ -1879,18 +1879,29 @@ html.is-home-project-modal .wp-site-blocks {
 }
 
 .construction-home-projects__marquee {
-	overflow: hidden;
+	overflow-x: auto;
+	overflow-y: hidden;
 	width: 100%;
 	margin: 0;
 	padding: 0.15rem 0 0.35rem;
 	cursor: grab;
-	touch-action: pan-y;
+	touch-action: pan-x pan-y;
+	scroll-behavior: auto;
+	overscroll-behavior-x: contain;
+	-webkit-overflow-scrolling: touch;
+	scrollbar-width: none;
 	user-select: none;
 	-webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
 	mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
 }
 
-.construction-home-projects__marquee.is-dragging {
+.construction-home-projects__marquee::-webkit-scrollbar {
+	display: none;
+}
+
+.construction-home-projects__marquee.is-dragging,
+.construction-home-projects__marquee.is-dragging .construction-home-projects__card,
+.construction-home-projects__marquee.is-dragging a {
 	cursor: grabbing;
 }
 
@@ -1900,7 +1911,6 @@ html.is-home-project-modal .wp-site-blocks {
 	align-items: stretch;
 	width: max-content;
 	gap: 1.15rem !important;
-	will-change: transform;
 }
 
 .construction-home-projects__set {
@@ -1972,6 +1982,11 @@ html.is-home-project-modal .wp-site-blocks {
 	line-height: 0 !important;
 	text-decoration: none !important;
 	overflow: hidden;
+}
+
+.construction-home-projects__card:focus-within {
+	outline: 3px solid var(--bn-ink);
+	outline-offset: -3px;
 }
 
 .construction-home-projects__media {

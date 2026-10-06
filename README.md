@@ -101,6 +101,8 @@ wp --path="/Users/aigarspeda/Local Sites/construction/app/public" eval-file /Use
 
 Use Local's site shell so PHP and the database socket are configured. This check refuses to run outside `construction.local`, creates temporary projects, checks REST saves and rendered cards, and removes the fixtures afterwards.
 
+Homepage carousel regression checks run with `node scripts/tests/home-carousel.cjs`. They cover preloaded repeats, swipe momentum, mouse dragging, click handling, hover and keyboard pauses, and reduced motion. Check physical mobile swipes separately in Safari and Chrome.
+
 ## After activate
 
 1. **Appearance → Construction** — upload logo; set phone, email, addresses.

@@ -692,7 +692,7 @@
 		});
 	}
 
-	// Homepage Realizētie projekti: slow infinite marquee + drag/scrub.
+	// Native scrolling with preloaded repeats, like JanogaGo's client carousel.
 	(() => {
 		const marquee = document.querySelector('[data-home-projects-marquee]');
 		const track = document.querySelector('[data-home-projects-track]');
@@ -713,154 +713,206 @@
 		track.appendChild(set);
 		track.dataset.marqueeReady = '1';
 
-		if (reduceMotion) {
-			return;
-		}
-
-		const clone = set.cloneNode(true);
-		clone.setAttribute('aria-hidden', 'true');
-		clone.querySelectorAll('a').forEach((anchor) => {
-			anchor.setAttribute('tabindex', '-1');
-		});
-		track.appendChild(clone);
-
-		const speed = 32; // px per second — same calm pace as before
+		const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+		const speed = 32;
 		const dragThreshold = 6;
+		let centreBatch = 0;
 		let loopWidth = 0;
-		let offset = 0;
-		let pointerActive = false;
-		let dragging = false;
-		let dragMoved = false;
+		let frame;
+		let lastFrameTime = 0;
+		let scrollRemainder = 0;
+		let resumeTimer;
+		let resizeTimer;
 		let pointerId = null;
+		let touchActive = false;
+		let hovering = false;
+		let focused = false;
+		let visible = false;
+		let imagesReady = false;
+		let dragging = false;
 		let startX = 0;
-		let startOffset = 0;
-		let lastTs = 0;
+		let startY = 0;
+		let lastX = 0;
+		let suppressClickUntil = 0;
+		let viewportWidth = window.innerWidth;
 
-		const wrap = (value) => {
-			if (loopWidth <= 0) {
-				return value;
-			}
-			let next = value;
-			while (next <= -loopWidth) {
-				next += loopWidth;
-			}
-			while (next > 0) {
-				next -= loopWidth;
-			}
-			return next;
+		const canAutoplay = () => loopWidth && imagesReady && visible && !motionQuery.matches &&
+			!document.hidden && pointerId === null && !touchActive && !hovering && !focused &&
+			!document.body.classList.contains('has-project-modal');
+		const pause = () => {
+			window.clearTimeout(resumeTimer);
+			if (frame !== undefined) window.cancelAnimationFrame(frame);
+			frame = undefined;
+			lastFrameTime = 0;
+			scrollRemainder = 0;
 		};
-
-		const apply = () => {
-			track.style.transform = `translate3d(${offset}px, 0, 0)`;
+		const recenter = () => {
+			if (!loopWidth || focused) return;
+			const left = marquee.scrollLeft;
+			const remaining = marquee.scrollWidth - marquee.clientWidth - left;
+			if (left >= loopWidth && remaining >= loopWidth) return;
+			// Move by whole repeats. No DOM changes or image loading during a swipe.
+			const phase = ((left % loopWidth) + loopWidth) % loopWidth;
+			marquee.scrollLeft = centreBatch * loopWidth + phase;
 		};
-
+		const tick = (timestamp) => {
+			frame = undefined;
+			if (!canAutoplay()) return;
+			if (!lastFrameTime) lastFrameTime = timestamp;
+			scrollRemainder += Math.min(timestamp - lastFrameTime, 48) * speed / 1000;
+			lastFrameTime = timestamp;
+			const distance = Math.floor(scrollRemainder);
+			scrollRemainder -= distance;
+			if (distance) marquee.scrollLeft += distance;
+			recenter();
+			frame = window.requestAnimationFrame(tick);
+		};
+		const resume = () => {
+			window.clearTimeout(resumeTimer);
+			if (!canAutoplay()) return;
+			resumeTimer = window.setTimeout(() => {
+				if (!canAutoplay() || frame !== undefined) return;
+				lastFrameTime = 0;
+				frame = window.requestAnimationFrame(tick);
+			}, 700);
+		};
+		const createClone = () => {
+			const clone = set.cloneNode(true);
+			clone.setAttribute('aria-hidden', 'true');
+			// Project details come from the original cards; repeats only need their covers.
+			clone.querySelectorAll('.construction-home-projects__body, .construction-home-projects__gallery').forEach((node) => node.remove());
+			clone.querySelectorAll('[id]').forEach((node) => node.removeAttribute('id'));
+			clone.querySelectorAll('a, button, [tabindex]').forEach((node) => node.setAttribute('tabindex', '-1'));
+			return clone;
+		};
 		const measure = () => {
+			pause();
+			const oldPhase = loopWidth ? ((marquee.scrollLeft % loopWidth) + loopWidth) % loopWidth / loopWidth : 0;
 			const styles = window.getComputedStyle(track);
-			const gap = Number.parseFloat(styles.columnGap || styles.gap) || 18;
+			const gap = Number.parseFloat(styles.columnGap || styles.gap) || 0;
 			loopWidth = set.getBoundingClientRect().width + gap;
-			offset = wrap(offset);
-			apply();
+			if (!loopWidth) return;
+			// Enough prebuilt content on either side, even with one project on a wide screen.
+			const nextCentre = Math.max(3, Math.ceil(marquee.clientWidth / loopWidth) + 2);
+			if (nextCentre !== centreBatch) {
+				Array.from(track.children).forEach((batch) => { if (batch !== set) batch.remove(); });
+				centreBatch = nextCentre;
+				for (let i = 0; i < centreBatch; i++) track.insertBefore(createClone(), set);
+				for (let i = 0; i < centreBatch; i++) track.appendChild(createClone());
+			}
+			marquee.scrollLeft = centreBatch * loopWidth + oldPhase * loopWidth;
+			resume();
 		};
 
-		const endPointer = (event) => {
-			if (!pointerActive || (pointerId !== null && event.pointerId !== pointerId)) {
-				return;
-			}
-			pointerActive = false;
-			dragging = false;
-			pointerId = null;
-			marquee.classList.remove('is-dragging');
-			lastTs = 0;
-			// Only block navigation after a real scrub — plain clicks must open the project.
-			if (dragMoved) {
-				const suppressClick = (clickEvent) => {
-					clickEvent.preventDefault();
-					clickEvent.stopPropagation();
-					marquee.removeEventListener('click', suppressClick, true);
-				};
-				marquee.addEventListener('click', suppressClick, true);
-			}
-		};
+		const coverImages = cards.flatMap((card) => Array.from(card.querySelectorAll('.construction-home-projects__media img')));
+		coverImages.forEach((image) => { image.loading = 'eager'; });
+		measure();
+		Promise.all(coverImages.map((image) => image.decode().catch(() => {}))).then(() => {
+			imagesReady = true;
+			resume();
+		});
+		if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
 
-		const onPointerDown = (event) => {
-			if (event.button !== undefined && event.button !== 0) {
-				return;
-			}
-			// Do not capture yet — capturing on every down swallows card link clicks.
-			pointerActive = true;
-			dragging = false;
-			dragMoved = false;
+		marquee.addEventListener('scroll', () => {
+			recenter();
+			if (touchActive) suppressClickUntil = performance.now() + 400;
+			// Native touch/trackpad momentum keeps resetting this delay after release.
+			if (frame === undefined) resume();
+		}, { passive: true });
+		marquee.addEventListener('pointerdown', (event) => {
+			if (!event.isPrimary || event.button !== 0 || pointerId !== null) return;
+			// Mouse scrubbing should not focus a repeated link or latch the keyboard pause.
+			if (event.pointerType === 'mouse') event.preventDefault();
+			pause();
 			pointerId = event.pointerId;
-			startX = event.clientX;
-			startOffset = offset;
+			startX = lastX = event.clientX;
+			startY = event.clientY;
+			dragging = false;
+			suppressClickUntil = 0;
+		}, { passive: false });
+		window.addEventListener('pointermove', (event) => {
+			if (event.pointerId !== pointerId) return;
+			const dx = event.clientX - startX;
+			const dy = event.clientY - startY;
+			if (!dragging && (Math.abs(dx) < dragThreshold || Math.abs(dx) <= Math.abs(dy))) return;
+			dragging = true;
+			suppressClickUntil = performance.now() + 400;
+			// Touch keeps the browser's native scrolling and momentum.
+			if (event.pointerType !== 'mouse') return;
+			event.preventDefault();
+			marquee.classList.add('is-dragging');
+			if (!marquee.hasPointerCapture(event.pointerId)) marquee.setPointerCapture(event.pointerId);
+			marquee.scrollLeft -= event.clientX - lastX;
+			lastX = event.clientX;
+			recenter();
+		}, { passive: false });
+		const releasePointer = (event) => {
+			if (event.pointerId !== pointerId) return;
+			if (dragging) suppressClickUntil = performance.now() + 400;
+			pointerId = null;
+			dragging = false;
+			marquee.classList.remove('is-dragging');
+			resume();
 		};
-
-		const onPointerMove = (event) => {
-			if (!pointerActive || (pointerId !== null && event.pointerId !== pointerId)) {
-				return;
-			}
-			const delta = event.clientX - startX;
-			if (!dragging) {
-				if (Math.abs(delta) < dragThreshold) {
-					return;
-				}
-				dragging = true;
-				dragMoved = true;
-				marquee.classList.add('is-dragging');
-				if (marquee.setPointerCapture) {
-					marquee.setPointerCapture(event.pointerId);
-				}
-			}
-			offset = wrap(startOffset + delta);
-			apply();
+		window.addEventListener('pointerup', releasePointer, { passive: true });
+		window.addEventListener('pointercancel', releasePointer, { passive: true });
+		marquee.addEventListener('lostpointercapture', releasePointer, { passive: true });
+		marquee.addEventListener('touchstart', () => {
+			touchActive = true;
+			pause();
+		}, { passive: true });
+		const releaseTouch = (event) => {
+			touchActive = event.touches.length > 0;
+			resume();
 		};
-
-		marquee.addEventListener('pointerdown', onPointerDown);
-		marquee.addEventListener('pointermove', onPointerMove);
-		marquee.addEventListener('pointerup', endPointer);
-		marquee.addEventListener('pointercancel', endPointer);
-
-		marquee.addEventListener(
-			'wheel',
-			(event) => {
-				const delta =
-					Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
-				if (!delta) {
-					return;
-				}
-				event.preventDefault();
-				offset = wrap(offset - delta);
-				apply();
-				lastTs = 0;
-			},
-			{ passive: false }
-		);
-
-		const tick = (ts) => {
-			if (!lastTs) {
-				lastTs = ts;
-			}
-			const dt = Math.min(0.064, (ts - lastTs) / 1000);
-			lastTs = ts;
-			if (!dragging) {
-				offset = wrap(offset - speed * dt);
-				apply();
-			}
-			window.requestAnimationFrame(tick);
-		};
-
-		const start = () => {
-			measure();
-			window.requestAnimationFrame(tick);
-		};
-
-		if (document.fonts && document.fonts.ready) {
-			document.fonts.ready.then(start).catch(start);
-		} else {
-			start();
-		}
+		marquee.addEventListener('touchend', releaseTouch, { passive: true });
+		marquee.addEventListener('touchcancel', releaseTouch, { passive: true });
+		marquee.addEventListener('dragstart', (event) => event.preventDefault());
+		marquee.addEventListener('click', (event) => {
+			if (event.detail === 0 || performance.now() >= suppressClickUntil) return;
+			event.preventDefault();
+			event.stopPropagation();
+			suppressClickUntil = 0;
+		}, true);
+		marquee.addEventListener('wheel', (event) => {
+			// Let vertical wheel input continue scrolling the page.
+			if (!event.deltaX && !event.shiftKey) return;
+			pause();
+			resume();
+		}, { passive: true });
+		marquee.addEventListener('pointerenter', (event) => {
+			if (event.pointerType !== 'mouse') return;
+			hovering = true;
+			pause();
+		});
+		marquee.addEventListener('pointerleave', (event) => {
+			if (event.pointerType !== 'mouse') return;
+			hovering = false;
+			resume();
+		});
+		marquee.addEventListener('focusin', (event) => {
+			focused = event.target.matches(':focus-visible');
+			if (focused) pause();
+		});
+		marquee.addEventListener('focusout', (event) => {
+			focused = marquee.contains(event.relatedTarget) && event.relatedTarget.matches(':focus-visible');
+			resume();
+		});
+		document.addEventListener('visibilitychange', () => document.hidden ? pause() : resume());
+		motionQuery.addEventListener('change', () => motionQuery.matches ? pause() : resume());
+		new IntersectionObserver((entries) => {
+			visible = entries[0].isIntersecting;
+			if (visible) resume(); else pause();
+		}).observe(marquee);
+		new MutationObserver(() => {
+			if (document.body.classList.contains('has-project-modal')) pause(); else resume();
+		}).observe(document.body, { attributes: true, attributeFilter: ['class'] });
 		window.addEventListener('resize', () => {
-			window.requestAnimationFrame(measure);
+			// Mobile browser bars change height without changing the card layout.
+			if (window.innerWidth === viewportWidth) return;
+			viewportWidth = window.innerWidth;
+			window.clearTimeout(resizeTimer);
+			resizeTimer = window.setTimeout(measure, 120);
 		});
 	})();
 
