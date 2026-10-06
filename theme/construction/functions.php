@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CONSTRUCTION_VERSION', '0.9.44' );
+define( 'CONSTRUCTION_VERSION', '0.9.46' );
 
 require get_template_directory() . '/inc/i18n.php';
 require get_template_directory() . '/inc/settings.php';

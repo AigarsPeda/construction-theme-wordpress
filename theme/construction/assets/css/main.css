@@ -1446,14 +1446,6 @@ p.construction-lang a[aria-current="true"] {
 	color: var(--bn-timber);
 }
 
-.construction-projects__intro {
-	margin: 0 0 1.35rem !important;
-	max-width: 40rem;
-	color: var(--bn-steel);
-	font-size: 1.02rem;
-	line-height: 1.55;
-}
-
 .construction-projects__grid {
 	display: grid !important;
 	grid-template-columns: 1fr;
@@ -1707,6 +1699,9 @@ html.is-home-project-modal .wp-site-blocks {
 .construction-project-viewer__nav,
 .construction-project-viewer__close {
 	appearance: none;
+	display: grid;
+	place-items: center;
+	padding: 0;
 	width: 2.35rem;
 	height: 2.35rem;
 	border: 1px solid color-mix(in srgb, var(--bn-ink) 14%, transparent);
@@ -1716,6 +1711,17 @@ html.is-home-project-modal .wp-site-blocks {
 	font-size: 1.25rem;
 	line-height: 1;
 	cursor: pointer;
+}
+
+.construction-project-viewer__controls svg {
+	display: block;
+	width: 1.25rem;
+	height: 1.25rem;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 2;
+	stroke-linecap: round;
+	stroke-linejoin: round;
 }
 
 .construction-project-viewer__nav:hover,

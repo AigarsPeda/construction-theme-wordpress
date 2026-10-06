@@ -6,12 +6,7 @@
 	"icon": "portfolio",
 	"description": "Lists all published projects for the current language. Add or edit projects under Projects in the admin.",
 	"textdomain": "construction",
-	"attributes": {
-		"intro": {
-			"type": "string",
-			"default": ""
-		}
-	},
+	"usesContext": ["postId"],
 	"supports": {
 		"html": false,
 		"align": ["full"],

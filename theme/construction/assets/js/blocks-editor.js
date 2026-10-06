@@ -1098,19 +1098,9 @@
 	}
 
 	registerBlockType('construction/projects-grid', {
-		edit: function (props) {
+		edit: function () {
 			return el(ProjectsEditableGrid, {
 				label: S.projectsGrid || 'Projects grid',
-				headingControl: el(RichText, {
-					tagName: 'p',
-					className: 'construction-projects__intro',
-					value: props.attributes.intro || '',
-					placeholder: S.sectionDescription || 'Introduction text',
-					allowedFormats: [],
-					onChange: function (intro) {
-						props.setAttributes({ intro: intro });
-					},
-				}),
 			});
 		},
 		save: function () {

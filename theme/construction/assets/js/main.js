@@ -297,9 +297,9 @@
 				</div>
 				<div class="construction-project-viewer__meta">
 					<div class="construction-project-viewer__controls">
-						<button type="button" class="construction-project-viewer__nav" data-nav="prev" aria-label="${escapeHtml(labelPrev)}">‹</button>
-						<button type="button" class="construction-project-viewer__nav" data-nav="next" aria-label="${escapeHtml(labelNext)}">›</button>
-						<button type="button" class="construction-project-viewer__close" data-nav="close" aria-label="${escapeHtml(labelClose)}">×</button>
+						<button type="button" class="construction-project-viewer__nav" data-nav="prev" aria-label="${escapeHtml(labelPrev)}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15.5 6 8.5 12l7 6"/></svg></button>
+						<button type="button" class="construction-project-viewer__nav" data-nav="next" aria-label="${escapeHtml(labelNext)}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8.5 6 7 6-7 6"/></svg></button>
+						<button type="button" class="construction-project-viewer__close" data-nav="close" aria-label="${escapeHtml(labelClose)}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
 					</div>
 					<h2 class="construction-project-viewer__title" id="construction-project-modal-title"></h2>
 					<div class="construction-project-viewer__text"></div>

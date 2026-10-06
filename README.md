@@ -103,6 +103,8 @@ Use Local's site shell so PHP and the database socket are configured. This check
 
 Homepage carousel regression checks run with `node scripts/tests/home-carousel.cjs`. They cover preloaded repeats, swipe momentum, mouse dragging, click handling, hover and keyboard pauses, and reduced motion. Check physical mobile swipes separately in Safari and Chrome.
 
+Projects page title checks run with `wp --path="/Users/aigarspeda/Local Sites/construction/app/public" eval-file scripts/tests/projects-page.php`. They verify the public heading follows the admin page title in all languages and omits the old introduction. The check runs only on Local and removes its temporary page afterwards.
+
 ## After activate
 
 1. **Appearance → Construction** — upload logo; set phone, email, addresses.

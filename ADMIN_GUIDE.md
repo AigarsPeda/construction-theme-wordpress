@@ -172,7 +172,7 @@ No extra setting — same logo / phone / email as desktop.
 |---|---|
 | Hero, services (intro + 3 vertical phase sections), FAQ | **Pages → Edit** (block editor) |
 | Realized projects (home) + projects page grid | **Projects** CPT (auto via blocks) |
-| Projects page | **Pages** holds the Projects grid block only |
+| Projects page heading | **Pages → Edit → page title**; the Projects grid block displays this title |
 | Browser tab title, meta, focus keyword | **Rank Math** on that page |
 | Logo, phone, email (header / mobile menu) | **Appearance → Construction** |
 | Site name | **Settings → General** |

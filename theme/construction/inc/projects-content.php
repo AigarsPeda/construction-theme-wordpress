@@ -111,7 +111,6 @@ function construction_projects_page_content_for_lang( string $lang ): string {
 	$attributes = wp_json_encode(
 		array(
 			'align' => 'full',
-			'intro' => construction_string( 'projects.intro', $lang ),
 		),
 		JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
 	);
@@ -155,17 +154,17 @@ function construction_rebuild_polylang_projects( bool $force = false ) {
 
 	$defs = array(
 		'lv' => array(
-			'title'   => 'Realizētie projekti',
+			'title'   => construction_string( 'projects.title', 'lv' ),
 			'slug'    => 'projekti',
 			'content' => construction_projects_page_content_for_lang( 'lv' ),
 		),
 		'en' => array(
-			'title'   => 'Completed projects',
+			'title'   => construction_string( 'projects.title', 'en' ),
 			'slug'    => 'projects',
 			'content' => construction_projects_page_content_for_lang( 'en' ),
 		),
 		'ru' => array(
-			'title'   => 'Реализованные проекты',
+			'title'   => construction_string( 'projects.title', 'ru' ),
 			'slug'    => 'proekty',
 			'content' => construction_projects_page_content_for_lang( 'ru' ),
 		),
@@ -273,7 +272,7 @@ function construction_find_projects_page_candidate_ids(): array {
 	);
 	foreach ( $title_query->posts as $pid ) {
 		$title = get_the_title( (int) $pid );
-		if ( in_array( $title, array( 'Projekti', 'Projects', 'Проекты', 'Realizētie projekti', 'Completed projects', 'Реализованные проекты' ), true ) ) {
+		if ( in_array( $title, array( 'Projekti', 'Projects', 'Проекты', 'Realizētie projekti', 'Completed projects', 'Реализованные проекты', 'Mūsu realizētie projekti', 'Our completed projects', 'Наши реализованные проекты' ), true ) ) {
 			$old_ids[] = (int) $pid;
 		}
 	}

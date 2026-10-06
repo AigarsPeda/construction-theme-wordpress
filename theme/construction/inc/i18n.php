@@ -260,14 +260,9 @@ function construction_strings(): array {
 			'ru' => 'Проекты',
 		),
 		'projects.title'       => array(
-			'lv' => 'Realizētie projekti',
-			'en' => 'Completed projects',
-			'ru' => 'Реализованные проекты',
-		),
-		'projects.intro'       => array(
-			'lv' => 'Atlasīti objekti — būvniecība, vadība un uzraudzība katrā posmā. Spiediet projektu, lai atvērtu to logam.',
-			'en' => 'Selected projects — construction, management, and supervision at every stage. Click a project to open it in a modal.',
-			'ru' => 'Избранные объекты — строительство, управление и надзор на каждом этапе. Нажмите проект, чтобы открыть его в окне.',
+			'lv' => 'Mūsu speciālistu realizētie projekti',
+			'en' => 'Projects delivered by our specialists',
+			'ru' => 'Проекты, реализованные нашими специалистами',
 		),
 		'projects.cta'         => array(
 			'lv' => 'Sazinies ar mums',
@@ -300,7 +295,7 @@ function construction_strings(): array {
 			'ru' => 'Открыть страницу проектов',
 		),
 		'projects.home_title'  => array(
-			'lv' => 'Projekti',
+			'lv' => 'Mūsu speciālistu realizētie projekti',
 			'en' => 'Projects delivered by our specialists',
 			'ru' => 'Проекты, реализованные нашими специалистами',
 		),
