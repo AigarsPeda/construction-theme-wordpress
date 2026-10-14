@@ -119,6 +119,8 @@ Projects page title checks run with `wp --path="/Users/aigarspeda/Local Sites/co
 
 More how-tos: **[ADMIN_GUIDE.md](ADMIN_GUIDE.md)**.
 
+Local statistics consent controls, Site Kit integration and multilingual policy pages are described in **[docs/analytics-consent.md](docs/analytics-consent.md)**.
+
 ## What “Gutenberg” means here
 
 You do **not** install a theme named Gutenberg.  

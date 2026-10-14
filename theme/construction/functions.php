@@ -23,6 +23,7 @@ require get_template_directory() . '/inc/projects-cpt.php';
 require get_template_directory() . '/inc/blocks.php';
 require get_template_directory() . '/inc/contacts-content.php';
 require get_template_directory() . '/inc/audience-pages-content.php';
+require get_template_directory() . '/inc/privacy.php';
 
 /**
  * Theme setup.

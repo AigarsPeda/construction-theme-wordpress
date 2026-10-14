@@ -32,5 +32,8 @@ $home_url     = construction_front_url_for_lang( $lang );
 		<!-- /wp:paragraph -->
 	</div>
 	<!-- /wp:group -->
+	<!-- wp:html -->
+	<?php construction_privacy_footer_links(); ?>
+	<!-- /wp:html -->
 </div>
 <!-- /wp:group -->

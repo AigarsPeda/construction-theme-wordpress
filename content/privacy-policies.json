@@ -1,0 +1,104 @@
+{
+  "lv": {
+    "title": "Privātums un sīkdatnes",
+    "slug": "privatums",
+    "sections": [
+      [
+        "Datu pārzinis",
+        "OAKS Build. Juridiskais nosaukums: JĀAIZPILDA. Reģistrācijas numurs: JĀAIZPILDA. Juridiskā adrese: JĀAIZPILDA. Par privātumu rakstiet uz <a href=\"mailto:info@oaksbuild.lv\">info@oaksbuild.lv</a>."
+      ],
+      [
+        "Kādus datus apstrādājam un kāpēc",
+        "Saziņai izmantojam jūsu sniegto vārdu, kontaktinformāciju un projekta informāciju, lai atbildētu un apspriestu sadarbību. Pamats ir darbības pirms līguma noslēgšanas vai mūsu leģitīmā interese atbildēt uz saziņu. Datu sniegšana ir brīvprātīga, taču bez saziņai vajadzīgās informācijas nevarēsim atbildēt. Vietnes drošībai un kļūdu novēršanai serveris var reģistrēt IP adresi, apmeklētās lapas, laiku un pārlūka informāciju. Pamats ir mūsu leģitīmā interese uzturēt drošu un funkcionējošu vietni."
+      ],
+      [
+        "Sīkdatnes",
+        "Nepieciešamā sīkdatne <strong>pll_language</strong> saglabā izvēlēto valodu līdz vienam gadam. <strong>construction_consent</strong> saglabā piekrišanu vai atteikumu 180 dienas. Ja atļaujat statistiku un tā vietnē ir ieslēgta, Google Analytics sīkdatnes <strong>_ga</strong> un <strong>_ga_*</strong> atšķir apmeklējumus un saglabā sesijas informāciju līdz 180 dienām. Nepieciešamās sīkdatnes nodrošina valodas un piekrišanas izvēles darbību. Statistikas sīkdatnes ir izvēles."
+      ],
+      [
+        "Statistika tikai ar piekrišanu",
+        "Ja vietnē ir ieslēgta Google Analytics statistika, tā sāk darboties tikai pēc jūsu piekrišanas. Tā palīdz saprast apmeklētās lapas un saziņas saišu izmantošanu. Google saņem lapas adresi, pārlūka un ierīces informāciju, valodu, apmeklējuma laiku un var noteikt aptuvenu atrašanās vietu. Mēs nesūtām jūsu saziņas ziņojumu, e-pastu vai tālruņa numuru. Apstrādes pamats ir jūsu piekrišana. Reklāmas personalizācija netiek izmantota."
+      ],
+      [
+        "Datu saņēmēji",
+        "Vietnes mitināšanu nodrošina DigitalOcean. Saziņu apstrādā izmantotais e-pasta pakalpojumu sniedzējs. Google saņem statistikas datus tikai ar jūsu piekrišanu. Fontu un tehnisko bibliotēku ielādei vietne sazinās ar Google Fonts un jsDelivr, kas saņem IP adresi un tehnisko savienojuma informāciju arī bez statistikas piekrišanas. Google un citi pakalpojumu sniedzēji var apstrādāt datus ārpus Eiropas Ekonomikas zonas. Piemērojamie datu nosūtīšanas aizsardzības pasākumi: JĀPRECIZĒ atbilstoši izmantotajiem pakalpojumiem un līgumiem. Par Google apstrādi lasiet <a href=\"https://policies.google.com/privacy\" target=\"_blank\" rel=\"noopener noreferrer\">Google privātuma politikā</a>."
+      ],
+      [
+        "Glabāšanas ilgums",
+        "Saziņu glabājam tik ilgi, cik nepieciešams atbildes sniegšanai, projekta sadarbībai un juridisko pienākumu izpildei. Servera žurnālu un rezerves kopiju glabāšanu nosaka drošības, kļūdu novēršanas un atjaunošanas vajadzības. Sīkdatņu termiņi norādīti iepriekš. Google Analytics īpašuma datu glabāšanas termiņš: JĀPRECIZĒ pirms statistikas ieslēgšanas."
+      ],
+      [
+        "Jūsu izvēle un tiesības",
+        "Atteikšanās no statistikas neierobežo vietnes lietošanu. Piekrišanu varat atsaukt lapas apakšā sadaļā “Sīkdatņu iestatījumi”, izvēloties “Noraidīt analītiku”. Tas aptur turpmāko uzskaiti un dzēš pieejamās statistikas sīkdatnes. Atsaukšana neietekmē iepriekš likumīgi veikto apstrādi. Jums ir tiesības pieprasīt piekļuvi datiem, to labošanu, dzēšanu vai apstrādes ierobežošanu un atbilstošos gadījumos iebilst pret apstrādi vai lūgt datu pārnesamību. Rakstiet uz <a href=\"mailto:info@oaksbuild.lv\">info@oaksbuild.lv</a>. Sūdzību varat iesniegt <a href=\"https://www.dvi.gov.lv/\" target=\"_blank\" rel=\"noopener noreferrer\">Datu valsts inspekcijā</a>."
+      ]
+    ]
+  },
+  "en": {
+    "title": "Privacy & cookies",
+    "slug": "privacy",
+    "sections": [
+      [
+        "Data controller",
+        "OAKS Build. Legal company name: TO BE COMPLETED. Registration number: TO BE COMPLETED. Registered address: TO BE COMPLETED. Contact us about privacy at <a href=\"mailto:info@oaksbuild.lv\">info@oaksbuild.lv</a>."
+      ],
+      [
+        "What we process and why",
+        "We use the name, contact details and project information you provide to answer enquiries and discuss working together. The basis is steps before entering a contract or our legitimate interest in responding to correspondence. Providing data is voluntary, but we cannot reply without the information needed to contact you. For security and troubleshooting, the server may log your IP address, pages visited, time and browser information. The basis is our legitimate interest in keeping the website secure and working."
+      ],
+      [
+        "Cookies",
+        "The essential cookie <strong>pll_language</strong> remembers your language for up to one year. <strong>construction_consent</strong> stores acceptance or rejection for 180 days. If you accept statistics and they are enabled on the website, the Google Analytics cookies <strong>_ga</strong> and <strong>_ga_*</strong> distinguish visits and remember session information for up to 180 days. Essential cookies support your language and consent choices. Statistics cookies are optional."
+      ],
+      [
+        "Statistics only with consent",
+        "If Google Analytics is enabled on the website, it starts only after your consent. It helps us understand page visits and the use of contact links. Google receives the page address, browser and device information, language and visit time, and may determine an approximate location. We do not send your enquiry message, email or phone number. Processing is based on your consent. Advertising personalisation is not used."
+      ],
+      [
+        "Data recipients",
+        "DigitalOcean hosts the website. Our email provider processes correspondence. Google receives statistics data only with your consent. The website contacts Google Fonts and jsDelivr to load fonts and technical libraries; they receive your IP address and technical connection information even without statistics consent. Google and other providers may process data outside the European Economic Area. Applicable transfer safeguards: TO BE CONFIRMED for the services and agreements used. Read about Google’s processing in the <a href=\"https://policies.google.com/privacy\" target=\"_blank\" rel=\"noopener noreferrer\">Google Privacy Policy</a>."
+      ],
+      [
+        "Retention",
+        "We keep correspondence as needed to answer enquiries, work on projects and meet legal obligations. Security, troubleshooting and recovery needs determine retention of server logs and backups. Cookie lifetimes are listed above. Google Analytics property data retention: TO BE CONFIRMED before collection is enabled."
+      ],
+      [
+        "Your choice and rights",
+        "Rejecting statistics does not restrict use of the website. Withdraw consent through “Cookie settings” in the footer by selecting “Reject analytics”. This stops further collection and deletes accessible statistics cookies. Withdrawal does not affect processing that was lawful before it. You can request access, correction, deletion or restriction of processing and, where applicable, object to processing or request data portability. Write to <a href=\"mailto:info@oaksbuild.lv\">info@oaksbuild.lv</a>. You can complain to Latvia’s <a href=\"https://www.dvi.gov.lv/\" target=\"_blank\" rel=\"noopener noreferrer\">Data State Inspectorate</a>."
+      ]
+    ]
+  },
+  "ru": {
+    "title": "Конфиденциальность и cookie",
+    "slug": "konfidencialnost",
+    "sections": [
+      [
+        "Оператор персональных данных",
+        "OAKS Build. Юридическое название: НЕОБХОДИМО ЗАПОЛНИТЬ. Регистрационный номер: НЕОБХОДИМО ЗАПОЛНИТЬ. Юридический адрес: НЕОБХОДИМО ЗАПОЛНИТЬ. По вопросам конфиденциальности пишите на <a href=\"mailto:info@oaksbuild.lv\">info@oaksbuild.lv</a>."
+      ],
+      [
+        "Какие данные мы обрабатываем и зачем",
+        "Мы используем предоставленные имя, контактные данные и информацию о проекте, чтобы ответить на обращение и обсудить сотрудничество. Основание: действия до заключения договора или наш законный интерес отвечать на сообщения. Предоставление данных добровольно, но без необходимых контактных сведений мы не сможем ответить. Для безопасности и устранения ошибок сервер может записывать IP-адрес, посещённые страницы, время и сведения о браузере. Основание: наш законный интерес поддерживать безопасность и работу сайта."
+      ],
+      [
+        "Файлы cookie",
+        "Необходимый файл <strong>pll_language</strong> сохраняет выбранный язык до одного года. <strong>construction_consent</strong> сохраняет согласие или отказ на 180 дней. Если вы разрешаете статистику и она включена на сайте, файлы Google Analytics <strong>_ga</strong> и <strong>_ga_*</strong> различают посещения и сохраняют сведения о сеансе до 180 дней. Необходимые файлы обеспечивают сохранение языка и выбора согласия. Статистические файлы необязательны."
+      ],
+      [
+        "Статистика только с согласия",
+        "Если Google Analytics включён на сайте, он начинает работать только после вашего согласия. Он помогает оценивать посещения страниц и использование контактных ссылок. Google получает адрес страницы, сведения о браузере и устройстве, язык и время посещения и может определять примерное местоположение. Мы не отправляем ваше сообщение, адрес электронной почты или номер телефона. Основание обработки: ваше согласие. Рекламная персонализация не используется."
+      ],
+      [
+        "Получатели данных",
+        "Сайт размещён у DigitalOcean. Почтовый провайдер обрабатывает переписку. Google получает статистические данные только с вашего согласия. Для загрузки шрифтов и технических библиотек сайт обращается к Google Fonts и jsDelivr; они получают IP-адрес и технические сведения о соединении независимо от согласия на статистику. Google и другие провайдеры могут обрабатывать данные за пределами Европейской экономической зоны. Применимые меры защиты передачи: НЕОБХОДИМО УТОЧНИТЬ для используемых услуг и договоров. Об обработке Google см. в <a href=\"https://policies.google.com/privacy\" target=\"_blank\" rel=\"noopener noreferrer\">политике конфиденциальности Google</a>."
+      ],
+      [
+        "Сроки хранения",
+        "Мы храним переписку столько, сколько нужно для ответа, сотрудничества по проектам и выполнения юридических обязанностей. Сроки хранения журналов сервера и резервных копий определяются потребностями безопасности, устранения ошибок и восстановления. Сроки cookie указаны выше. Срок хранения данных ресурса Google Analytics: НЕОБХОДИМО УТОЧНИТЬ до включения сбора."
+      ],
+      [
+        "Ваш выбор и права",
+        "Отказ от статистики не ограничивает использование сайта. Отозвать согласие можно через «Настройки cookie» внизу страницы, выбрав «Отклонить статистику». Это прекращает дальнейший сбор и удаляет доступные статистические файлы cookie. Отзыв не влияет на обработку, законно выполненную до него. Вы можете запросить доступ, исправление, удаление или ограничение обработки, а в применимых случаях возразить против обработки или запросить переносимость данных. Пишите на <a href=\"mailto:info@oaksbuild.lv\">info@oaksbuild.lv</a>. Жалобу можно подать в <a href=\"https://www.dvi.gov.lv/\" target=\"_blank\" rel=\"noopener noreferrer\">Государственную инспекцию данных Латвии</a>."
+      ]
+    ]
+  }
+}
