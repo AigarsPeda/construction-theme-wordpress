@@ -10,7 +10,7 @@ SSH_KEY="${SSH_KEY:-/Users/aigarspeda/.ssh/digitalocean_construction}"
 REMOTE_HOST="${REMOTE_HOST:-root@201.79.12.67}"
 REMOTE_WP_PATH="${REMOTE_WP_PATH:-/var/www/construction}"
 REMOTE_BACKUP_DIR="${REMOTE_BACKUP_DIR:-/var/backups/construction}"
-REMOTE_URL="${REMOTE_URL:-http://201.79.12.67}"
+REMOTE_URL="${REMOTE_URL:-https://oaksbuild.lv}"
 LOCAL_THEME_PATH="${LOCAL_THEME_PATH:-$PROJECT_ROOT/theme/construction}"
 REMOTE_THEME_PATH="$REMOTE_WP_PATH/wp-content/themes/construction"
 

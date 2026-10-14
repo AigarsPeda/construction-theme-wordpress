@@ -6,7 +6,7 @@ umask 077
 SSH_KEY="${SSH_KEY:-/Users/aigarspeda/.ssh/digitalocean_construction}"
 REMOTE_HOST="${REMOTE_HOST:-root@201.79.12.67}"
 REMOTE_WP_PATH="${REMOTE_WP_PATH:-/var/www/construction}"
-REMOTE_URL="${REMOTE_URL:-http://201.79.12.67}"
+REMOTE_URL="${REMOTE_URL:-https://oaksbuild.lv}"
 REMOTE_BACKUP_DIR="${REMOTE_BACKUP_DIR:-/var/backups/construction}"
 LOCAL_URL="${LOCAL_URL:-http://construction.local}"
 LOCAL_WP_PATH="${LOCAL_WP_PATH:-/Users/aigarspeda/Local Sites/construction/app/public}"

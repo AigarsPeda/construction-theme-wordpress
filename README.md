@@ -49,6 +49,8 @@ Copy `theme/construction` into:
 
 ## Install on production
 
+Current production site: **[https://oaksbuild.lv](https://oaksbuild.lv)**. The `www` address redirects to the same site. DNS is managed at NIC; the web server is the DigitalOcean droplet at `201.79.12.67`. Microsoft 365 email records are separate from the website records.
+
 For a **full copy** of the current Local site (pages, images, Polylang, plugin settings, Construction options), follow **[DEPLOY.md](DEPLOY.md)**.
 
 Theme-only install (empty WP, then rebuild content by hand):
@@ -90,6 +92,8 @@ The repository includes three scripts for the current Local and DigitalOcean set
 The database scripts ask for an explicit confirmation. Pass `--yes` only when a deliberate non-interactive run is required. Both scripts perform serialized-safe URL replacement. Pulls retain the latest three compressed local rollback backups in `Desktop/construction-backups`. Pushes retain the latest three compressed production rollback backups in `/var/backups/construction`. Theme deployments also save a private rollback archive there before uploading files.
 
 Pulls also copy the droplet's uploads into Local without deleting Local-only files. Database pushes do not upload media files.
+
+Copy `mu-plugins/construction-sitemap.php` into each site's `wp-content/mu-plugins/` directory. It keeps translated homepage sitemap URLs aligned with their canonical page permalinks. WordPress loads it automatically; theme-only deployment does not copy MU plugins. After installing or updating it, clear Rank Math's sitemap cache.
 
 The scripts use the current SSH key, server address, Local paths, and WordPress paths as defaults. Override settings through the environment when needed. Run any script with `--help` to see the available variables.
 
