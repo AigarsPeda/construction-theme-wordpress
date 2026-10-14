@@ -18,7 +18,6 @@ $brand_class  = $custom_logo ? 'construction-brand construction-brand--wordmark'
 $mark_class   = $custom_logo ? 'construction-logo-mark construction-logo-mark--wordmark' : 'construction-logo-mark';
 $menu_label   = esc_attr( construction_t( 'nav.menu' ) );
 $close_label  = esc_attr( construction_t( 'nav.close' ) );
-$lang_label   = esc_html( construction_t( 'nav.language' ) );
 $home_label   = esc_html( construction_t( 'nav.home' ) );
 $phone        = esc_html( construction_contact( 'phone' ) );
 $phone_href   = esc_url( construction_contact_phone_href() );
@@ -108,7 +107,6 @@ if ( is_string( $drawer_nav_html ) ) {
 			</nav>
 
 			<div class="construction-drawer__langs">
-				<p class="construction-drawer__langs-label"><?php echo $lang_label; ?></p>
 				<?php echo construction_language_switcher_html( 'construction-lang construction-lang--drawer' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</div>
 
@@ -116,7 +114,6 @@ if ( is_string( $drawer_nav_html ) ) {
 				<a class="construction-drawer__contact-link" href="<?php echo $mail_href; ?>"><?php echo $email; ?></a>
 				<a class="construction-drawer__contact-link" href="<?php echo $phone_href; ?>"><?php echo $phone; ?></a>
 				<p class="construction-drawer__contact-address">
-					<span class="construction-drawer__contact-label"><?php echo esc_html( construction_t( 'contact.address_label' ) ); ?></span>
 					<?php echo $address; ?>
 				</p>
 			</div>
