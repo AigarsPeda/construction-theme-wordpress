@@ -1,0 +1,16 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "construction/request-form",
+	"title": "Request form",
+	"category": "theme",
+	"icon": "email-alt",
+	"description": "The site's request form (fields, texts and emails are set under Appearance → Request form). Sends with the site mailer.",
+	"keywords": ["form", "contact", "pieteikums", "forma", "kontakti"],
+	"textdomain": "construction",
+	"supports": {
+		"html": false,
+		"multiple": false,
+		"reusable": false
+	}
+}

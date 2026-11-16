@@ -21,3 +21,14 @@ add_filter( 'rank_math/sitemap/entry', function ( $url, $type, $post ) {
 	}
 	return $url;
 }, 99, 3 );
+
+/** Remove repeated carousel images from each page's image sitemap entries. */
+add_filter( 'rank_math/sitemap/urlimages', function ( $images ) {
+	$unique = array();
+	foreach ( $images as $image ) {
+		if ( ! empty( $image['src'] ) ) {
+			$unique[ $image['src'] ] = $image;
+		}
+	}
+	return array_values( $unique );
+} );

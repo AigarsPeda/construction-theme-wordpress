@@ -1,0 +1,347 @@
+/*
+ * Request form — shared by the dialog (opened by buttons with the class
+ * `construction-request`) and the inline "Request form" block.
+ * The form's block class is deliberately different from the trigger class.
+ */
+
+.construction-request-form {
+	--request-line: color-mix(in srgb, var(--bn-ink) 16%, transparent);
+	--request-error: #a4262c;
+	--request-muted: color-mix(in srgb, var(--bn-steel) 72%, var(--bn-ink));
+	color: var(--bn-ink);
+}
+
+/* ——— Dialog ——— */
+.construction-request-form--dialog {
+	width: min(40rem, calc(100% - 2rem));
+	max-width: none;
+	max-height: calc(100dvh - 2rem);
+	margin: auto;
+	padding: 0;
+	border: 0;
+	border-radius: var(--bn-radius);
+	background: #fff;
+	box-shadow: 0 1.5rem 4rem color-mix(in srgb, var(--bn-ink) 28%, transparent);
+	overflow: auto;
+	overscroll-behavior: contain;
+}
+
+.construction-request-form--dialog::backdrop {
+	background: color-mix(in srgb, var(--bn-ink) 55%, transparent);
+	backdrop-filter: blur(3px);
+	-webkit-backdrop-filter: blur(3px);
+}
+
+html:has(.construction-request-form--dialog[open]) {
+	overflow: hidden;
+}
+
+.construction-request-form__panel {
+	position: relative;
+	padding: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.construction-request-form__close {
+	position: absolute;
+	top: clamp(0.75rem, 2vw, 1.1rem);
+	right: clamp(0.75rem, 2vw, 1.1rem);
+	width: 44px;
+	height: 44px;
+	padding: 0;
+	border: 0;
+	border-radius: 10px;
+	background: var(--bn-mist);
+	color: var(--bn-ink);
+	cursor: pointer;
+}
+
+.construction-request-form__close::before,
+.construction-request-form__close::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 18px;
+	height: 2px;
+	border-radius: 1px;
+	background: currentColor;
+	transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.construction-request-form__close::after {
+	transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.construction-request-form__close:hover,
+.construction-request-form__close:focus-visible {
+	background: color-mix(in srgb, var(--bn-mist) 70%, var(--bn-steel));
+}
+
+.construction-request-form--dialog .construction-request-form__title {
+	margin-right: 3.5rem;
+}
+
+/* ——— Inline block ——— */
+.construction-request-form--inline {
+	border: 1px solid color-mix(in srgb, var(--bn-ink) 12%, transparent);
+	background: color-mix(in srgb, var(--bn-mist) 55%, #fff);
+}
+
+.construction-request-form--inline .construction-request-form__panel {
+	padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.construction-request-form--inline .construction-request-form__title {
+	font-size: clamp(1.35rem, 2.4vw, 1.6rem);
+}
+
+/* ——— Shared ——— */
+.construction-request-form__title {
+	margin: 0;
+	font-family: "Archivo", sans-serif;
+	font-size: clamp(1.5rem, 3vw, 1.9rem);
+	font-weight: 700;
+	line-height: 1.12;
+	letter-spacing: -0.03em;
+	text-wrap: balance;
+}
+
+.construction-request-form__title:focus {
+	outline: none;
+}
+
+.construction-request-form__intro {
+	margin: 0.75rem 0 0;
+	max-width: 32rem;
+	font-size: 1.0625rem;
+	line-height: 1.55;
+	color: var(--request-muted);
+}
+
+.construction-request-form__form {
+	margin-top: clamp(1.5rem, 3vw, 2rem);
+}
+
+.construction-request-form__grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1.1rem 1rem;
+}
+
+.construction-request-form__field {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+}
+
+.construction-request-form__field--wide {
+	grid-column: 1 / -1;
+}
+
+.construction-request-form__field label {
+	margin-bottom: 0.4rem;
+	font-family: "Archivo", sans-serif;
+	font-size: 0.9rem;
+	font-weight: 600;
+	line-height: 1.3;
+}
+
+.construction-request-form__optional {
+	margin-left: 0.35rem;
+	font-family: "Source Sans 3", sans-serif;
+	font-weight: 400;
+	color: var(--bn-steel);
+}
+
+.construction-request-form__field input,
+.construction-request-form__field textarea {
+	width: 100%;
+	min-height: 48px;
+	padding: 0.75rem 0.9rem;
+	border: 1px solid var(--request-line);
+	border-radius: 10px;
+	background: #fff;
+	color: var(--bn-ink);
+	font: inherit;
+	font-size: 1rem;
+	line-height: 1.45;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.construction-request-form__field textarea {
+	min-height: 8.5rem;
+	resize: vertical;
+}
+
+.construction-request-form__field input::placeholder,
+.construction-request-form__field textarea::placeholder {
+	color: color-mix(in srgb, var(--bn-steel) 80%, #fff);
+}
+
+.construction-request-form__field input:focus,
+.construction-request-form__field textarea:focus {
+	outline: none;
+	border-color: var(--bn-ink);
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--bn-timber) 40%, transparent);
+}
+
+.construction-request-form__field [aria-invalid] {
+	border-color: var(--request-error);
+}
+
+.construction-request-form__field [aria-invalid]:focus {
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--request-error) 22%, transparent);
+}
+
+.construction-request-form__error {
+	margin: 0.35rem 0 0;
+	font-size: 0.9rem;
+	line-height: 1.35;
+	color: var(--request-error);
+}
+
+/* Honeypot: off-screen for people, still in the form for bots. */
+.construction-request-form__trap {
+	position: absolute;
+	left: -10000px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
+.construction-request-form__privacy {
+	margin: 1.25rem 0 0;
+	font-size: 0.9rem;
+	line-height: 1.5;
+	color: var(--request-muted);
+}
+
+.construction-request-form__privacy a {
+	color: inherit;
+	text-underline-offset: 0.18em;
+}
+
+.construction-request-form__privacy a:hover {
+	color: var(--bn-ink);
+}
+
+.construction-request-form__actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.75rem 1.25rem;
+	margin-top: 1.5rem;
+}
+
+.construction-request-form__submit {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 52px;
+	padding: 0.9rem 1.5rem;
+	border: 0;
+	border-radius: 10px;
+	background: var(--bn-ink);
+	color: #fff;
+	font-family: "Archivo", sans-serif;
+	font-size: 0.95rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.construction-request-form__submit:hover,
+.construction-request-form__submit:focus-visible {
+	background: var(--bn-timber);
+	color: var(--bn-ink);
+}
+
+.construction-request-form__submit:focus-visible {
+	outline: 2px solid var(--bn-ink);
+	outline-offset: 3px;
+}
+
+.construction-request-form__submit:disabled {
+	cursor: progress;
+	opacity: 0.7;
+}
+
+.construction-request-form__status {
+	margin: 0;
+	font-size: 0.95rem;
+	line-height: 1.4;
+}
+
+.construction-request-form__status.is-error {
+	color: var(--request-error);
+}
+
+.construction-request-form__done .construction-request-form__submit {
+	margin-top: 1.75rem;
+}
+
+/* ——— Contacts page: the form follows the existing contact details ——— */
+.construction-contacts-page__inner > .construction-request-form--inline {
+	margin-top: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+/* Wide cards: heading and intro on the left, the fields on the right. */
+@media (min-width: 960px) {
+	.construction-request-form--inline .construction-request-form__body {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+		grid-template-rows: auto 1fr;
+		column-gap: clamp(2rem, 4vw, 3.5rem);
+	}
+
+	.construction-request-form--inline .construction-request-form__title,
+	.construction-request-form--inline .construction-request-form__intro {
+		grid-column: 1;
+	}
+
+	.construction-request-form--inline .construction-request-form__intro {
+		align-self: start;
+	}
+
+	.construction-request-form--inline .construction-request-form__form {
+		grid-column: 2;
+		grid-row: 1 / span 2;
+		margin-top: 0;
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.construction-request-form--dialog[open] {
+		animation: bn-request-in 0.28s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+	}
+
+	.construction-request-form--dialog[open]::backdrop {
+		animation: bn-fade 0.28s ease both;
+	}
+}
+
+@keyframes bn-request-in {
+	from {
+		opacity: 0;
+		transform: translateY(12px) scale(0.98);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@media (max-width: 559px) {
+	.construction-request-form--dialog {
+		width: calc(100% - 1rem);
+		max-height: calc(100dvh - 1rem);
+	}
+
+	.construction-request-form__grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.construction-request-form__submit {
+		width: 100%;
+	}
+}

@@ -129,28 +129,10 @@ function construction_contacts_page_content_for_lang( string $lang ): string {
 				<!-- /wp:paragraph -->
 			</div>
 			<!-- /wp:group -->
-
-			<!-- wp:group {"className":"construction-lead-form construction-lead-form--visual construction-contacts-page__cta","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"center"}} -->
-			<div class="wp-block-group construction-lead-form construction-lead-form--visual construction-contacts-page__cta">
-				<!-- wp:paragraph {"className":"construction-lead-form__hint"} -->
-				<p class="construction-lead-form__hint">{$t( 'contact.hint' )}</p>
-				<!-- /wp:paragraph -->
-
-				<!-- wp:buttons {"className":"construction-lead-form__actions"} -->
-				<div class="wp-block-buttons construction-lead-form__actions">
-					<!-- wp:button {"className":"construction-lead-form__go"} -->
-					<div class="wp-block-button construction-lead-form__go"><a class="wp-block-button__link wp-element-button" href="{$mail_href}">{$t( 'contact.mail_cta' )} →</a></div>
-					<!-- /wp:button -->
-				</div>
-				<!-- /wp:buttons -->
-			</div>
-			<!-- /wp:group -->
-
-			<!-- wp:paragraph {"className":"construction-contacts-page__social"} -->
-			<p class="construction-contacts-page__social"><a href="https://instagram.com/construction" target="_blank" rel="noopener">Instagram</a> · <a href="https://facebook.com/construction" target="_blank" rel="noopener">Facebook</a></p>
-			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
+
+		<!-- wp:construction/request-form /-->
 	</div>
 	<!-- /wp:group -->
 </div>

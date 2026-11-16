@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CONSTRUCTION_VERSION', '0.9.46' );
+define( 'CONSTRUCTION_VERSION', '0.9.48' );
 
 require get_template_directory() . '/inc/i18n.php';
 require get_template_directory() . '/inc/settings.php';
@@ -23,6 +23,8 @@ require get_template_directory() . '/inc/projects-cpt.php';
 require get_template_directory() . '/inc/blocks.php';
 require get_template_directory() . '/inc/contacts-content.php';
 require get_template_directory() . '/inc/audience-pages-content.php';
+require get_template_directory() . '/inc/estimate-pages-content.php';
+require get_template_directory() . '/inc/request-form.php';
 require get_template_directory() . '/inc/privacy.php';
 
 /**
@@ -341,6 +343,31 @@ add_action( 'admin_init', 'construction_admin_rebuild_audience_pages' );
 add_action( 'init', 'construction_admin_rebuild_audience_pages', 5 );
 
 /**
+ * Seed the LV/EN/RU cost-estimating (Tāmēšana) pages if they are missing.
+ *
+ * Safe:  /wp-admin/?construction_rebuild_estimate_pages=1
+ * Reset: /wp-admin/?construction_rebuild_estimate_pages=1&force=1
+ */
+function construction_admin_rebuild_estimate_pages(): void {
+	if ( ! is_admin() || ! current_user_can( 'manage_options' ) || ! isset( $_GET['construction_rebuild_estimate_pages'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return;
+	}
+
+	$force  = isset( $_GET['force'] ) && (string) wp_unslash( $_GET['force'] ) === '1'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$result = construction_rebuild_polylang_estimate_pages( $force );
+	if ( is_wp_error( $result ) ) {
+		wp_die( esc_html( $result->get_error_message() ) );
+	}
+
+	flush_rewrite_rules( false );
+	delete_option( 'construction_flush_rewrites' );
+
+	wp_safe_redirect( admin_url( 'edit.php?post_type=page&construction_estimate_pages_ready=1' ) );
+	exit;
+}
+add_action( 'admin_init', 'construction_admin_rebuild_estimate_pages' );
+
+/**
  * Import images into Media Library only.
  *
  * Admin: /wp-admin/?construction_import_media=1
@@ -397,6 +424,7 @@ function construction_homes_ready_notice(): void {
 		&& ! isset( $_GET['construction_menus_ready'] )
 		&& ! isset( $_GET['construction_projects_ready'] )
 		&& ! isset( $_GET['construction_audience_pages_ready'] )
+		&& ! isset( $_GET['construction_estimate_pages_ready'] )
 		&& ! isset( $_GET['construction_media_ready'] )
 	) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		return;
@@ -409,6 +437,8 @@ function construction_homes_ready_notice(): void {
 		echo esc_html__( 'Projects pages ready: Projekti (LV), Projects (EN), Проекты (RU).', 'construction' );
 	} elseif ( isset( $_GET['construction_audience_pages_ready'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		echo esc_html__( 'Audience pages ready in Latvian, English, and Russian.', 'construction' );
+	} elseif ( isset( $_GET['construction_estimate_pages_ready'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		echo esc_html__( 'Cost-estimating pages ready: Tāmēšana (LV), Cost estimating (EN), Составление смет (RU).', 'construction' );
 	} elseif ( isset( $_GET['construction_menus_ready'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		echo esc_html__( 'Menus ready: Primary LV / EN / RU. Edit them under Appearance → Menus.', 'construction' );
 	} else {

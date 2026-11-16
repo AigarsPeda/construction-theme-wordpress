@@ -37,11 +37,14 @@
 
 		const closeButtons = root.querySelectorAll('[data-construction-menu-close]');
 		const drawer = root.querySelector('.construction-drawer');
-		const mq = window.matchMedia('(max-width: 899px)');
 		let closeTimer = 0;
 
+		// CSS decides when the toggle shows (the breakpoint differs per language),
+		// so the drawer may open whenever the toggle is visible.
+		const toggleVisible = () => window.getComputedStyle(toggle).display !== 'none';
+
 		const setOpen = (open) => {
-			if (!mq.matches && open) {
+			if (open && !toggleVisible()) {
 				return;
 			}
 
@@ -84,8 +87,8 @@
 			}
 		});
 
-		mq.addEventListener('change', (event) => {
-			if (!event.matches) {
+		window.addEventListener('resize', () => {
+			if (toggle.getAttribute('aria-expanded') === 'true' && !toggleVisible()) {
 				setOpen(false);
 			}
 		});

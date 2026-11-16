@@ -1,0 +1,746 @@
+{
+    "site": "http://construction.local",
+    "created_at_utc": "2026-11-16T17:12:26+00:00",
+    "changes": [
+        {
+            "kind": "option",
+            "key": "rank-math-options-titles",
+            "existed": true,
+            "old": {
+                "noindex_empty_taxonomies": "on",
+                "title_separator": "-",
+                "capitalize_titles": "off",
+                "twitter_card_type": "summary_large_image",
+                "knowledgegraph_type": "company",
+                "knowledgegraph_name": "OAKS Build",
+                "website_name": "OAKS Build",
+                "local_business_type": "Organization",
+                "local_address_format": "{address} {locality}, {region} {postalcode}",
+                "opening_hours": [
+                    {
+                        "day": "Monday",
+                        "time": "09:00-17:00"
+                    },
+                    {
+                        "day": "Tuesday",
+                        "time": "09:00-17:00"
+                    },
+                    {
+                        "day": "Wednesday",
+                        "time": "09:00-17:00"
+                    },
+                    {
+                        "day": "Thursday",
+                        "time": "09:00-17:00"
+                    },
+                    {
+                        "day": "Friday",
+                        "time": "09:00-17:00"
+                    },
+                    {
+                        "day": "Saturday",
+                        "time": "09:00-17:00"
+                    },
+                    {
+                        "day": "Sunday",
+                        "time": "09:00-17:00"
+                    }
+                ],
+                "opening_hours_format": "off",
+                "homepage_title": "%sitename% %page% %sep% %sitedesc%",
+                "homepage_description": "",
+                "homepage_custom_robots": "off",
+                "disable_author_archives": "off",
+                "url_author_base": "author",
+                "author_custom_robots": "on",
+                "author_robots": [
+                    "noindex"
+                ],
+                "author_archive_title": "%name% %sep% %sitename% %page%",
+                "author_add_meta_box": "on",
+                "disable_date_archives": "on",
+                "date_archive_title": "%date% %page% %sep% %sitename%",
+                "search_title": "%search_query% %page% %sep% %sitename%",
+                "404_title": "Page Not Found %sep% %sitename%",
+                "date_archive_robots": [
+                    "noindex"
+                ],
+                "noindex_search": "on",
+                "noindex_archive_subpages": "off",
+                "noindex_password_protected": "off",
+                "pt_download_default_rich_snippet": "product",
+                "author_slack_enhanced_sharing": "on",
+                "pt_post_title": "%title% %sep% %sitename%",
+                "pt_post_description": "%excerpt%",
+                "pt_post_robots": [
+                    "index"
+                ],
+                "pt_post_custom_robots": "off",
+                "pt_post_default_rich_snippet": "article",
+                "pt_post_default_article_type": "BlogPosting",
+                "pt_post_default_snippet_name": "%seo_title%",
+                "pt_post_default_snippet_desc": "%seo_description%",
+                "pt_post_slack_enhanced_sharing": "on",
+                "pt_post_ls_use_fk": "titles",
+                "pt_post_add_meta_box": "on",
+                "pt_post_bulk_editing": "editing",
+                "pt_post_link_suggestions": "on",
+                "pt_post_primary_taxonomy": "category",
+                "pt_page_title": "%title% %sep% %sitename%",
+                "pt_page_description": "%excerpt%",
+                "pt_page_robots": [
+                    "index"
+                ],
+                "pt_page_custom_robots": "off",
+                "pt_page_default_rich_snippet": "article",
+                "pt_page_default_article_type": "Article",
+                "pt_page_default_snippet_name": "%seo_title%",
+                "pt_page_default_snippet_desc": "%seo_description%",
+                "pt_page_slack_enhanced_sharing": "on",
+                "pt_page_ls_use_fk": "titles",
+                "pt_page_add_meta_box": "on",
+                "pt_page_bulk_editing": "editing",
+                "pt_page_link_suggestions": "on",
+                "pt_attachment_title": "%title% %sep% %sitename%",
+                "pt_attachment_description": "%excerpt%",
+                "pt_attachment_robots": [
+                    "noindex"
+                ],
+                "pt_attachment_custom_robots": "on",
+                "pt_attachment_default_rich_snippet": "off",
+                "pt_attachment_default_article_type": "Article",
+                "pt_attachment_default_snippet_name": "%seo_title%",
+                "pt_attachment_default_snippet_desc": "%seo_description%",
+                "pt_attachment_slack_enhanced_sharing": "off",
+                "pt_attachment_add_meta_box": "off",
+                "pt_product_title": "%title% %sep% %sitename%",
+                "pt_product_description": "%excerpt%",
+                "pt_product_robots": [
+                    "index"
+                ],
+                "pt_product_custom_robots": "off",
+                "pt_product_default_rich_snippet": "product",
+                "pt_product_default_article_type": "Article",
+                "pt_product_default_snippet_name": "%seo_title%",
+                "pt_product_default_snippet_desc": "%seo_description%",
+                "pt_product_slack_enhanced_sharing": "on",
+                "pt_product_ls_use_fk": "titles",
+                "pt_product_add_meta_box": "on",
+                "pt_product_bulk_editing": "editing",
+                "pt_product_link_suggestions": "on",
+                "pt_product_primary_taxonomy": "product_cat",
+                "pt_web-story_title": "%title% %sep% %sitename%",
+                "pt_web-story_description": "%excerpt%",
+                "pt_web-story_robots": [
+                    "index"
+                ],
+                "pt_web-story_custom_robots": "off",
+                "pt_web-story_default_rich_snippet": "article",
+                "pt_web-story_default_article_type": "Article",
+                "pt_web-story_default_snippet_name": "%seo_title%",
+                "pt_web-story_default_snippet_desc": "%seo_description%",
+                "pt_web-story_slack_enhanced_sharing": "off",
+                "pt_web-story_add_meta_box": "off",
+                "tax_category_title": "%term% %sep% %sitename%",
+                "tax_category_robots": [
+                    "index"
+                ],
+                "tax_category_add_meta_box": "on",
+                "tax_category_custom_robots": "off",
+                "tax_category_description": "%term_description%",
+                "tax_category_slack_enhanced_sharing": "on",
+                "tax_category_bulk_editing": 0,
+                "tax_post_tag_title": "%term% %sep% %sitename%",
+                "tax_post_tag_robots": [
+                    "noindex"
+                ],
+                "tax_post_tag_add_meta_box": "off",
+                "tax_post_tag_custom_robots": "on",
+                "tax_post_tag_description": "%term_description%",
+                "tax_post_tag_slack_enhanced_sharing": "on",
+                "tax_post_tag_bulk_editing": 0,
+                "remove_product_cat_snippet_data": "on",
+                "remove_product_tag_snippet_data": "on",
+                "website_alternate_name": "OaksBuild",
+                "url": "http://construction.local/",
+                "additional_info": [
+                    {
+                        "type": "legalName",
+                        "value": "Sabiedrība ar ierobežotu atbildību “OAKS Build”"
+                    }
+                ],
+                "social_additional_profiles": "https://bis.gov.lv/bisp/lv/construction_companies/20720"
+            },
+            "new": {
+                "noindex_empty_taxonomies": "on",
+                "title_separator": "-",
+                "capitalize_titles": "off",
+                "twitter_card_type": "summary_large_image",
+                "knowledgegraph_type": "company",
+                "knowledgegraph_name": "OAKS Build",
+                "website_name": "OAKS Build",
+                "local_business_type": "Organization",
+                "local_address_format": "{address} {locality}, {region} {postalcode}",
+                "opening_hours": [],
+                "opening_hours_format": "off",
+                "homepage_title": "%sitename% %page% %sep% %sitedesc%",
+                "homepage_description": "",
+                "homepage_custom_robots": "off",
+                "disable_author_archives": "off",
+                "url_author_base": "author",
+                "author_custom_robots": "on",
+                "author_robots": [
+                    "noindex"
+                ],
+                "author_archive_title": "%name% %sep% %sitename% %page%",
+                "author_add_meta_box": "on",
+                "disable_date_archives": "on",
+                "date_archive_title": "%date% %page% %sep% %sitename%",
+                "search_title": "%search_query% %page% %sep% %sitename%",
+                "404_title": "Page Not Found %sep% %sitename%",
+                "date_archive_robots": [
+                    "noindex"
+                ],
+                "noindex_search": "on",
+                "noindex_archive_subpages": "off",
+                "noindex_password_protected": "off",
+                "pt_download_default_rich_snippet": "product",
+                "author_slack_enhanced_sharing": "on",
+                "pt_post_title": "%title% %sep% %sitename%",
+                "pt_post_description": "%excerpt%",
+                "pt_post_robots": [
+                    "index"
+                ],
+                "pt_post_custom_robots": "off",
+                "pt_post_default_rich_snippet": "article",
+                "pt_post_default_article_type": "BlogPosting",
+                "pt_post_default_snippet_name": "%seo_title%",
+                "pt_post_default_snippet_desc": "%seo_description%",
+                "pt_post_slack_enhanced_sharing": "on",
+                "pt_post_ls_use_fk": "titles",
+                "pt_post_add_meta_box": "on",
+                "pt_post_bulk_editing": "editing",
+                "pt_post_link_suggestions": "on",
+                "pt_post_primary_taxonomy": "category",
+                "pt_page_title": "%title% %sep% %sitename%",
+                "pt_page_description": "%excerpt%",
+                "pt_page_robots": [
+                    "index"
+                ],
+                "pt_page_custom_robots": "off",
+                "pt_page_default_rich_snippet": "off",
+                "pt_page_default_article_type": "Article",
+                "pt_page_default_snippet_name": "%seo_title%",
+                "pt_page_default_snippet_desc": "%seo_description%",
+                "pt_page_slack_enhanced_sharing": "off",
+                "pt_page_ls_use_fk": "titles",
+                "pt_page_add_meta_box": "on",
+                "pt_page_bulk_editing": "editing",
+                "pt_page_link_suggestions": "on",
+                "pt_attachment_title": "%title% %sep% %sitename%",
+                "pt_attachment_description": "%excerpt%",
+                "pt_attachment_robots": [
+                    "noindex"
+                ],
+                "pt_attachment_custom_robots": "on",
+                "pt_attachment_default_rich_snippet": "off",
+                "pt_attachment_default_article_type": "Article",
+                "pt_attachment_default_snippet_name": "%seo_title%",
+                "pt_attachment_default_snippet_desc": "%seo_description%",
+                "pt_attachment_slack_enhanced_sharing": "off",
+                "pt_attachment_add_meta_box": "off",
+                "pt_product_title": "%title% %sep% %sitename%",
+                "pt_product_description": "%excerpt%",
+                "pt_product_robots": [
+                    "index"
+                ],
+                "pt_product_custom_robots": "off",
+                "pt_product_default_rich_snippet": "product",
+                "pt_product_default_article_type": "Article",
+                "pt_product_default_snippet_name": "%seo_title%",
+                "pt_product_default_snippet_desc": "%seo_description%",
+                "pt_product_slack_enhanced_sharing": "on",
+                "pt_product_ls_use_fk": "titles",
+                "pt_product_add_meta_box": "on",
+                "pt_product_bulk_editing": "editing",
+                "pt_product_link_suggestions": "on",
+                "pt_product_primary_taxonomy": "product_cat",
+                "pt_web-story_title": "%title% %sep% %sitename%",
+                "pt_web-story_description": "%excerpt%",
+                "pt_web-story_robots": [
+                    "index"
+                ],
+                "pt_web-story_custom_robots": "off",
+                "pt_web-story_default_rich_snippet": "article",
+                "pt_web-story_default_article_type": "Article",
+                "pt_web-story_default_snippet_name": "%seo_title%",
+                "pt_web-story_default_snippet_desc": "%seo_description%",
+                "pt_web-story_slack_enhanced_sharing": "off",
+                "pt_web-story_add_meta_box": "off",
+                "tax_category_title": "%term% %sep% %sitename%",
+                "tax_category_robots": [
+                    "index"
+                ],
+                "tax_category_add_meta_box": "on",
+                "tax_category_custom_robots": "off",
+                "tax_category_description": "%term_description%",
+                "tax_category_slack_enhanced_sharing": "on",
+                "tax_category_bulk_editing": 0,
+                "tax_post_tag_title": "%term% %sep% %sitename%",
+                "tax_post_tag_robots": [
+                    "noindex"
+                ],
+                "tax_post_tag_add_meta_box": "off",
+                "tax_post_tag_custom_robots": "on",
+                "tax_post_tag_description": "%term_description%",
+                "tax_post_tag_slack_enhanced_sharing": "on",
+                "tax_post_tag_bulk_editing": 0,
+                "remove_product_cat_snippet_data": "on",
+                "remove_product_tag_snippet_data": "on",
+                "website_alternate_name": "OaksBuild",
+                "url": "http://construction.local/",
+                "additional_info": [
+                    {
+                        "type": "legalName",
+                        "value": "Sabiedrība ar ierobežotu atbildību “OAKS Build”"
+                    }
+                ],
+                "social_additional_profiles": "https://bis.gov.lv/bisp/lv/construction_companies/20720",
+                "knowledgegraph_logo": "http://construction.local/wp-content/uploads/2026/09/oaks-build-long-2-logo.png",
+                "knowledgegraph_logo_id": 370,
+                "email": "info@oaksbuild.lv",
+                "phone_numbers": [
+                    {
+                        "type": "customer support",
+                        "number": "+37128727787"
+                    }
+                ],
+                "local_address": {
+                    "addressLocality": "Rīga",
+                    "addressCountry": "LV"
+                },
+                "open_graph_image": "http://construction.local/wp-content/uploads/2026/09/Image_1.png",
+                "open_graph_image_id": 334,
+                "local_seo_contact_page": "210"
+            }
+        },
+        {
+            "kind": "option",
+            "key": "rank-math-options-sitemap",
+            "existed": true,
+            "old": {
+                "items_per_page": 200,
+                "include_images": "on",
+                "include_featured_image": "off",
+                "exclude_roles": [
+                    "contributor",
+                    "subscriber"
+                ],
+                "html_sitemap": "on",
+                "html_sitemap_display": "shortcode",
+                "html_sitemap_sort": "published",
+                "html_sitemap_seo_titles": "titles",
+                "authors_sitemap": "on",
+                "pt_post_sitemap": "on",
+                "pt_page_sitemap": "on",
+                "pt_attachment_sitemap": "off",
+                "pt_product_sitemap": "on",
+                "pt_web-story_sitemap": "off",
+                "tax_category_sitemap": "on",
+                "tax_post_tag_sitemap": "off"
+            },
+            "new": {
+                "items_per_page": 200,
+                "include_images": "on",
+                "include_featured_image": "off",
+                "exclude_roles": [
+                    "contributor",
+                    "subscriber"
+                ],
+                "html_sitemap": "on",
+                "html_sitemap_display": "shortcode",
+                "html_sitemap_sort": "published",
+                "html_sitemap_seo_titles": "titles",
+                "authors_sitemap": "off",
+                "pt_post_sitemap": "on",
+                "pt_page_sitemap": "on",
+                "pt_attachment_sitemap": "off",
+                "pt_product_sitemap": "on",
+                "pt_web-story_sitemap": "off",
+                "tax_category_sitemap": "on",
+                "tax_post_tag_sitemap": "off",
+                "pt_construction_project_sitemap": "off"
+            }
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 174,
+            "key": "rank_math_title",
+            "existed": true,
+            "old_values": [
+                "Būvuzraudzības pakalpojumi Latvijā – OAKS Build"
+            ],
+            "new": "Būvniecības vadība un būvuzraudzība %sep% %sitename%"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 174,
+            "key": "rank_math_description",
+            "existed": true,
+            "old_values": [
+                "OAKS Build piedāvā būvniecības projektu vadību un būvuzraudzību Latvijā. Palīdzam attīstītājiem un privātmāju būvētājiem kontrolēt izmaksas, termiņus un darbu kvalitāti."
+            ],
+            "new": "Būvniecības vadība un būvuzraudzība Latvijā. OAKS Build palīdz attīstītājiem un privātmāju būvētājiem kontrolēt izmaksas, termiņus un darbu kvalitāti."
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 174,
+            "key": "rank_math_focus_keyword",
+            "existed": true,
+            "old_values": [
+                "būvniecības vadība un uzraudzība"
+            ],
+            "new": "būvniecības vadība,būvuzraudzība"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 175,
+            "key": "rank_math_description",
+            "existed": true,
+            "old_values": [
+                "OAKS Build provides construction project management and site supervision in Latvia. We help property developers and private home builders manage costs, schedules and quality."
+            ],
+            "new": "Construction management and site supervision in Latvia. OAKS Build helps developers and private home clients control budgets, schedules and quality."
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 175,
+            "key": "rank_math_focus_keyword",
+            "existed": true,
+            "old_values": [
+                "construction management and supervision"
+            ],
+            "new": "construction management,construction supervision Latvia"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 176,
+            "key": "rank_math_title",
+            "existed": true,
+            "old_values": [
+                "Управление строительством и строительный надзор %sep% %sitename%"
+            ],
+            "new": "Управление строительством в Латвии %sep% %sitename%"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 176,
+            "key": "rank_math_description",
+            "existed": true,
+            "old_values": [
+                "OAKS Build предлагает управление строительными проектами и строительный надзор в Латвии. Помогаем девелоперам и владельцам частных домов контролировать бюджет, сроки и качество работ."
+            ],
+            "new": "Управление строительством и строительный надзор в Латвии. OAKS Build помогает девелоперам и владельцам частных домов контролировать сроки, бюджет и качество."
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 176,
+            "key": "rank_math_focus_keyword",
+            "existed": true,
+            "old_values": [
+                "управление строительством и строительный надзор"
+            ],
+            "new": "управление строительством,строительный надзор в Латвии"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 355,
+            "key": "rank_math_title",
+            "existed": true,
+            "old_values": [
+                "Būvniecības projektu vadība attīstītājiem – OAKS Build"
+            ],
+            "new": "Būvniecības projektu vadība attīstītājiem %sep% %sitename%"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 356,
+            "key": "rank_math_title",
+            "existed": true,
+            "old_values": [
+                "For property developers %sep% %sitename%"
+            ],
+            "new": "Construction project management for developers %sep% %sitename%"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 357,
+            "key": "rank_math_title",
+            "existed": true,
+            "old_values": [
+                "Для девелоперов %sep% %sitename%"
+            ],
+            "new": "Управление строительными проектами %sep% %sitename%"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 358,
+            "key": "rank_math_title",
+            "existed": true,
+            "old_values": [
+                "Privātmājas būvuzraudzība un būvniecības vadība – OAKS Build"
+            ],
+            "new": "Privātmājas būvuzraudzība un vadība %sep% %sitename%"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 358,
+            "key": "rank_math_focus_keyword",
+            "existed": true,
+            "old_values": [
+                "privātmājas būvniecības vadība"
+            ],
+            "new": "privātmājas būvuzraudzība,privātmājas būvniecības vadība"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 359,
+            "key": "rank_math_title",
+            "existed": true,
+            "old_values": [
+                "For private home builders %sep% %sitename%"
+            ],
+            "new": "Private home construction management %sep% %sitename%"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 360,
+            "key": "rank_math_title",
+            "existed": true,
+            "old_values": [
+                "Для застройщиков частных домов %sep% %sitename%"
+            ],
+            "new": "Управление строительством частного дома %sep% %sitename%"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 168,
+            "key": "rank_math_facebook_image",
+            "existed": false,
+            "old_values": [],
+            "new": "http://construction.local/wp-content/uploads/2026/10/S1.png"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 168,
+            "key": "rank_math_facebook_image_id",
+            "existed": false,
+            "old_values": [],
+            "new": 522
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 169,
+            "key": "rank_math_facebook_image",
+            "existed": false,
+            "old_values": [],
+            "new": "http://construction.local/wp-content/uploads/2026/10/S1.png"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 169,
+            "key": "rank_math_facebook_image_id",
+            "existed": false,
+            "old_values": [],
+            "new": 522
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 170,
+            "key": "rank_math_facebook_image",
+            "existed": false,
+            "old_values": [],
+            "new": "http://construction.local/wp-content/uploads/2026/10/S1.png"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 170,
+            "key": "rank_math_facebook_image_id",
+            "existed": false,
+            "old_values": [],
+            "new": 522
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 210,
+            "key": "rank_math_description",
+            "existed": true,
+            "old_values": [
+                "Sazinieties ar OAKS Build, lai pārrunātu Jūsu būvniecības projektu. E-pasts, tālrunis, adrese un uzņēmuma rekvizīti vienuviet."
+            ],
+            "new": "Sazinieties ar OAKS Build par būvniecības vadību un būvuzraudzību Latvijā. Zvaniet vai rakstiet, lai pārrunātu sava projekta ieceri un sadarbības iespējas."
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 210,
+            "key": "rank_math_focus_keyword",
+            "existed": true,
+            "old_values": [
+                "kontakti"
+            ],
+            "new": "OAKS Build kontakti"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 211,
+            "key": "rank_math_description",
+            "existed": true,
+            "old_values": [
+                "Contact OAKS Build to discuss your construction project. Find our email, phone number, address, and company details in one place."
+            ],
+            "new": "Contact OAKS Build about construction management and site supervision in Latvia. Call or email us to discuss your project and how we can help."
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 211,
+            "key": "rank_math_focus_keyword",
+            "existed": true,
+            "old_values": [
+                "contact"
+            ],
+            "new": "OAKS Build contact"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 212,
+            "key": "rank_math_description",
+            "existed": true,
+            "old_values": [
+                "Свяжитесь с OAKS Build, чтобы обсудить ваш строительный проект. Электронная почта, телефон, адрес и реквизиты компании в одном месте."
+            ],
+            "new": "Свяжитесь с OAKS Build по вопросам управления строительством и строительного надзора в Латвии. Позвоните или напишите, чтобы обсудить ваш проект."
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 212,
+            "key": "rank_math_focus_keyword",
+            "existed": true,
+            "old_values": [
+                "контакты"
+            ],
+            "new": "OAKS Build контакты"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 554,
+            "key": "rank_math_title",
+            "existed": false,
+            "old_values": [],
+            "new": "Privātums un sīkdatnes %sep% %sitename%"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 554,
+            "key": "rank_math_description",
+            "existed": false,
+            "old_values": [],
+            "new": "Uzziniet, kā OAKS Build apstrādā personas datus, izmanto sīkdatnes un apkopo vietnes statistiku, kā arī kā mainīt piekrišanu un īstenot savas tiesības."
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 554,
+            "key": "rank_math_focus_keyword",
+            "existed": false,
+            "old_values": [],
+            "new": "privātums un sīkdatnes"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 555,
+            "key": "rank_math_title",
+            "existed": false,
+            "old_values": [],
+            "new": "Privacy and cookies %sep% %sitename%"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 555,
+            "key": "rank_math_description",
+            "existed": false,
+            "old_values": [],
+            "new": "Read how OAKS Build handles personal data, uses cookies and collects website statistics. Learn how to change your consent and exercise your data rights."
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 555,
+            "key": "rank_math_focus_keyword",
+            "existed": false,
+            "old_values": [],
+            "new": "privacy and cookies"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 556,
+            "key": "rank_math_title",
+            "existed": false,
+            "old_values": [],
+            "new": "Конфиденциальность и cookie %sep% %sitename%"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 556,
+            "key": "rank_math_description",
+            "existed": false,
+            "old_values": [],
+            "new": "Узнайте, как OAKS Build обрабатывает персональные данные, использует cookie и собирает статистику сайта, как изменить согласие и реализовать свои права."
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 556,
+            "key": "rank_math_focus_keyword",
+            "existed": false,
+            "old_values": [],
+            "new": "конфиденциальность и cookie"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 334,
+            "key": "_wp_attachment_image_alt",
+            "existed": false,
+            "old_values": [],
+            "new": "Speciālists ar būvprojektu pie ēkas būvlaukuma"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 381,
+            "key": "_wp_attachment_image_alt",
+            "existed": false,
+            "old_values": [],
+            "new": "Speciālists un pasūtītāji privātmājas būvlaukumā"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 393,
+            "key": "_wp_attachment_image_alt",
+            "existed": false,
+            "old_values": [],
+            "new": "Privātmājas projekta risinājumu apspriešana pie rasējumiem"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 397,
+            "key": "_wp_attachment_image_alt",
+            "existed": false,
+            "old_values": [],
+            "new": "Speciālisti vērtē būvdarbu norisi ēkas būvlaukumā"
+        },
+        {
+            "kind": "post_meta",
+            "post_id": 102,
+            "key": "_wp_attachment_image_alt",
+            "existed": false,
+            "old_values": [],
+            "new": "Daudzstāvu ēkas būvlaukums ar celtņiem"
+        }
+    ]
+}

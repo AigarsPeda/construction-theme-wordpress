@@ -41,7 +41,7 @@ function construction_media_source_dir(): string {
  *
  * Homepage and gallery share photos by key; duplicate files are uploaded once.
  *
- * @return array<string, array{file: string, author: string, photo_id: string, unsplash_url: string, alt_key?: string}>
+ * @return array<string, array{file: string, author: string, photo_id: string, unsplash_url: string, alt_key?: string, download_url?: string}>
  */
 function construction_media_catalog(): array {
 	return array(
@@ -185,7 +185,92 @@ function construction_media_catalog(): array {
 			'unsplash_url' => 'https://unsplash.com/photos/eKY6_9W_iqY',
 			'alt_key'      => 'projects.alt.13',
 		),
+		// Cost-estimating page. No local source file: imported from Unsplash's CDN.
+		'estimate_private'  => array(
+			'file'         => 'troy-mortier-kkdfOe0iRu8-unsplash.jpg',
+			'author'       => 'Troy Mortier',
+			'photo_id'     => 'kkdfOe0iRu8',
+			'unsplash_url' => 'https://unsplash.com/photos/kkdfOe0iRu8',
+			'download_url' => 'https://images.unsplash.com/photo-1676802037786-3697d60497ae?w=2400&q=80&fm=jpg',
+		),
+		'estimate_business' => array(
+			'file'         => 'pablo-heimplatz-t4Ot1iDE0hQ-unsplash.jpg',
+			'author'       => 'Pablo Heimplatz',
+			'photo_id'     => 't4Ot1iDE0hQ',
+			'unsplash_url' => 'https://unsplash.com/photos/t4Ot1iDE0hQ',
+			'download_url' => 'https://images.unsplash.com/photo-1643308012242-704341800ef3?w=2400&q=80&fm=jpg',
+		),
 	);
+}
+
+/**
+ * Import catalog images that declare a download_url (idempotent).
+ *
+ * Uses WordPress's own download + sideload, so attachments get the usual
+ * sub-sizes and appear in the Media Library like any manual upload.
+ *
+ * @param list<string>          $keys Catalog keys to make available.
+ * @param array<string, string> $alts Optional alt text per key for new uploads.
+ * @return array<string, int>|WP_Error Attachment ID per key.
+ */
+function construction_import_remote_media( array $keys, array $alts = array() ) {
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+	require_once ABSPATH . 'wp-admin/includes/media.php';
+	require_once ABSPATH . 'wp-admin/includes/image.php';
+
+	$catalog = construction_media_catalog();
+	$ids     = construction_media_ids();
+	$out     = array();
+
+	foreach ( $keys as $key ) {
+		$existing = construction_media_id( $key );
+		if ( $existing > 0 ) {
+			$out[ $key ] = $existing;
+			continue;
+		}
+
+		$meta = $catalog[ $key ] ?? null;
+		if ( ! is_array( $meta ) || empty( $meta['download_url'] ) ) {
+			return new WP_Error( 'unknown_media', 'No downloadable catalog image for key: ' . $key );
+		}
+
+		$tmp = download_url( $meta['download_url'], 60 );
+		if ( is_wp_error( $tmp ) ) {
+			return $tmp;
+		}
+
+		$attachment_id = media_handle_sideload(
+			array(
+				'name'     => $meta['file'],
+				'tmp_name' => $tmp,
+			),
+			0,
+			$meta['author'] . ' — ' . $meta['photo_id']
+		);
+		if ( is_wp_error( $attachment_id ) ) {
+			@unlink( $tmp ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			return $attachment_id;
+		}
+
+		$attachment_id = (int) $attachment_id;
+		update_post_meta( $attachment_id, '_construction_photo_id', $meta['photo_id'] );
+		update_post_meta( $attachment_id, '_construction_unsplash', $meta['unsplash_url'] );
+		if ( ! empty( $alts[ $key ] ) ) {
+			update_post_meta( $attachment_id, '_wp_attachment_image_alt', $alts[ $key ] );
+		}
+		wp_update_post(
+			array(
+				'ID'           => $attachment_id,
+				'post_excerpt' => sprintf( 'Photo by %s on Unsplash', $meta['author'] ),
+			)
+		);
+
+		$ids[ $key ] = $attachment_id;
+		$out[ $key ] = $attachment_id;
+		update_option( 'construction_media_ids', $ids );
+	}
+
+	return $out;
 }
 
 /**
@@ -482,6 +567,11 @@ function construction_import_media_library() {
 		$existing = isset( $ids[ $key ] ) ? (int) $ids[ $key ] : 0;
 		if ( $existing > 0 && get_post( $existing ) ) {
 			++$reused;
+			continue;
+		}
+
+		// Remote-only images are imported by construction_import_remote_media().
+		if ( ! empty( $meta['download_url'] ) ) {
 			continue;
 		}
 

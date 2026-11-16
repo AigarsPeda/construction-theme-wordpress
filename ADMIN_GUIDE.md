@@ -97,6 +97,52 @@ Forced reseed: add `&force=1` (overwrites DB content from theme seed).
 
 ---
 
+## Cost-estimating page (Tāmēšana)
+
+Pages: **tamesana** (LV) / **cost-estimating** (EN) / **sostavlenie-smet** (RU), linked as Polylang translations and listed third in each Primary menu.
+
+The page is split vertically into two halves under the title: **Privātpersonām** (house cost estimate) and **Uzņēmumiem** (development project assessment). Both buttons open the request form with the matching request type.
+
+| Change | Where |
+|---|---|
+| Any text, list item, button label or link | **Pages → Edit** (each language separately) |
+| Half background photo | Select the photo in **List View** (it sits behind the text) → **Replace** |
+| Browser title, meta description, focus keywords | **Rank Math** panel on that page |
+
+Rank Math was seeded with: LV focus keywords `tāmēšana, tāmju sagatavošana, tāmju izstrāde, būvniecības tāme, būvniecības izmaksu tāme`; EN `construction cost estimating …`; RU `составление смет …`. Editing them in Rank Math is safe — reseeding never overwrites filled fields.
+
+Seed missing pages (keeps existing content, imports the two Unsplash photos into the Media Library if needed, adds menu items):
+
+`/wp-admin/?construction_rebuild_estimate_pages=1`
+
+Forced reseed: add `&force=1` (deletes and recreates only the three estimate pages).
+
+---
+
+## Request form (Pieteikumu forma)
+
+One form, used in two places:
+
+- **Pop-up:** any button with the CSS class `construction-request` opens it (select the button → Block → Advanced → Additional CSS class). `construction-request--estimate` and `construction-request--assessment` preset the request type and the message hint. The pop-up title is the button text. Currently on: the home hero button, both buttons on the two audience pages, and the two Tāmēšana buttons.
+- **On a page:** the **Request form** block (block inserter → "Request form"). It sits under the contact details on the Contacts pages; move or remove it like any block.
+
+Without JavaScript the buttons keep their normal link (contacts page).
+
+**Edit everything under Appearance → Request form:**
+
+| Setting | Notes |
+|---|---|
+| Fields | Show / Required per field, label and hint per language. Email is always shown and required (needed for replies and the confirmation). |
+| Send requests to | Empty = the email from Appearance → Construction. Reply to a request email to answer the visitor. |
+| Confirmation email | On/off; subject and text per language. Placeholders `{name}` `{request}` `{site}` `{phone}` `{email}`. It never repeats the visitor's message. |
+| Texts and messages | Every visible text and error message per language. An empty box falls back to the default. |
+
+**Sending:** through `wp_mail()`, i.e. WP Mail SMTP on production. Local uses PHP mail (Mailpit); do not copy the droplet's Gmail settings to Local.
+
+**Spam:** a hidden honeypot field, a minimum fill time (signed by the server) and at most 5 requests per visitor per hour. Bots get a normal success message and nothing is sent.
+
+---
+
 ## Projects (Projekti)
 
 **Add / edit projects in one place:** **Projects** in the WP Admin menu (not by editing page blocks by hand).
@@ -193,6 +239,8 @@ No extra setting — same logo / phone / email as desktop.
 | `?construction_merge_projects=1` | Merge old 3-posts-per-project rows into one post each |
 | `?construction_rebuild_contacts=1` | Create missing contacts pages only |
 | `?construction_rebuild_contacts=1&force=1` | **Deletes and reseeds** contacts pages |
+| `?construction_rebuild_estimate_pages=1` | Create missing Tāmēšana pages (+ photos, menu items) |
+| `?construction_rebuild_estimate_pages=1&force=1` | **Deletes and reseeds** the three Tāmēšana pages |
 
 Saving **Appearance → Construction** no longer rebuilds pages (so your edits stay safe).
 

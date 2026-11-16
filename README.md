@@ -107,6 +107,10 @@ Use Local's site shell so PHP and the database socket are configured. This check
 
 Homepage carousel regression checks run with `node scripts/tests/home-carousel.cjs`. They cover preloaded repeats, swipe momentum, mouse dragging, click handling, hover and keyboard pauses, and reduced motion. Check physical mobile swipes separately in Safari and Chrome.
 
+Cost-estimating (Tāmēšana) page checks run with `wp --path="/Users/aigarspeda/Local Sites/construction/app/public" eval-file scripts/tests/estimate-page.php`. They verify the three linked pages, their markup, contact links, Rank Math fields, menu items and Media Library images. The check is read-only and runs only on Local. Seed the pages with `/wp-admin/?construction_rebuild_estimate_pages=1`; on a server without the images it downloads them from Unsplash through WordPress.
+
+Request form checks run with `wp --path="/Users/aigarspeda/Local Sites/construction/app/public" eval-file scripts/tests/request-form.php`. They cover localized validation, required/hidden field settings, honeypot and timing guards, email contents and headers, confirmation language and the hourly limit. Every email is captured at `pre_wp_mail`, so nothing is sent.
+
 Projects page title checks run with `wp --path="/Users/aigarspeda/Local Sites/construction/app/public" eval-file scripts/tests/projects-page.php`. They verify the public heading follows the admin page title in all languages and omits the old introduction. The check runs only on Local and removes its temporary page afterwards.
 
 ## After activate

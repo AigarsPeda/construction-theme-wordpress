@@ -141,7 +141,7 @@ add_filter( 'document_title_parts', 'construction_document_title_parts' );
 
 /**
  * Print meta description + Open Graph tags (theme fallback only).
- * hreflang is always printed — Polylang-friendly and safe alongside most SEO plugins.
+ * Polylang owns hreflang output, including the x-default filter below.
  */
 function construction_seo_head(): void {
 	if ( ! construction_seo_plugin_active() ) {
@@ -173,30 +173,152 @@ function construction_seo_head(): void {
 			echo '<meta name="twitter:image" content="' . esc_url( $image ) . '" />' . "\n";
 		}
 	}
-
-	// hreflang alternates for the current singular page (or front page).
-	if ( function_exists( 'pll_get_post' ) && function_exists( 'pll_languages_list' ) ) {
-		$post_id = is_singular() ? get_queried_object_id() : (int) get_option( 'page_on_front' );
-		if ( $post_id > 0 ) {
-			foreach ( construction_languages() as $code ) {
-				$translated = pll_get_post( $post_id, $code );
-				if ( ! $translated ) {
-					continue;
-				}
-				$href = get_permalink( (int) $translated );
-				if ( ! is_string( $href ) || $href === '' ) {
-					continue;
-				}
-				echo '<link rel="alternate" hreflang="' . esc_attr( $code ) . '" href="' . esc_url( $href ) . '" />' . "\n";
-			}
-			$default = pll_get_post( $post_id, 'lv' );
-			if ( $default ) {
-				$href = get_permalink( (int) $default );
-				if ( is_string( $href ) && $href !== '' ) {
-					echo '<link rel="alternate" hreflang="x-default" href="' . esc_url( $href ) . '" />' . "\n";
-				}
-			}
-		}
-	}
 }
 add_action( 'wp_head', 'construction_seo_head', 1 );
+
+/**
+ * Use Polylang's reciprocal translation set, with the default translation as fallback.
+ * Do not advertise homepage translations on search, archive or error URLs.
+ */
+function construction_seo_hreflang( array $links ): array {
+	if ( ! is_singular( 'page' ) ) {
+		return array();
+	}
+
+	$default = function_exists( 'pll_default_language' ) ? pll_default_language() : 'lv';
+	if ( isset( $links[ $default ] ) ) {
+		$links['x-default'] = $links[ $default ];
+	}
+	return $links;
+}
+add_filter( 'pll_rel_hreflang_attributes', 'construction_seo_hreflang' );
+
+/**
+ * Refine Rank Math's graph without creating a second JSON-LD provider.
+ * These are service and portfolio pages, rather than editorial articles.
+ */
+function construction_seo_schema( array $data ): array {
+	if ( ! is_page() ) {
+		return $data;
+	}
+
+	$slug     = (string) get_post_field( 'post_name', get_queried_object_id() );
+	$services = array(
+		'projektu-attistitajiem' => 'Būvniecības projektu vadība attīstītājiem',
+		'for-property-developers' => 'Construction project management for developers',
+		'dlya-developerov' => 'Управление строительными проектами для девелоперов',
+		'privatmaju-buvetajiem' => 'Privātmājas būvuzraudzība un būvniecības vadība',
+		'for-private-home-builders' => 'Private home construction management and supervision',
+		'dlya-zastroyshchikov-chastnyh-domov' => 'Управление строительством и надзор за частным домом',
+		'tamesana' => 'Būvniecības tāmēšana',
+		'cost-estimating' => 'Construction cost estimating',
+		'sostavlenie-smet' => 'Составление строительных смет',
+	);
+
+	foreach ( $data as &$entity ) {
+		if ( ! is_array( $entity ) ) {
+			continue;
+		}
+		if ( in_array( $entity['@type'] ?? '', array( 'WebPage', 'ContactPage', 'CollectionPage' ), true ) ) {
+			if ( in_array( $slug, array( 'kontakti', 'contacts', 'kontakty' ), true ) ) {
+				$entity['@type'] = 'ContactPage';
+			} elseif ( in_array( $slug, array( 'projekti', 'projects', 'proekty' ), true ) ) {
+				$entity['@type'] = 'CollectionPage';
+			}
+			if ( isset( $services[ $slug ] ) ) {
+				$entity['mainEntity'] = array( '@id' => get_permalink() . '#service' );
+			}
+		}
+
+		// Rank Math can fall back to 200x200 for images extracted from block HTML.
+		if ( 'ImageObject' === ( $entity['@type'] ?? '' ) && ! empty( $entity['url'] ) ) {
+			$entity = array_replace( $entity, construction_seo_local_image_dimensions( $entity['url'] ) );
+		}
+	}
+	unset( $entity );
+
+	if ( isset( $services[ $slug ] ) ) {
+		$data['construction_service'] = array(
+			'@type'            => 'Service',
+			'@id'              => get_permalink() . '#service',
+			'name'             => $services[ $slug ],
+			'serviceType'      => $services[ $slug ],
+			'url'              => get_permalink(),
+			'description'      => (string) get_post_meta( get_queried_object_id(), 'rank_math_description', true ),
+			'provider'         => array( '@id' => home_url( '/#organization' ) ),
+			'mainEntityOfPage' => array( '@id' => get_permalink() . '#webpage' ),
+		);
+	}
+
+	return $data;
+}
+add_filter( 'rank_math/json_ld', 'construction_seo_schema', 99 );
+
+/**
+ * Feed documents are useful to readers but should not compete with page URLs.
+ */
+function construction_seo_feed_headers( array $headers ): array {
+	if ( is_feed() ) {
+		$headers['X-Robots-Tag'] = 'noindex, follow';
+	}
+	return $headers;
+}
+add_filter( 'wp_headers', 'construction_seo_feed_headers' );
+
+/** Service and company pages use the website Open Graph type. */
+add_filter( 'rank_math/opengraph/type', function ( $type ) {
+	return is_page() ? 'website' : $type;
+} );
+
+/** Keep WebPage and Organization entities when the default Article schema is off. */
+add_filter( 'rank_math/schema/add_global_entities', function ( $enabled ) {
+	if ( is_page() && ! post_password_required() ) {
+		$robots = (array) get_post_meta( get_queried_object_id(), 'rank_math_robots', true );
+		return ! in_array( 'noindex', $robots, true );
+	}
+	return $enabled;
+} );
+
+/** Read dimensions only for local uploads; never fetch an external image. */
+function construction_seo_local_image_dimensions( string $url ): array {
+	$uploads = wp_upload_dir();
+	if ( ! str_starts_with( $url, $uploads['baseurl'] . '/' ) ) {
+		return array();
+	}
+	$file = $uploads['basedir'] . substr( $url, strlen( $uploads['baseurl'] ) );
+	$size = is_readable( $file ) ? wp_getimagesize( $file ) : false;
+	return $size ? array( 'width' => $size[0], 'height' => $size[1] ) : array();
+}
+
+/** Content images stored as URLs can lack Open Graph dimensions in Rank Math. */
+function construction_seo_social_image_dimensions( array $image ): array {
+	if ( ! empty( $image['url'] ) ) {
+		$image = array_replace( $image, construction_seo_local_image_dimensions( $image['url'] ) );
+	}
+	return $image;
+}
+add_filter( 'rank_math/opengraph/facebook/image_array', 'construction_seo_social_image_dimensions' );
+add_filter( 'rank_math/opengraph/twitter/image_array', 'construction_seo_social_image_dimensions' );
+
+/**
+ * Defer supporting audience-page images below the hero. Hero images stay eager:
+ * the private-home hero can hold up to three images, all above the fold.
+ */
+add_filter( 'render_block_core/post-content', function ( $html ) {
+	$hero_end = strpos( $html, 'construction-audience-page__intro' );
+	if ( ! str_contains( $html, 'construction-audience-page__hero-media' ) || false === $hero_end ) {
+		return $html;
+	}
+	// Split at the opening "<" of the tag that starts the first section after the hero.
+	$split = strrpos( substr( $html, 0, $hero_end ), '<' );
+	if ( false === $split ) {
+		return $html;
+	}
+	$tags = new WP_HTML_Tag_Processor( substr( $html, $split ) );
+	while ( $tags->next_tag( 'IMG' ) ) {
+		if ( 'high' !== $tags->get_attribute( 'fetchpriority' ) ) {
+			$tags->set_attribute( 'loading', 'lazy' );
+		}
+	}
+	return substr( $html, 0, $split ) . $tags->get_updated_html();
+} );
