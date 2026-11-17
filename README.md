@@ -76,10 +76,10 @@ Then: **Appearance → Themes → Add New → Upload Theme → construction.zip*
 The repository includes three scripts for the current Local and DigitalOcean setup:
 
 ```bash
-# Preview theme-file changes without uploading anything.
+# Preview theme and MU-plugin changes without uploading anything.
 ./scripts/sync-code-to-droplet.sh --dry-run
 
-# Upload the local theme and make the remote theme directory match it.
+# Upload the theme (remote theme becomes an exact copy) and the repo's MU plugins.
 ./scripts/sync-code-to-droplet.sh
 
 # Replace Local's database with the droplet database.
@@ -89,11 +89,16 @@ The repository includes three scripts for the current Local and DigitalOcean set
 ./scripts/push-db-to-droplet.sh
 ```
 
-The database scripts ask for an explicit confirmation. Pass `--yes` only when a deliberate non-interactive run is required. Both scripts perform serialized-safe URL replacement. Pulls retain the latest three compressed local rollback backups in `Desktop/construction-backups`. Pushes retain the latest three compressed production rollback backups in `/var/backups/construction`. Theme deployments also save a private rollback archive there before uploading files.
+Safety rules built into the database scripts:
 
-Pulls also copy the droplet's uploads into Local without deleting Local-only files. Database pushes do not upload media files.
+- **No silent loss of work.** Before anything changes, each script compares posts on both sites and stops if the copy would delete or replace something that exists only on the receiving side, or was edited there later (for example a project added on production). It prints the list. Pull or deploy that work first; pass `--allow-overwrite` only when the listed items may be lost.
+- **Each environment keeps its own mail and Google settings.** WP Mail SMTP options and log tables, and Google Site Kit options and user tokens, are saved before the import and restored after it (`scripts/lib/environment-settings.php`). Production keeps its Gmail connection; Local never receives it. Never configure Local to send through the production Gmail account.
+- **Backups.** Pulls keep the latest three compressed local backups in `Desktop/construction-backups`; pushes keep the latest three production backups in `/var/backups/construction`. Theme syncs save a private archive of the live theme and MU plugins there first.
+- **Media.** Pulls copy the droplet's uploads into Local without deleting Local-only files. Pushes copy only the uploads production lacks (never deletes or replaces files); skip with `--skip-uploads`.
 
-Copy `mu-plugins/construction-sitemap.php` into each site's `wp-content/mu-plugins/` directory. It keeps translated homepage sitemap URLs aligned with their canonical page permalinks. WordPress loads it automatically; theme-only deployment does not copy MU plugins. After installing or updating it, clear Rank Math's sitemap cache.
+The database scripts ask for an explicit confirmation; pass `--yes` only for a deliberate non-interactive run. Both perform serialized-safe URL replacement.
+
+`sync-code-to-droplet.sh` installs every `mu-plugins/*.php` from the repo into the droplet's `wp-content/mu-plugins/` (other MU plugins there are left alone). `construction-sitemap.php` keeps translated homepage sitemap URLs aligned with their canonical permalinks. After it changes, clear Rank Math's sitemap cache: delete `wp-content/uploads/rank-math/rank_math_*.xml` (Rank Math rebuilds it on the next request; `wp rankmath sitemap generate` fails when run as root).
 
 The scripts use the current SSH key, server address, Local paths, and WordPress paths as defaults. Override settings through the environment when needed. Run any script with `--help` to see the available variables.
 

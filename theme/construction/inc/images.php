@@ -200,6 +200,14 @@ function construction_media_catalog(): array {
 			'unsplash_url' => 'https://unsplash.com/photos/t4Ot1iDE0hQ',
 			'download_url' => 'https://images.unsplash.com/photo-1643308012242-704341800ef3?w=2400&q=80&fm=jpg',
 		),
+		// Landscape crop of the portrait original for the full-width Tāmēšana hero.
+		'estimate_hero'     => array(
+			'file'         => 'marina-zvada-fNxmdlYHRm8-unsplash.jpg',
+			'author'       => 'Marina Zvada',
+			'photo_id'     => 'fNxmdlYHRm8',
+			'unsplash_url' => 'https://unsplash.com/photos/fNxmdlYHRm8',
+			'download_url' => 'https://images.unsplash.com/photo-1762146828422-50a8bd416d3c?w=2400&h=1350&fit=crop&crop=focalpoint&fp-x=0.5&fp-y=0.55&q=80&fm=jpg',
+		),
 	);
 }
 

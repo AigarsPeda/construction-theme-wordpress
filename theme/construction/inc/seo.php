@@ -210,9 +210,9 @@ function construction_seo_schema( array $data ): array {
 		'privatmaju-buvetajiem' => 'Privātmājas būvuzraudzība un būvniecības vadība',
 		'for-private-home-builders' => 'Private home construction management and supervision',
 		'dlya-zastroyshchikov-chastnyh-domov' => 'Управление строительством и надзор за частным домом',
-		'tamesana' => 'Būvniecības tāmēšana',
+		'tamesana' => 'Būvniecības tāmju sastādīšana',
 		'cost-estimating' => 'Construction cost estimating',
-		'sostavlenie-smet' => 'Составление строительных смет',
+		'sostavlenie-smet' => 'Составление смет на строительство',
 	);
 
 	foreach ( $data as &$entity ) {
@@ -247,12 +247,68 @@ function construction_seo_schema( array $data ): array {
 			'description'      => (string) get_post_meta( get_queried_object_id(), 'rank_math_description', true ),
 			'provider'         => array( '@id' => home_url( '/#organization' ) ),
 			'mainEntityOfPage' => array( '@id' => get_permalink() . '#webpage' ),
-		);
+		) + construction_seo_service_details( $slug );
 	}
 
 	return $data;
 }
 add_filter( 'rank_math/json_ld', 'construction_seo_schema', 99 );
+
+/**
+ * Extra Service facts for the cost-estimating pages: the other names people
+ * search for, the country served, and the two offers described on the page.
+ * Everything here restates visible page content; nothing is shown to visitors.
+ *
+ * @return array<string, mixed>
+ */
+function construction_seo_service_details( string $slug ): array {
+	$details = array(
+		'tamesana'         => array(
+			'names'   => array( 'Tāmēšana', 'Tāmēšanas pakalpojumi', 'Tāmju sagatavošana', 'Būvniecības izmaksu tāme' ),
+			'country' => 'Latvija',
+			'catalog' => 'Tāmēšanas pakalpojumi',
+			'offers'  => array( 'Privātmājas būvniecības izmaksu tāme', 'Nekustamā īpašuma attīstības projekta izmaksu un rentabilitātes izvērtējums' ),
+		),
+		'cost-estimating'  => array(
+			'names'   => array( 'Construction cost estimate', 'Building cost estimate' ),
+			'country' => 'Latvia',
+			'catalog' => 'Cost estimating services',
+			'offers'  => array( 'Private house construction cost estimate', 'Property development cost and profitability assessment' ),
+		),
+		'sostavlenie-smet' => array(
+			'names'   => array( 'Сметы на строительство', 'Смета на строительство дома', 'Услуги сметчика' ),
+			'country' => 'Латвия',
+			'catalog' => 'Сметные услуги',
+			'offers'  => array( 'Смета на строительство частного дома', 'Оценка затрат и рентабельности девелоперского проекта' ),
+		),
+	);
+	if ( ! isset( $details[ $slug ] ) ) {
+		return array();
+	}
+
+	$detail = $details[ $slug ];
+	return array(
+		'alternateName'   => $detail['names'],
+		'areaServed'      => array(
+			'@type' => 'Country',
+			'name'  => $detail['country'],
+		),
+		'hasOfferCatalog' => array(
+			'@type'           => 'OfferCatalog',
+			'name'            => $detail['catalog'],
+			'itemListElement' => array_map(
+				static fn( string $name ): array => array(
+					'@type'       => 'Offer',
+					'itemOffered' => array(
+						'@type' => 'Service',
+						'name'  => $name,
+					),
+				),
+				$detail['offers']
+			),
+		),
+	);
+}
 
 /**
  * Feed documents are useful to readers but should not compete with page URLs.
@@ -290,9 +346,16 @@ function construction_seo_local_image_dimensions( string $url ): array {
 	return $size ? array( 'width' => $size[0], 'height' => $size[1] ) : array();
 }
 
-/** Content images stored as URLs can lack Open Graph dimensions in Rank Math. */
-function construction_seo_social_image_dimensions( array $image ): array {
-	if ( ! empty( $image['url'] ) ) {
+/**
+ * Content images stored as URLs can lack Open Graph dimensions in Rank Math.
+ * Rank Math versions differ in what they pass (an image array or a plain URL),
+ * so anything that is not an image array is returned untouched.
+ *
+ * @param mixed $image Rank Math image data.
+ * @return mixed
+ */
+function construction_seo_social_image_dimensions( $image ) {
+	if ( is_array( $image ) && ! empty( $image['url'] ) && is_string( $image['url'] ) ) {
 		$image = array_replace( $image, construction_seo_local_image_dimensions( $image['url'] ) );
 	}
 	return $image;

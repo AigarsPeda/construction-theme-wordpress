@@ -101,17 +101,24 @@ Forced reseed: add `&force=1` (overwrites DB content from theme seed).
 
 Pages: **tamesana** (LV) / **cost-estimating** (EN) / **sostavlenie-smet** (RU), linked as Polylang translations and listed third in each Primary menu.
 
-The page is split vertically into two halves under the title: **Privātpersonām** (house cost estimate) and **Uzņēmumiem** (development project assessment). Both buttons open the request form with the matching request type.
+The top of the page is one **Cover** block: a blueprint photo behind the centred title and lead. Under it the page is split vertically into two halves: **private clients** (house cost estimate, pale blue) and **companies** (development project assessment, black). Both buttons open the request form with the matching request type.
 
 | Change | Where |
 |---|---|
 | Any text, list item, button label or link | **Pages → Edit** (each language separately) |
-| Half background photo | Select the photo in **List View** (it sits behind the text) → **Replace** |
+| Hero photo | Click the photo area (or select **Cover** in **List View**) → toolbar **Replace**. The new photo is shown in greyscale automatically. |
+| Which part of the photo shows | Cover → sidebar **Focal point** (drag the circle) |
+| Photo description for search engines | Cover → sidebar **Alternative text** (keep the focus keyword in it, e.g. "Tāmēšana …") |
+| Hero height on desktop | Cover → sidebar **Minimum height** (phones use a shorter height set by the theme) |
+| Pale overlay over the photo | Cover → **Styles** tab → **Overlay**: gradient **Mist veil**. Choosing a dark overlay turns the hero text white. |
+| Greyscale filter | Cover toolbar → **Apply duotone filter** → **Greyscale** |
 | Browser title, meta description, focus keywords | **Rank Math** panel on that page |
 
-Rank Math was seeded with: LV focus keywords `tāmēšana, tāmju sagatavošana, tāmju izstrāde, būvniecības tāme, būvniecības izmaksu tāme`; EN `construction cost estimating …`; RU `составление смет …`. Editing them in Rank Math is safe — reseeding never overwrites filled fields.
+Rank Math LV focus keywords start with `tāmēšana` (then `tāmēšanas pakalpojumi, tāmju sastādīšana, tāmju sagatavošana, mājas būvniecības tāme`); EN `construction cost estimating …`; RU `составление смет …`. Editing them in Rank Math is safe — reseeding never overwrites filled fields.
 
-Seed missing pages (keeps existing content, imports the two Unsplash photos into the Media Library if needed, adds menu items):
+Rank Math scores this page about 70. The remaining red checks need visible content: about 600 words of text, the keyword in an H2/H3, and one link to another website. The "power word", "number", "sentiment", "Table of Contents" and "Content AI" checks can stay red.
+
+Seed missing pages (keeps existing content, imports the hero photo into the Media Library if needed, adds menu items):
 
 `/wp-admin/?construction_rebuild_estimate_pages=1`
 

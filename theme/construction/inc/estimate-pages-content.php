@@ -27,10 +27,11 @@ function construction_estimate_page_definitions(): array {
 			'slug'       => 'tamesana',
 			'menu_label' => 'Tāmēšana',
 			'lead'       => 'Sagatavojam būvniecības izmaksu tāmes privātmājām un izvērtējam nekustamā īpašuma attīstības projektu ekonomisko potenciālu.',
+			'hero_alt'   => 'Tāmēšana pēc būvprojekta rasējumiem',
 			'seo'        => array(
-				'title'       => 'Tāmēšana un tāmju sagatavošana būvniecībai %sep% %sitename%',
-				'description' => 'Tāmēšana un būvniecības izmaksu tāmju sagatavošana privātmājām. Izvērtējam nekustamā īpašuma attīstības projektu izmaksas un rentabilitāti.',
-				'keywords'    => 'tāmēšana,tāmju sagatavošana,tāmju izstrāde,būvniecības tāme,būvniecības izmaksu tāme',
+				'title'       => 'Tāmēšanas pakalpojumi un tāmju sastādīšana %sep% %sitename%',
+				'description' => 'Tāmēšana un būvniecības tāmju sastādīšana privātmājām: darbu un materiālu izmaksas pirms būvniecības. Izvērtējam attīstības projektu rentabilitāti.',
+				'keywords'    => 'tāmēšana,tāmēšanas pakalpojumi,tāmju sastādīšana,tāmju sagatavošana,mājas būvniecības tāme',
 			),
 			'private'    => array(
 				'question'   => 'Plānojat būvēt māju, bet nezināt, cik tas izmaksās?',
@@ -39,7 +40,6 @@ function construction_estimate_page_definitions(): array {
 				'details'    => 'Izstrādāsim detalizētu būvniecības izmaksu tāmi, izvērtēsim darbu un materiālu izmaksas, lai jau savlaicīgi varētu plānot budžetu un pieņemt pārdomātus lēmumus.',
 				'closing'    => 'Ziniet savas būvniecības izmaksas vēl pirms būvniecības uzsākšanas!',
 				'cta'        => 'Pieteikt tāmes izstrādi',
-				'image_alt'  => 'Privātmājas koka jumta konstrukcija būvniecības laikā',
 			),
 			'business'   => array(
 				'question'   => 'Vēlaties iegādāties nekustamā īpašuma attīstības projektu, bet nezināt, vai tas būs finansiāli izdevīgs?',
@@ -54,7 +54,6 @@ function construction_estimate_page_definitions(): array {
 				),
 				'closing'    => 'Pieņemiet investīciju lēmumus, balstoties uz aprēķiniem, nevis minējumiem!',
 				'cta'        => 'Pieteikt projekta izvērtēšanu',
-				'image_alt'  => 'Būvlaukums ar torņa celtņiem',
 			),
 		),
 		'en' => array(
@@ -63,10 +62,11 @@ function construction_estimate_page_definitions(): array {
 			'slug'       => 'cost-estimating',
 			'menu_label' => 'Cost estimating',
 			'lead'       => 'We prepare construction cost estimates for private homes and assess the economic potential of property development projects.',
+			'hero_alt'   => 'Construction cost estimating from architectural drawings',
 			'seo'        => array(
-				'title'       => 'Construction Cost Estimating %sep% %sitename%',
-				'description' => 'Construction cost estimates for private homes and property development projects. Know your building costs and project profitability before work begins.',
-				'keywords'    => 'construction cost estimating,construction cost estimate,cost estimate,building cost estimate',
+				'title'       => 'Construction Cost Estimating in Latvia %sep% %sitename%',
+				'description' => 'Construction cost estimates for private homes in Latvia. Know your building costs and the profitability of development projects before work begins.',
+				'keywords'    => 'construction cost estimating,construction cost estimate,building cost estimate,cost estimate latvia',
 			),
 			'private'    => array(
 				'question'   => 'Planning to build a house but unsure what it will cost?',
@@ -75,7 +75,6 @@ function construction_estimate_page_definitions(): array {
 				'details'    => 'We will prepare a detailed construction cost estimate and assess labour and material costs, so you can plan your budget early and make well-considered decisions.',
 				'closing'    => 'Know your construction costs before construction begins!',
 				'cta'        => 'Request a cost estimate',
-				'image_alt'  => 'Timber roof trusses of a house under construction',
 			),
 			'business'   => array(
 				'question'   => 'Looking to acquire a property development project but unsure whether it will pay off?',
@@ -90,7 +89,6 @@ function construction_estimate_page_definitions(): array {
 				),
 				'closing'    => 'Make investment decisions based on calculations, not guesswork!',
 				'cta'        => 'Request a project assessment',
-				'image_alt'  => 'Construction site with tower cranes',
 			),
 		),
 		'ru' => array(
@@ -99,10 +97,11 @@ function construction_estimate_page_definitions(): array {
 			'slug'       => 'sostavlenie-smet',
 			'menu_label' => 'Сметы',
 			'lead'       => 'Составляем сметы на строительство частных домов и оцениваем экономический потенциал девелоперских проектов.',
+			'hero_alt'   => 'Составление смет по строительным чертежам',
 			'seo'        => array(
-				'title'       => 'Составление смет на строительство %sep% %sitename%',
-				'description' => 'Составляем сметы на строительство частных домов. Оцениваем затраты и рентабельность девелоперских проектов до начала строительства.',
-				'keywords'    => 'составление смет,сметы на строительство,смета на строительство,строительная смета,сметные расчеты',
+				'title'       => 'Составление смет на строительство в Латвии %sep% %sitename%',
+				'description' => 'Составляем сметы на строительство частных домов в Латвии. Оцениваем затраты и рентабельность девелоперских проектов до начала строительства.',
+				'keywords'    => 'составление смет,смета на строительство дома,сметы на строительство,составление сметы,услуги сметчика',
 			),
 			'private'    => array(
 				'question'   => 'Планируете строить дом, но не знаете, во сколько он обойдется?',
@@ -111,7 +110,6 @@ function construction_estimate_page_definitions(): array {
 				'details'    => 'Составим подробную смету строительных затрат, оценим стоимость работ и материалов, чтобы вы могли заранее спланировать бюджет и принимать взвешенные решения.',
 				'closing'    => 'Узнайте стоимость строительства еще до его начала!',
 				'cta'        => 'Заказать смету',
-				'image_alt'  => 'Деревянная стропильная система строящегося частного дома',
 			),
 			'business'   => array(
 				'question'   => 'Хотите приобрести девелоперский проект, но не уверены, что он будет финансово выгодным?',
@@ -126,22 +124,79 @@ function construction_estimate_page_definitions(): array {
 				),
 				'closing'    => 'Принимайте инвестиционные решения на основе расчетов, а не догадок!',
 				'cta'        => 'Заказать оценку проекта',
-				'image_alt'  => 'Строительная площадка с башенными кранами',
 			),
 		),
 	);
 }
 
 /**
- * Catalog image key per panel.
+ * Catalog image keys used by the page (the hero photo).
  *
- * @return array{private: string, business: string}
+ * @return array{hero: string}
  */
 function construction_estimate_page_image_keys(): array {
 	return array(
-		'private'  => 'estimate_private',
-		'business' => 'estimate_business',
+		'hero' => 'estimate_hero',
 	);
+}
+
+/**
+ * Hero: a core Cover block with the blueprint photo, a "Mist veil" overlay
+ * and the "Greyscale" filter (both theme.json presets), so the photo, focal
+ * point, overlay, height and text all stay editable in the block editor.
+ *
+ * Markup mirrors the Cover block's own save output so the editor validates it.
+ *
+ * @param string $inner Serialized inner blocks (H1 and lead).
+ * @param string $alt   Photo alt text.
+ */
+function construction_estimate_hero_markup( string $inner, string $alt ): string {
+	$id    = construction_media_id( 'estimate_hero' );
+	$url   = $id > 0 ? (string) wp_get_attachment_url( $id ) : '';
+	$attrs = array();
+	$image = '';
+
+	if ( '' !== $url ) {
+		$attrs = array(
+			'url'        => $url,
+			'id'         => $id,
+			'alt'        => $alt,
+			'focalPoint' => array(
+				'x' => 0.5,
+				'y' => 0.55,
+			),
+		);
+		$image = sprintf(
+			'<img class="wp-block-cover__image-background wp-image-%1$d size-full" alt="%2$s" src="%3$s" style="object-position:50%% 55%%" data-object-fit="cover" data-object-position="50%% 55%%"/>',
+			$id,
+			esc_attr( $alt ),
+			esc_url( $url )
+		);
+	}
+
+	$attrs['minHeight']     = 35;
+	$attrs['minHeightUnit'] = 'rem';
+	$attrs['gradient']      = 'mist-veil';
+	$attrs['isDark']        = false;
+	if ( '' !== $url ) {
+		$attrs['sizeSlug'] = 'full';
+	}
+	$attrs['className'] = 'construction-estimate-page__intro';
+	$attrs['style']     = array( 'color' => array( 'duotone' => 'var:preset|duotone|greyscale' ) );
+	$attrs['layout']    = array( 'type' => 'default' );
+	// CLI PHP often encodes 0.55 as 0.55000000000000004; keep the stored attributes clean.
+	$precision = ini_get( 'serialize_precision' );
+	ini_set( 'serialize_precision', '-1' ); // phpcs:ignore WordPress.PHP.IniSet.Risky
+	$json = serialize_block_attributes( $attrs );
+	ini_set( 'serialize_precision', (string) $precision ); // phpcs:ignore WordPress.PHP.IniSet.Risky
+
+	return <<<HTML
+	<!-- wp:cover {$json} -->
+	<div class="wp-block-cover is-light construction-estimate-page__intro" style="min-height:35rem">{$image}<span aria-hidden="true" class="wp-block-cover__background has-background-dim-100 has-background-dim wp-block-cover__gradient-background has-background-gradient has-mist-veil-gradient-background"></span><div class="wp-block-cover__inner-container">
+{$inner}
+	</div></div>
+	<!-- /wp:cover -->
+HTML;
 }
 
 /**
@@ -152,13 +207,6 @@ function construction_estimate_page_image_keys(): array {
  * @param string               $contact_url Escaped contacts URL.
  */
 function construction_estimate_panel_markup( array $panel, string $variant, string $contact_url ): string {
-	$keys     = construction_estimate_page_image_keys();
-	$image    = construction_media_image_block(
-		$keys[ $variant ],
-		'construction-estimate-page__image',
-		(string) $panel['image_alt'],
-		'construction-hero'
-	);
 	$question = esc_html( (string) $panel['question'] );
 	$intro    = esc_html( (string) $panel['intro'] );
 	$promise  = esc_html( (string) $panel['promise'] );
@@ -194,7 +242,7 @@ HTML;
 	return <<<HTML
 		<!-- wp:group {"className":"construction-estimate-page__panel construction-estimate-page__panel--{$variant}","layout":{"type":"default"}} -->
 		<div class="wp-block-group construction-estimate-page__panel construction-estimate-page__panel--{$variant}">
-{$image}			<!-- wp:group {"className":"construction-estimate-page__copy","layout":{"type":"default"}} -->
+			<!-- wp:group {"className":"construction-estimate-page__copy","layout":{"type":"default"}} -->
 			<div class="wp-block-group construction-estimate-page__copy">
 				<!-- wp:heading {"className":"construction-estimate-page__question"} -->
 				<h2 class="wp-block-heading construction-estimate-page__question">{$question}</h2>
@@ -241,12 +289,8 @@ function construction_estimate_page_content( string $lang ): string {
 	$contact_url = esc_url( construction_contacts_url_for_lang( $lang ) );
 	$private     = construction_estimate_panel_markup( $copy['private'], 'private', $contact_url );
 	$business    = construction_estimate_panel_markup( $copy['business'], 'business', $contact_url );
-
-	return <<<HTML
-<!-- wp:group {"align":"full","className":"construction-estimate-page","layout":{"type":"default"}} -->
-<div class="wp-block-group alignfull construction-estimate-page">
-	<!-- wp:group {"className":"construction-estimate-page__intro","layout":{"type":"default"}} -->
-	<div class="wp-block-group construction-estimate-page__intro">
+	$hero        = construction_estimate_hero_markup(
+		<<<HTML
 		<!-- wp:heading {"level":1,"className":"construction-estimate-page__title"} -->
 		<h1 class="wp-block-heading construction-estimate-page__title">{$title}</h1>
 		<!-- /wp:heading -->
@@ -254,8 +298,14 @@ function construction_estimate_page_content( string $lang ): string {
 		<!-- wp:paragraph {"className":"construction-estimate-page__lead"} -->
 		<p class="construction-estimate-page__lead">{$lead}</p>
 		<!-- /wp:paragraph -->
-	</div>
-	<!-- /wp:group -->
+HTML,
+		(string) $copy['hero_alt']
+	);
+
+	return <<<HTML
+<!-- wp:group {"align":"full","className":"construction-estimate-page","layout":{"type":"default"}} -->
+<div class="wp-block-group alignfull construction-estimate-page">
+{$hero}
 
 	<!-- wp:group {"className":"construction-estimate-page__split","layout":{"type":"default"}} -->
 	<div class="wp-block-group construction-estimate-page__split">
@@ -415,10 +465,7 @@ function construction_rebuild_polylang_estimate_pages( bool $force = false ) {
 	$keys        = construction_estimate_page_image_keys();
 	$media       = construction_import_remote_media(
 		array_values( $keys ),
-		array(
-			$keys['private']  => (string) $definitions['lv']['private']['image_alt'],
-			$keys['business'] => (string) $definitions['lv']['business']['image_alt'],
-		)
+		array( $keys['hero'] => (string) $definitions['lv']['hero_alt'] )
 	);
 	if ( is_wp_error( $media ) ) {
 		return $media;
@@ -456,7 +503,7 @@ function construction_rebuild_polylang_estimate_pages( bool $force = false ) {
 		pll_set_post_language( (int) $id, $lang );
 		construction_estimate_seed_seo( (int) $id, $copy['seo'] );
 		// Featured image feeds Open Graph / social previews; the page template does not display it.
-		set_post_thumbnail( (int) $id, (int) $media[ $keys['private'] ] );
+		set_post_thumbnail( (int) $id, (int) $media[ $keys['hero'] ] );
 	}
 
 	if ( count( $ids ) === count( $definitions ) ) {
@@ -471,23 +518,26 @@ function construction_rebuild_polylang_estimate_pages( bool $force = false ) {
 }
 
 /**
- * Each half's photo spans half the viewport on desktop. Say so in `sizes`
- * so browsers download a smaller file than WordPress's 100vw default.
+ * The hero photo spans the full viewport; WordPress's default `sizes` caps it
+ * at the file width. An image added inside one half spans half the viewport.
  *
  * @param string $filtered_image Image tag.
  * @param string $context        Filter context.
  * @param int    $attachment_id  Attachment ID.
  */
 function construction_estimate_image_sizes( string $filtered_image, string $context, int $attachment_id ): string {
-	if ( 'the_content' !== $context || $attachment_id <= 0 ) {
+	if ( 'the_content' !== $context || $attachment_id <= 0 || ! str_contains( $filtered_image, ' sizes="' ) ) {
 		return $filtered_image;
 	}
 
-	$estimate_ids = array_map( 'construction_media_id', array_values( construction_estimate_page_image_keys() ) );
-	if ( ! in_array( $attachment_id, $estimate_ids, true ) ) {
+	if ( str_contains( $filtered_image, 'wp-block-cover__image-background' ) && construction_media_id( 'estimate_hero' ) === $attachment_id ) {
+		$sizes = '100vw';
+	} elseif ( in_array( $attachment_id, array( construction_media_id( 'estimate_private' ), construction_media_id( 'estimate_business' ) ), true ) ) {
+		$sizes = '(max-width: 899px) 100vw, 50vw';
+	} else {
 		return $filtered_image;
 	}
 
-	return (string) preg_replace( '/\ssizes="[^"]*"/', ' sizes="(max-width: 899px) 100vw, 50vw"', $filtered_image, 1 );
+	return (string) preg_replace( '/\ssizes="[^"]*"/', ' sizes="' . $sizes . '"', $filtered_image, 1 );
 }
 add_filter( 'wp_content_img_tag', 'construction_estimate_image_sizes', 10, 3 );

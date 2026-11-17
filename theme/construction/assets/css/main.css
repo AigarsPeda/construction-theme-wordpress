@@ -2569,10 +2569,10 @@ html.is-home-project-modal .wp-site-blocks {
 
 /*
  * Cost-estimating page (Tāmēšana).
- * A centred title, then the page splits into two halves by colour alone:
- * mist for private clients, ink for businesses. Each half opens with a toned
- * photo that belongs to its field, and the text sits on solid colour —
- * no text over images, no rules.
+ * A light hero (core Cover block: blueprint photo with the "Greyscale" filter
+ * under the "Mist veil" overlay) carries the centred title. Below it the page
+ * splits into two halves by colour alone: mist for private clients, ink for
+ * businesses, text on solid colour, no rules.
  */
 .construction-estimate-page.alignfull {
 	--estimate-gutter: max(var(--bn-pad), calc((100vw - var(--bn-max)) / 2 + var(--bn-pad)));
@@ -2583,33 +2583,54 @@ html.is-home-project-modal .wp-site-blocks {
 	margin: 0;
 }
 
-.construction-estimate-page__intro {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+/* Height, photo, focal point, overlay and filter come from the Cover block settings. */
+.construction-estimate-page__intro.wp-block-cover {
 	margin: 0 !important;
-	padding: clamp(3rem, 6vw, 4.5rem) var(--bn-pad) clamp(2.5rem, 4.5vw, 3.5rem);
+	padding: clamp(4rem, 9vw, 6.5rem) var(--bn-pad);
 	text-align: center;
 }
 
-.construction-estimate-page__intro > * {
+.construction-estimate-page__intro > .wp-block-cover__inner-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+/* Stated on the text itself: the editor canvas does not inherit it. */
+.construction-estimate-page__intro .construction-estimate-page__title,
+.construction-estimate-page__intro .construction-estimate-page__lead {
+	text-align: center;
+}
+
+.construction-estimate-page__intro.is-light > .wp-block-cover__inner-container {
+	color: var(--bn-ink);
+}
+
+/* Zero specificity so the lead's own spacing below still applies. */
+:where(.construction-estimate-page__intro > .wp-block-cover__inner-container) > * {
 	margin: 0 !important;
 }
 
 .construction-estimate-page__title {
-	font-size: clamp(2.4rem, 4.6vw, 4.25rem);
-	line-height: 1;
+	font-size: clamp(2.6rem, 5.4vw, 4.75rem);
+	line-height: 0.98;
 	letter-spacing: -0.045em;
+	color: inherit;
 	text-wrap: balance;
 }
 
 .construction-estimate-page__lead {
-	max-width: 40rem;
+	max-width: 42rem;
 	margin-top: clamp(1rem, 2vw, 1.4rem) !important;
 	font-size: clamp(1.05rem, 1.5vw, 1.2rem);
 	line-height: 1.55;
-	color: var(--estimate-body);
+	color: color-mix(in srgb, #fff 80%, var(--bn-timber));
 	text-wrap: balance;
+}
+
+/* Overlay switched to a dark one in the editor: the cover turns text white. */
+.construction-estimate-page__intro.is-light .construction-estimate-page__lead {
+	color: color-mix(in srgb, var(--bn-steel) 55%, var(--bn-ink));
 }
 
 .construction-estimate-page__split {
@@ -2687,6 +2708,11 @@ html.is-home-project-modal .wp-site-blocks {
 	margin: 0 !important;
 	padding-top: clamp(2.5rem, 4vw, 3.5rem);
 	padding-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+/* Without a photo strip a half starts straight on its colour. */
+.construction-estimate-page__panel > .construction-estimate-page__copy:first-child {
+	padding-top: clamp(3rem, 5vw, 4.5rem);
 }
 
 .construction-estimate-page__panel--private .construction-estimate-page__copy {
@@ -2821,12 +2847,12 @@ html.is-home-project-modal .wp-site-blocks {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-	.construction-estimate-page__intro > *,
+	.construction-estimate-page__intro > .wp-block-cover__inner-container > *,
 	.construction-estimate-page__copy {
 		animation: bn-rise 0.7s ease both;
 	}
 
-	.construction-estimate-page__intro > :nth-child(2) {
+	.construction-estimate-page__intro > .wp-block-cover__inner-container > :nth-child(2) {
 		animation-delay: 0.08s;
 	}
 
@@ -2848,8 +2874,14 @@ html.is-home-project-modal .wp-site-blocks {
 		grid-template-columns: minmax(0, 1fr);
 	}
 
-	.construction-estimate-page__intro {
-		padding: clamp(2.5rem, 10vw, 3.5rem) var(--bn-pad) clamp(2rem, 8vw, 2.75rem);
+	/* Phones: a shorter hero than the desktop height set in the Cover block. */
+	.construction-estimate-page__intro.wp-block-cover {
+		min-height: clamp(24rem, 110vw, 30rem) !important;
+		padding: clamp(3rem, 14vw, 4.5rem) var(--bn-pad);
+	}
+
+	.construction-estimate-page__title {
+		font-size: min(2.6rem, 9.2vw);
 	}
 
 	.construction-estimate-page__panel > .wp-block-image {

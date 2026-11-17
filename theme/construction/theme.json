@@ -15,6 +15,16 @@
 				{ "slug": "steel", "name": "Steel", "color": "#6B7580" },
 				{ "slug": "ink", "name": "Ink", "color": "#0E0E0E" },
 				{ "slug": "timber", "name": "Timber", "color": "#B8956C" }
+			],
+			"gradients": [
+				{
+					"slug": "mist-veil",
+					"name": "Mist veil",
+					"gradient": "radial-gradient(rgba(255,255,255,0.95) 0%,rgba(255,255,255,0.88) 30%,rgba(228,235,240,0.78) 64%,rgba(228,235,240,0.74) 100%)"
+				}
+			],
+			"duotone": [
+				{ "slug": "greyscale", "name": "Greyscale", "colors": [ "#0E0E0E", "#FFFFFF" ] }
 			]
 		},
 		"layout": {
